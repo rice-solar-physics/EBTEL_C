@@ -470,11 +470,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Call the Euler routine
 			state_ptr = ebtel_euler(state,tau,par,opt);
 		}
-		else if(opt.solver==1)	//RK routine
+		else //if(opt.solver==1)	//RK routine
 		{	
 			//Call the RK routine
 			state_ptr = ebtel_rk(state,3,ttime_tot,tau,par,opt);	
 		}
+		/*
 		else if(opt.solver==2)	//Adaptive RK routine
 		{
 			//Call the adaptive RK routine
@@ -484,7 +485,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			tau = rka_setter->tau;
 			state_ptr = rka_setter->state;
 		}
-		
+		*/
+
 		//Update p,n,t and save to structure
 		p = *(state_ptr + 0);
 		param_setter->press[i+1] = p;

@@ -496,11 +496,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->temp[i+1] = t;
 		
 		//Free the state ptr or rka_setter as it will be malloc'd again on the next go around
-		if(opt.solver==0 || opt.solver == 1)
-		{
+		//if(opt.solver==0 || opt.solver == 1)
+		//{
 			free(state_ptr);
 			state_ptr = NULL;
-		}
+		//}
+			
+		/*
 		else
 		{
 			//Free the rka_setter structure and all fields since they will be malloc'd on the next iteration
@@ -509,6 +511,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			free(rka_setter);
 			rka_setter = NULL;
 		}
+		*/
 		
 		v = pv/p; 			//calculate new velocity
 		param_setter->vel[i+1] = v*r4;

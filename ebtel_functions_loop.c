@@ -157,7 +157,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//struct
 	struct rk_params par;
-	struct ebtel_rka_st *rka_setter;
+	//struct ebtel_rka_st *rka_setter;
 	struct ebtel_params_st *param_setter = malloc(sizeof(struct ebtel_params_st));
 	assert(param_setter != NULL);
 	
@@ -396,7 +396,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Begin the loop over the timesteps
 	for(i = 0; i < ntot-1; i++)
 	{
-		
 		//Update the parameter structure
 		par.q1 = heat[i+1];
 		par.q2 = heat[i];
@@ -457,7 +456,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		else //if(opt.solver==1)	//RK routine
 		{	
 			//Call the RK routine
-			state_ptr = ebtel_rk(state,3,ttime_tot,tau,par,opt);	
+			state_ptr = ebtel_rk(state,3,time[i],tau,par,opt);	
 		}
 
 		//Update p,n,t and save to structure
@@ -881,7 +880,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double *ebtel_heating(double time, double tau, double h_nano, double t_pulse_half, int n, int heating_shape)
+double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_half, int n, int heating_shape)
 {
 	//Declare variables
 	double h_back;
@@ -892,7 +891,7 @@ double *ebtel_heating(double time, double tau, double h_nano, double t_pulse_hal
 	double t_mid;
 	double t_m;
 	double t_h;
-	double heat = malloc(sizeof(double[n]));
+	double *heat = malloc(sizeof(double[n]));
 	int i;
 
 	//First set some general parameters
@@ -945,7 +944,7 @@ double *ebtel_heating(double time, double tau, double h_nano, double t_pulse_hal
 		}
 		else
 		{
-			heat = h_back;
+			heat[i] = h_back;
 		}
     }
 	else

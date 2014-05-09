@@ -111,15 +111,11 @@ int main (void)
 	FILE *in_file;
 	
 	//Pointers
-	double time_ptr;
-	double heat_ptr;
+	double *time_ptr;
+	double *heat_ptr;
 	
 	//Char
 	char filename_in[64];
-	
-	//Arrays
-	double time[n];
-	double heat[n];
 	
 	/**********************************
 	Read in data from parameter file
@@ -133,7 +129,7 @@ int main (void)
 		printf("Error! Could not open file.\n");
 	}
 	
-	fscanf(in_file,"%d\n%le\n%d\n%d\%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
+	fscanf(in_file,"%d\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
 	&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&opt.T0,&opt.n0);
 	
 	fclose(in_file);
@@ -144,6 +140,10 @@ int main (void)
 	
 	//Guess maximum array size using the timestep
 	n = total_time/t_scale;
+	
+	//Declare arrays of size n
+	double time[n];
+	double heat[n];
 	
 	//Build the time array
 	time_ptr = ebtel_linspace(0,total_time,n);
@@ -205,15 +205,15 @@ int main (void)
 	params_final = ebtel_loop_solver(n, L, total_time, time, heat, opt);
 	
 	//Save the heating and time arrays to the parameter structure
-	params_final->time = time_ptr;
-	params_final->heat = heat_ptr;
+	//params_final->time = time_ptr;
+	//params_final->heat = heat_ptr;
 	
 	/************************************************************************************
 									Save the Data
 	************************************************************************************/
 	
 	//Write the contents of params_final to a file. See output for filename.
-	ebtel_file_writer(loop_length, n, opt, params_final);
+	ebtel_file_writer(loop_length, n, time, heat, opt, params_final);
 	
 	/****************Done writing data to file. Free up memory reserved by pointers.******************/
 	

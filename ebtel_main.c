@@ -90,7 +90,7 @@ int main (void)
 	K_B = 1.38e-16;
 	KAPPA_0 = 8.12e-7;
 	M_P = 1.67e-24;
-	PI = 3.14;
+	PI = 3.14159;
 	TWO_SEVENTHS = 0.285714;
 	SEVEN_HALVES = 3.5;
 	TWO_THIRDS = 0.66666667;

@@ -222,8 +222,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Set up thermal conduction parameters
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(9.1e-28,0.5);
-	sat_limit = 0.1667;
-	//sat_limit = 1;	//HYDRAD value
+	//sat_limit = 0.1667;
+	sat_limit = 1;	//HYDRAD value
 	
 	/***********************************************************************************
 						Set up DEM in Transition Region

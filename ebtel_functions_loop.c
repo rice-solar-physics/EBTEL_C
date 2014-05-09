@@ -54,7 +54,7 @@ OUTPUTS:
    rad_cor--coronal radiative loss
 ***********************************************************************************/
 
-struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, struct Option opt)
+struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, double time[], double heat[], struct Option opt)
 {
 	/***********************************************************************************
 								Variable Declarations
@@ -128,8 +128,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double rad_cor;
 	double rad_ratio;
 	double f_ratio;
-	double ttime_tot;
-	double Q;
 	double tau;
 	
 	//Double array (single index)
@@ -270,14 +268,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws
 	*/
 	
-	//Initialize heat and time
-	ttime_tot = 0;
-	param_setter->time[0] = ttime_tot;
-	Q = ebtel_heating(ttime_tot,opt.tau,opt.h_nano,opt.t_pulse_half,opt.heating_shape);
-	param_setter->heat[0] = Q;
-	
 	//Check if the heating array begins with a zero. If so, return an error.
-	if (Q == 0)
+	if (heat[0] == 0)
 	{
 		printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
 	}
@@ -285,10 +277,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//(A) EBTEL Equilibrium
 
 	//First set up trial values for static equilibrium (i.e. d/dt = 0)
-	tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*Q/KAPPA_0,TWO_SEVENTHS);
+	tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
 	printf("tt_old = %e\n",tt_old);
 	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
-	nn = pow(Q/((1+r3)*rad),0.5);
+	nn = pow(heat[0]/((1+r3)*rad),0.5);
 	nn_old = nn;
 
 	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
@@ -296,11 +288,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 
 	for(i=0; i<=100; i++)
 	{
-		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);								//recalculate r3 coefficient
-		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*Q/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
-		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);									//radiative loss at new temperature
-		nn = pow(Q/((1+r3)*rad),0.5);											//density at new r3 and new rad
-		err = tt_new - tt_old;														//difference between t_i, T_i-1
+		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
+		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
+		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
+		nn = pow(heat[0]/((1+r3)*rad),0.5);													//density at new r3 and new rad
+		err = tt_new - tt_old;																//difference between t_i, T_i-1
 		err_n = nn - nn_old;
 		//Break the loop if the error gets below a certain threshold														
 		if(fabs(err)<tol && fabs(err_n)<tol)
@@ -328,7 +320,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	else
 	{
 		tt = tt_old;
-		nn = pow(Q/((1+r3)*rad),0.5);
+		nn = pow(heat[0]/((1+r3)*rad),0.5);
 	}
 	
 	//Print out the coefficients that we are starting the model with
@@ -362,7 +354,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	printf("********************************************************************\n");
 	printf("Model Parameters\n");
 	printf("L = %e\n",loop_length);
-	printf("Q = %e\n",Q);
+	printf("Q = %e\n",heat[0]);
 	printf("T, Ta = %e, %e\n",param_setter->temp[0],param_setter->tapex[0]);
 	printf("n, na = %e, %e\n",param_setter->ndens[0],param_setter->napex[0]);
 	printf("********************************************************************\n");
@@ -370,8 +362,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Alternatively, we could use the scaling laws to determine our initial conditions
 	lambda_0 = 1.95e-18;			//lambda = lambda_0*T
 	bb = -0.5; //-2/3				//power law for radiative loss function
-	q_0 = Q;
-	t_0 = r1*pow((3.5/KAPPA_0*Q*pow(loop_length,2)),TWO_SEVENTHS);
+	q_0 = heat[0];
+	t_0 = r1*pow((3.5/KAPPA_0*heat[0]*pow(loop_length,2)),TWO_SEVENTHS);
 	p_0 = pow(r2,-3.5*0.5)*pow(8/7*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11-2*bb)/4))/loop_length;
 	n_0 = p_0/(2*K_B*t_0);
 	v_0 = 0;
@@ -401,24 +393,16 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//This will be static if we are not using our adaptive solver
 	tau = opt.tau;
 	
-	//Initialize the counter
-	i = 0;
-	
 	//Begin the loop over the timesteps
-	while(ttime_tot<total_time)
+	for(i = 0; i < ntot-1; i++)
 	{
-		//Update the heat and time arrays
-		ttime_tot = ttime_tot + tau;
-		param_setter->time[i+1] = ttime_tot;
-		Q = ebtel_heating(ttime_tot,tau,opt.h_nano,opt.t_pulse_half,opt.heating_shape);
-		param_setter->heat[i+1] = Q;
 		
 		//Update the parameter structure
-		par.q1 = *(param_setter->heat + i);
-		par.q2 = Q;
+		par.q1 = heat[i+1];
+		par.q2 = heat[i];
 		if(opt.usage==3)
 		{
-			par.flux_nt = loop_length*Q/10;
+			par.flux_nt = loop_length*heat[i]/10;
 		}
 		else
 		{
@@ -475,17 +459,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Call the RK routine
 			state_ptr = ebtel_rk(state,3,ttime_tot,tau,par,opt);	
 		}
-		/*
-		else if(opt.solver==2)	//Adaptive RK routine
-		{
-			//Call the adaptive RK routine
-			rka_setter = ebtel_rk_adapt(state,3,ttime_tot,tau,1e-5,par,opt);
-			
-			//Update time, tau, and state_ptr from structure
-			tau = rka_setter->tau;
-			state_ptr = rka_setter->state;
-		}
-		*/
 
 		//Update p,n,t and save to structure
 		p = *(state_ptr + 0);
@@ -495,23 +468,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
 		
-		//Free the state ptr or rka_setter as it will be malloc'd again on the next go around
-		//if(opt.solver==0 || opt.solver == 1)
-		//{
-			free(state_ptr);
-			state_ptr = NULL;
-		//}
-			
-		/*
-		else
-		{
-			//Free the rka_setter structure and all fields since they will be malloc'd on the next iteration
-			free(rka_setter->state);
-			rka_setter->state = NULL;
-			free(rka_setter);
-			rka_setter = NULL;
-		}
-		*/
+		//Free the state ptr as it will be malloc'd again on the next go around
+		free(state_ptr);
+		state_ptr = NULL;
 		
 		v = pv/p; 			//calculate new velocity
 		param_setter->vel[i+1] = v*r4;
@@ -645,7 +604,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->rad_cor[i] = rad_cor;
 		
 		//Increment the counter
-		i++;
+		//i++;
 	}
 	
 	//End of loop
@@ -918,11 +877,11 @@ INPUTS:
 	heating_shape--indicates which heating profile will be used
 	
 OUTPUTS:
-	heat--heating at current time
+	heat--heating array
 
 ***********************************************************************************/
 
-double ebtel_heating(double time, double tau, double h_nano, double t_pulse_half, int heating_shape)
+double *ebtel_heating(double time, double tau, double h_nano, double t_pulse_half, int n, int heating_shape)
 {
 	//Declare variables
 	double h_back;
@@ -933,7 +892,8 @@ double ebtel_heating(double time, double tau, double h_nano, double t_pulse_half
 	double t_mid;
 	double t_m;
 	double t_h;
-	double heat;
+	double heat = malloc(sizeof(double[n]));
+	int i;
 
 	//First set some general parameters
 	h_back = 3.4e-6;
@@ -950,34 +910,38 @@ double ebtel_heating(double time, double tau, double h_nano, double t_pulse_half
 	
 	if(heating_shape == 1)
 	{
-		//Triangular Pulse
-		if(time <= t_start )
+		for(i=0;i<n;i++)
 		{
-			heat = h_back;
-		}
-		else if(time > t_start && time <= t_mid)
-		{
-			heat = h_back + h_nano*((time - (t_start +tau))/t_mid);
-		}
-		else if(time > t_mid && time <= t_end )
-		{
-			heat = h_back - h_nano*(time - t_end)/t_mid;
-		}
-		else
-		{
-			heat = h_back;
+			//Triangular Pulse
+			if(time[i] <= t_start )
+			{
+				heat[i] = h_back;
+			}
+			else if(time[i] > t_start && time[i] <= t_mid)
+			{
+				heat[i] = h_back + h_nano*((time[i] - (t_start +tau))/t_mid);
+			}
+			else if(time[i] > t_mid && time[i] <= t_end )
+			{
+				heat[i] = h_back - h_nano*(time[i] - t_end)/t_mid;
+			}
+			else
+			{
+				heat[i] = h_back;
+			}
 		}
     }
 	else if(heating_shape == 2)
 	{
+		for(i=0;i<n;i++)
 		//Square Pulse
-		if(time <= (t_start + tau))
+		if(time[i] <= (t_start + tau))
 		{
-			heat = h_back;
+			heat[i] = h_back;
 		}
-		else if(time > t_start && time < (t_end + tau))
+		else if(time[i] > t_start && time[i] < (t_end + tau))
 		{
-			heat = h_back + h_nano;
+			heat[i] = h_back + h_nano;
 		}
 		else
 		{
@@ -992,7 +956,10 @@ double ebtel_heating(double time, double tau, double h_nano, double t_pulse_half
 		t_m = 2000;
 		t_h = 40;
 		h_nano = 1;
-		heat = h_back + h_nano*exp(-pow((time - t_m),2)/(2*pow(t_h,2)));
+		for(i=0;i<n;i++)
+		{		
+			heat[i] = h_back + h_nano*exp(-pow((time[i] - t_m),2)/(2*pow(t_h,2)));
+		}
 	}
 
 	//Return the heat pointer

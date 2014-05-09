@@ -96,6 +96,7 @@ int main (void)
 	TWO_THIRDS = 0.66666667;
 	
 	//Int
+	int i;
 	int n;
 	int total_time;
 	int heating_shape;
@@ -109,8 +110,16 @@ int main (void)
 
 	FILE *in_file;
 	
+	//Pointers
+	double time_ptr;
+	double heat_ptr;
+	
 	//Char
 	char filename_in[64];
+	
+	//Arrays
+	double time[n];
+	double heat[n];
 	
 	/**********************************
 	Read in data from parameter file
@@ -134,7 +143,14 @@ int main (void)
 	************************************************************************************/
 	
 	//Guess maximum array size using the timestep
-	n = ceil(total_time/t_scale);
+	n = total_time/t_scale;
+	
+	//Build the time array
+	time_ptr = ebtel_linspace(0,total_time,n);
+	for(i=0; i<n; i++)
+	{
+		time[i] = *(time_ptr + i);
+	}
 	
 	//Define loop half-length and change to appropriate units
 	L = 1e8*loop_length;	//convert from Mm to cm
@@ -162,6 +178,13 @@ int main (void)
 	//2--square pulse 
 	//3--Gaussian pulse
 	
+	//Call the heating function and have it return the heating array
+	heat_ptr = ebtel_heating(time, t_scale, h_nano, t_pulse_half, n, heating_shape);
+	for(i=0;i<n;i++)
+	{
+		heat[i] = *(heat_ptr + i);
+	}
+	
 	//Set loop length appropriately for Gaussian heating pulse. This heating shape only 
 	//appropriate for short loops.
 	if(heating_shape==3)
@@ -179,7 +202,11 @@ int main (void)
 	
 	//Make the call to the ebtel_loop_solver function. This function sets the members of the structure params_final. Each member 
 	//is a pointer to an array
-	params_final = ebtel_loop_solver(n, L, total_time, opt);
+	params_final = ebtel_loop_solver(n, L, total_time, time, heat, opt);
+	
+	//Save the heating and time arrays to the parameter structure
+	params_final->time = time_ptr;
+	params_final->heat = heat_ptr;
 	
 	/************************************************************************************
 									Save the Data
@@ -192,6 +219,8 @@ int main (void)
 	
 	//Free up memory used by the structure params_final
 	ebtel_free_mem(params_final);
+	free(heat_ptr);
+	free(time_ptr);
 	
 	//Stop the timer
 	time_finish = clock();

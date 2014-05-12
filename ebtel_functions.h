@@ -57,6 +57,7 @@ struct ebtel_params_st {
 		double *tapex;
 		double *napex;
 		double *papex;
+		double *coeff_1;
 		double *logtdem;
 		double *f_ratio;
 		double *rad_ratio;

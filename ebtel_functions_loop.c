@@ -171,6 +171,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->tapex = malloc(sizeof(double[ntot]));
 	param_setter->napex = malloc(sizeof(double[ntot]));
 	param_setter->papex = malloc(sizeof(double[ntot]));
+	param_setter->coeff_1 = malloc(sizeof(double[ntot]));
 	param_setter->cond = malloc(sizeof(double[ntot]));
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
 	
@@ -282,6 +283,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
 	nn = pow(heat[0]/((1+r3)*rad),0.5);
 	nn_old = nn;
+	
+	//DEBUG
+	printf("Print seed values to debug iteration on tt\n");
+	printf("tt_old = %e\n",tt_old);
+	printf("rad = %e\n",rad);
+	printf("nn_old = %e\n",nn_old);
 
 	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
 	tol = 1e+3;		//error tolerance
@@ -293,9 +300,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
 		nn = pow(heat[0]/((1+r3)*rad),0.5);													//density at new r3 and new rad
 		err = tt_new - tt_old;																//difference between t_i, T_i-1
-		err_n = nn - nn_old;
+		err_n = nn - nn_old;	
 		//Break the loop if the error gets below a certain threshold														
-		if(fabs(err)<tol && fabs(err_n)<tol)
+		if(fabs(err)<tol)// && fabs(err_n)<tol)
 		{
 			printf("r3 = %e\n",r3);													//display calculated parameters
 			printf("tt_new = %e\n",tt_new);
@@ -349,6 +356,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->tapex[0] = ta;
 	param_setter->napex[0] = na;
 	param_setter->papex[0] = pa;
+	param_setter->coeff_1[0] = r3;
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
@@ -429,6 +437,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		//Calculate coefficients r1, r2, r3 (c3, c2, c1)
 		r3 = ebtel_calc_c1(t,n,loop_length,rad);
 		par.r3 = r3;
+		param_setter->coeff_1[i+1] = r3;
 		r2 = ebtel_calc_c2();
 		r1 = ebtel_calc_c3();
 		r12 = r1/r2;

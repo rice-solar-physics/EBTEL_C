@@ -143,7 +143,7 @@ void ebtel_file_writer(int loop_length, int n, double time[], double heat[], str
 		}
 		
 		//Print the data to the file filename using tab delimited entries
-		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",time[i],*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],heat[i]);
+		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",time[i],*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],heat[i],*(params_final->coeff_1 + i));
 		
 	}
 	
@@ -356,6 +356,8 @@ double * ebtel_linspace( int a, int b, int n)
 	par_struct->napex = NULL;
 	free(par_struct->papex);
 	par_struct->papex = NULL;
+	free(par_struct->coeff_1);
+	par_struct->coeff_1 = NULL;
 	free(par_struct->logtdem);
 	par_struct->logtdem = NULL;
 	free(par_struct->f_ratio);

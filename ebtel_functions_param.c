@@ -78,7 +78,7 @@ double ebtel_calc_c1( double temp, double den, double llength, double rad )
 	}
 	
 	//Calculate over/under density
-	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(3.5*r3_eqm*rad*pow(llength,2));
+	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(SEVEN_HALVES*r3_eqm*rad*pow(llength,2));
 	noneq2 = pow(den,2)/n_eq_2;
 	
 	//Use different values of r3 based on value of noneq2

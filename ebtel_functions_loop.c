@@ -223,8 +223,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Set up thermal conduction parameters
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(9.1e-28,0.5);
-	//sat_limit = 0.1667;
-	sat_limit = 1;	//HYDRAD value
+	sat_limit = 0.1667;
+	//sat_limit = 1;	//HYDRAD value
 	
 	/***********************************************************************************
 						Set up DEM in Transition Region
@@ -284,11 +284,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	nn = pow(heat[0]/((1+r3)*rad),0.5);
 	nn_old = nn;
 	
+	/*
 	//DEBUG
 	printf("Print seed values to debug iteration on tt\n");
 	printf("tt_old = %e\n",tt_old);
 	printf("rad = %e\n",rad);
 	printf("nn_old = %e\n",nn_old);
+	*/
 
 	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
 	tol = 1e+3;		//error tolerance
@@ -345,7 +347,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	v = 0;
 	ta = t/r2;
 	sc = ebtel_calc_lambda(t);
-	na = n*r2*exp(-2*loop_length/(PI*sc)*(1-sin(PI/5)));
+	na = n*r2*exp(-2.0*loop_length/(PI*sc)*(1.0-sin(PI/5.0)));
 	pa = 2*K_B*na*ta;
 	
 	//Set the initial values of our parameter structure
@@ -357,6 +359,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->napex[0] = na;
 	param_setter->papex[0] = pa;
 	param_setter->coeff_1[0] = r3;
+	param_setter->heat[0] = heat[0];
+	param_setter->time[0] = 0;
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
@@ -407,6 +411,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		//Update the parameter structure
 		par.q1 = heat[i+1];
 		par.q2 = heat[i];
+		param_setter->heat[i+1] = heat[i+1];
+		param_setter->time[i+1] = time[i+1];
 		if(opt.usage==3)
 		{
 			par.flux_nt = loop_length*heat[i]/10;
@@ -417,7 +423,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		}
 		
 		//Set up thermal conduction at the base
-		f_cl = c1*pow(t/r2,3.5)/loop_length;	//Classical heat flux calculation
+		f_cl = c1*pow(t/r2,SEVEN_HALVES)/loop_length;	//Classical heat flux calculation
 
 		//Decide on whether to use classical or dynamic heat flux
 		if(opt.classical==1)
@@ -444,7 +450,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		r12_tr = r1_tr/r2;
 
 		//Calculate equilibrium thermal conduction at base (-R_tr in Paper I)
-		f_eq = -r3*pow(n,2)*rad*loop_length;
+		f_eq = -r3*n*n*rad*loop_length;
 		par.f_eq = f_eq;
 		
 		//Calculate pv quantity to be used in velocity calculation
@@ -489,7 +495,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		//Calculate apex quantities
 		ta = t/r2;
 		param_setter->tapex[i+1] = ta;
-		na = n*r2*exp(-2*loop_length*(1-sin(PI/5))/(PI*sc));
+		na = n*r2*exp(-2.0*loop_length*(1.0-sin(PI/5.0))/(PI*sc));
 		param_setter->napex[i+1] = na;
 		pa = 2*K_B*na*ta;
 		param_setter->papex[i+1] = pa;

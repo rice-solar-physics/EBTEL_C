@@ -32,12 +32,11 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double ebtel_calc_c1( double temp, double den, double llength, double rad )
+double  ebtel_calc_c1( double temp, double den, double llength, double rad )
 {
 
 	//Declare variables
 	double sc;
-	double f_eq_1;
 	double r3_eqm_g;
 	double r3_radn_g;
 	double r3_eqm;
@@ -57,9 +56,6 @@ double ebtel_calc_c1( double temp, double den, double llength, double rad )
 	//Calculate r2 value
 	r2 = ebtel_calc_c2();
 	
-	//Set equilibrium value of f
-	f_eq_1 = -pow(den,2)*rad*llength;
-	
 	//Adjust values for gravity
 	r3_eqm_g = r3_eqm_0*exp(4*sin(PI/l_fact_eq)*llength/(PI*sc));
 	r3_radn_g = r3_rad_0*exp(4*sin(PI/l_fact_rad)*llength/(PI*sc));
@@ -73,8 +69,8 @@ double ebtel_calc_c1( double temp, double den, double llength, double rad )
 	}
 	else
 	{
-		r3_eqm = r3_eqm_0;
-		r3_radn = r3_rad_0;
+		r3_eqm = r3_eqm_g;
+		r3_radn = r3_radn_g;
 	}
 	
 	//Calculate over/under density
@@ -82,7 +78,7 @@ double ebtel_calc_c1( double temp, double den, double llength, double rad )
 	noneq2 = pow(den,2)/n_eq_2;
 	
 	//Use different values of r3 based on value of noneq2
-	if (noneq2 < 1)
+	if (noneq2 < 1.0)
 	{
 		//Hot loops equilibrium value of c1
 		r3 = r3_eqm;
@@ -163,7 +159,7 @@ double ebtel_calc_lambda( double temp )
 {
 	double sc;
 	
-	sc = (2*K_B*temp/M_P)/2.74e+4;
+	sc = (2.0*K_B*temp/M_P)/2.74e+4;
 	
 	return sc;
 }

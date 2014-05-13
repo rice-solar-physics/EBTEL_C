@@ -39,8 +39,6 @@ option that can be chosen in ebtel_main.
  	double p;
  	double n;
  	double T;
-	double pv;
-	double j_nt;
  	double dn;
  	double dp;
  	double *s_out = malloc(sizeof(double[3]));
@@ -51,15 +49,21 @@ option that can be chosen in ebtel_main.
  	T = s[2];
  
  	//Advance n in time
-	//dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T)))*tau;
-	//DEBUG--rewrite equations in exactly the form of the IDL version of the code
-	pv = 0.4*(par.f_eq - par.f -par.flux_nt);
-	j_nt = par.flux_nt/par.energy_nt*6.241e+8;
-	dn = (pv*0.5/(par.r12*K_B*T*par.L) + j_nt/par.L)*dt;
+	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T)))*tau;
+	
+	//DEBUG
+	//Try out expression that excludes the non-thermal terms
+	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L))*tau;
+	
 	n = n + dn;
 	
 	//Advance p in time
-	dp = TWO_THIRDS*(par.q1 + par.f_eq/par.L*(1.0 + 1.0/par.r3) - par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt))*tau;
+	dp = TWO_THIRDS*(par.q2 + par.f_eq/par.L*(1.0 + 1.0/par.r3) - par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt))*tau;
+	
+	//DEBUG
+	//Exclude non-thermal terms
+	dp = TWO_THIRDS*(par.q2 + par.f_eq/par.L*(1.0 + 1.0/par.r3))*tau;
+	
 	p = p + dp;	 
 	
 	//Calculate T

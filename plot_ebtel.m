@@ -11,7 +11,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 1;
+eb_case = 4;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -52,14 +52,14 @@ heating_shape = 1;
 param(3) = heating_shape;
 %loop_length = 75;
 param(4) = loop_length;
-usage=2;
+usage=1;
 param(5) = usage;
 rtv=1;
 param(6) = rtv;
 dem_old = 0;
 param(7) = dem_old;
-classical = 1;
-param(8) = classical;
+dynamic = 0;
+param(8) = dynamic;
 solver=0;
 param(9) = solver;
 mode=0;
@@ -225,7 +225,7 @@ hold on
 plot(time,n/10^8,'LineWidth',2)
 plot(timeidl,nidl/10^8,'--r','LineWidth',2)
 xlabel('$t$~(s)','interpreter','latex')
-ylabel('$n/10^8$~(cm$^{-3}$)','interpreter','latex')
+ylabel('$n$~($10^8$~cm$^{-3}$)','interpreter','latex')
 ylim([min(n)/10^8 (max(n)+0.10*max(n))/10^8])
 xlim([0 timeidl(end)])
 
@@ -240,7 +240,7 @@ hold on
 plot(time,na/10^8,'LineWidth',2)
 plot(timeidl,naidl/10^8,'--r','LineWidth',2)
 xlabel('$t~(s)$','interpreter','latex')
-ylabel('$n_{apex}/10^8$~(cm$^{-3}$)','interpreter','latex')
+ylabel('$n_{apex}$~($10^8$~(cm$^{-3}$)','interpreter','latex')
 ylim([min(na)/10^8 max(na)/10^8])
 xlim([0 timeidl(end)])
 
@@ -284,18 +284,29 @@ maxdiffna = max(abs(na - naidl));
 plot(time,abs(na - naidl)/maxdiffna,'b','LineWidth',2)
 maxdiffP = max(abs(P - Pidl));
 plot(time,abs(P - Pidl)/maxdiffP,'c','LineWidth',2)
-xlabel('$t$, (s)','interpreter','latex')
+xlabel('$t$ (s)','interpreter','latex')
 ylabel('$\Delta$(C-IDL)','interpreter','latex')
-hleg = legend('$\Delta(T)$','$\Delta(n)$','$\Delta(n_a)$','$\Delta(P)$');
-set(hleg,'FontSize',14,'Location','Best','interpreter','latex')
-text(1/2*time(end),0.9,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
+%Print max differences
+text(1/2*time(end),0.95,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
     'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.86,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
+text(1/2*time(end),0.91,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
     'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.82,['$\Delta(n_a)_{max}$ = ' num2str(maxdiffna)],...
+text(1/2*time(end),0.87,['$\Delta(n_a)_{max}$ = ' num2str(maxdiffna)],...
     'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.78,['$\Delta(P)_{max}$ = ' num2str(maxdiffP)],...
+text(1/2*time(end),0.83,['$\Delta(P)_{max}$ = ' num2str(maxdiffP)],...
     'interpreter','latex','FontSize',15);
+%Print average differences
+text(1/2*time(end),0.75,['$\langle\Delta(T)\rangle$ = ' num2str(mean(abs(T-Tidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.71,['$\langle\Delta(n)\rangle$ = ' num2str(mean(abs(n-nidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.67,['$\langle\Delta(na)\rangle$ = ' num2str(mean(abs(na-naidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.63,['$\langle\Delta(P)\rangle$ = ' num2str(mean(abs(P-Pidl)))],...
+    'interpreter','latex','FontSize',15);
+%Legend
+hleg = legend('$\Delta(T)$','$\Delta(n)$','$\Delta(n_a)$','$\Delta(P)$');
+set(hleg,'FontSize',18,'Location','Best','interpreter','latex')
 
 % %Additional T plot using data from EBTEL C and IDL
 % %First do some basic calculations for two component plasma
@@ -364,7 +375,7 @@ if usage == 1 || usage == 4
     plot(logtdem,log10meandem_tot,'g')
     plot(logtdem_idl,tot_idl,'--g')
     hold off
-    axis([5.5 7.5 18 22])
+    %axis([5.5 7.5 18 22])
     title(['DEM, Case ' num2str(eb_case)])
     xlabel('log($T$) (K)','interpreter','latex')
     ylabel('log(DEM) (cm$^{-5}$~K$^{-1}$)','interpreter','latex')

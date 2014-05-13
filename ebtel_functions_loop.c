@@ -373,11 +373,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//Alternatively, we could use the scaling laws to determine our initial conditions
 	lambda_0 = 1.95e-18;			//lambda = lambda_0*T
-	bb = -0.5; //-2/3				//power law for radiative loss function
+	bb = -TWO_THIRDS;//-0.5				//power law for radiative loss function
 	q_0 = heat[0];
-	t_0 = r1*pow((3.5/KAPPA_0*heat[0]*pow(loop_length,2)),TWO_SEVENTHS);
-	p_0 = pow(r2,-3.5*0.5)*pow(8/7*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11-2*bb)/4))/loop_length;
-	n_0 = p_0/(2*K_B*t_0);
+	t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
+	p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
+	n_0 = 0.5*p_0/(K_B*t_0);
 	v_0 = 0;
 	
 	//Print scaling law values to the screen
@@ -411,8 +411,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		//Update the parameter structure
 		par.q1 = heat[i+1];
 		par.q2 = heat[i];
+		
+		//Save time and heat to main data structure
 		param_setter->heat[i+1] = heat[i+1];
 		param_setter->time[i+1] = time[i+1];
+		
+		//Set up non-thermal electron flux for usage option 3
 		if(opt.usage==3)
 		{
 			par.flux_nt = loop_length*heat[i]/10;
@@ -842,10 +846,10 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 		//Calculate necessary coefficients for quadratic formula
 		a = KAPPA_0*pow(tdem,1.5);
 		b = -5.0*K_B*n*v;
-		p2kt2 = pow((p*exp(2.0*sin(PI/5.0)*L/(PI*sc))/(2*K_B*tdem)),2);		//(p/2kT)^2; calculate this here for convenience
+		p2kt2 = pow((p*exp(2.0*sin(PI/5.0)*L/(PI*sc))/(2*K_B*tdem)),2);	//(p/2kT)^2; calculate this here for convenience
 		c = -p2kt2*rad_dem;
-		dtds1 = (-b + sqrt(pow(b,2)) - 4.0*a*c)/(2.0*a);
-		dtds2 = (-b - sqrt(pow(b,2)) - 4.0*a*c)/(2.0*a);
+		dtds1 = (-b + sqrt(pow(b,2) - 4.0*a*c))/(2.0*a);
+		dtds2 = (-b - sqrt(pow(b,2) - 4.0*a*c))/(2.0*a);
 		dtds = ebtel_max_val(dtds1,dtds2);
 		dem_tr = 2.0*p2kt2/dtds;		//factor of 2 for both legs of the loop
 	}

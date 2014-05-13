@@ -100,10 +100,10 @@ int main (void)
     double z_avg = (1.0 + 2.0*n_he_n_p)/(1.0 + n_he_n_p); //Include Helium
     //double z_avg = 1.; //For Hydrad comparison.
     double kb_fact = 0.5*(1.0+1.0/z_avg);
-    K_B = k_b*kb_fact; //Modify equation of state for non-e-p plasma
+    K_B = k_b*kb_fact; //Modify equation of state for non-e-p plasma, set as global variable
     double m_fact = (1.0 + n_he_n_p*4.0)/(2.0 + 3.0*n_he_n_p); //Include Helium
     //double m_fact = (1 + n_he_n_p*4.)/2.; For Hydrad comparison
-    M_P = m_p*m_fact*(1.0 + z_avg)/z_avg; //Average ion mass
+    M_P = m_p*m_fact*(1.0 + z_avg)/z_avg; //Average ion mass, set as global variable
 	
 	//Int
 	int i;

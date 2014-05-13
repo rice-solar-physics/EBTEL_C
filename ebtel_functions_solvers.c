@@ -50,20 +50,10 @@ option that can be chosen in ebtel_main.
  
  	//Advance n in time
 	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T)))*tau;
-	
-	//DEBUG
-	//Try out expression that excludes the non-thermal terms
-	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L))*tau;
-	
 	n = n + dn;
 	
 	//Advance p in time
 	dp = TWO_THIRDS*(par.q2 + par.f_eq/par.L*(1.0 + 1.0/par.r3) - par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt))*tau;
-	
-	//DEBUG
-	//Exclude non-thermal terms
-	dp = TWO_THIRDS*(par.q2 + par.f_eq/par.L*(1.0 + 1.0/par.r3))*tau;
-	
 	p = p + dp;	 
 	
 	//Calculate T

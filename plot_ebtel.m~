@@ -52,14 +52,14 @@ heating_shape = 1;
 param(3) = heating_shape;
 %loop_length = 75;
 param(4) = loop_length;
-usage=2;
+usage=1;
 param(5) = usage;
 rtv=1;
 param(6) = rtv;
 dem_old = 0;
 param(7) = dem_old;
-classical = 1;
-param(8) = classical;
+dynamic = 0;
+param(8) = dynamic;
 solver=0;
 param(9) = solver;
 mode=0;
@@ -286,14 +286,27 @@ maxdiffP = max(abs(P - Pidl));
 plot(time,abs(P - Pidl)/maxdiffP,'c','LineWidth',2)
 xlabel('$t$, (s)','interpreter','latex')
 ylabel('$\Delta$(C-IDL)','interpreter','latex')
+%Print max differences
+text(1/2*time(end),0.95,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
+    'interpreter','latex','FontSize',15)
+text(1/2*time(end),0.91,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
+    'interpreter','latex','FontSize',15)
+text(1/2*time(end),0.87,['$\Delta(n_a)_{max}$ = ' num2str(maxdiffna)],...
+    'interpreter','latex','FontSize',15)
+text(1/2*time(end),0.83,['$\Delta(P)_{max}$ = ' num2str(maxdiffP)],...
+    'interpreter','latex','FontSize',15);
+%Print average differences
+text(1/2*time(end),0.75,['$\langle\Delta(T)\rangle$ = ' num2str(mean(abs(T-Tidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.71,['$\langle\Delta(n)\rangle$ = ' num2str(mean(abs(n-nidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.67,['$\langle\Delta(na)\rangle$ = ' num2str(mean(abs(na-naidl)))],...
+    'interpreter','latex','FontSize',15);
+text(1/2*time(end),0.63,['$\langle\Delta(P)\rangle$ = ' num2str(mean(abs(P-Pidl)))],...
+    'interpreter','latex','FontSize',15);
+%Legend
 hleg = legend('$\Delta(T)$','$\Delta(n)$','$\Delta(n_a)$','$\Delta(P)$');
-set(hleg,'FontSize',14,'Location','Best','interpreter','latex')
-text(1/2*time(end),0.9,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
-    'interpreter','latex','FontSize',14)
-text(1/2*time(end),0.9,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
-    'interpreter','latex','FontSize',14)
-text(1/2*time(end),0.9,'$\Delta(n_a)_{max}$ = ' num2str(maxdiffna) ...
-    '$\Delta(P)_{max}$ = ' num2str(maxdiffP)],'interpreter','latex');
+set(hleg,'FontSize',18,'Location','Best','interpreter','latex')
 
 % %Additional T plot using data from EBTEL C and IDL
 % %First do some basic calculations for two component plasma

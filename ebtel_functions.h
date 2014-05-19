@@ -147,4 +147,7 @@ struct ebtel_rka_st *ebtel_rk_adapt(double[], int, double, double, double, struc
 //Declare prototype for ebtel_min_val of type double
 double ebtel_min_val(double, double);
 
+//Declare prototype for ebtel_calc_abundance of type void
+void ebtel_calc_abundance(void);
+
 #endif

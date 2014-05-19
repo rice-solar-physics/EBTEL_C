@@ -163,3 +163,33 @@ double ebtel_calc_lambda( double temp )
 	
 	return sc;
 }
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_calc_abundance
+
+FUNCTION_DESCRIPTION: This function calculates the effective Boltzmann constant and ion mass given some He/H abundance.
+
+INPUTS:
+	
+OUTPUTS:
+
+***********************************************************************************/
+
+void ebtel_calc_abundance(void)
+{
+	double k_b = 1.38e-16;
+	double m_p = 1.67e-24;
+	
+	//Calculate average ion mass
+    double n_he_n_p = 0.075;   //He/p abundance.
+    //double z_avg = (1.0 + 2.0*n_he_n_p)/(1.0 + n_he_n_p); //Include Helium
+    double z_avg = 1.; //For Hydrad comparison.
+    double kb_fact = 0.5*(1.0+1.0/z_avg);
+    //double m_fact = (1.0 + n_he_n_p*4.0)/(2.0 + 3.0*n_he_n_p); //Include Helium
+    double m_fact = (1 + n_he_n_p*4.)/2.; //For Hydrad comparison
+	
+	//Set global variables
+    M_P = m_p*m_fact*(1.0 + z_avg)/z_avg; //Average ion mass
+	K_B = k_b*kb_fact; //Modify equation of state for non-e-p plasma
+}

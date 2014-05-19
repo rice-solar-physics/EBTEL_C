@@ -157,7 +157,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//struct
 	struct rk_params par;
-	//struct ebtel_rka_st *rka_setter;
 	struct ebtel_params_st *param_setter = malloc(sizeof(struct ebtel_params_st));
 	assert(param_setter != NULL);
 	
@@ -223,8 +222,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Set up thermal conduction parameters
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(9.1e-28,0.5);
-	sat_limit = 0.1667;
-	//sat_limit = 1;	//HYDRAD value
+	//sat_limit = 0.1667;
+	sat_limit = 1;	//HYDRAD value
 	
 	/***********************************************************************************
 						Set up DEM in Transition Region
@@ -300,10 +299,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
 		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
 		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
-		nn = pow(heat[0]/((1+r3)*rad),0.5);													//density at new r3 and new rad
-		err = tt_new - tt_old;																//difference between t_i, T_i-1
+		nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
+		err = tt_new - tt_old;															//difference between t_i, T_i-1
 		err_n = nn - nn_old;	
-		//Break the loop if the error gets below a certain threshold														
+		//Break the loop if the error gets below a certain threshold
 		if(fabs(err)<tol)// && fabs(err_n)<tol)
 		{
 			printf("r3 = %e\n",r3);													//display calculated parameters
@@ -910,6 +909,9 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	double t_mid;
 	double t_m;
 	double t_h;
+	double n_start;
+	double n_end;
+	double n_mid;
 	double *heat = malloc(sizeof(double[n]));
 	int i;
 
@@ -921,6 +923,11 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	t_mid = t_start + t_pulse_half;
 	t_end = t_start + t_pulse;
 	
+	//Set indices
+	n_start = t_start/tau;
+	n_end = n_start + t_pulse/tau;
+	n_mid = n_start + t_pulse/tau/2;
+	
 	//Choose which heating model to use
 	//1--triangular pulse (recommended, used in Paper I,II)
 	//2--square pulse 
@@ -931,15 +938,15 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 		for(i=0;i<n;i++)
 		{
 			//Triangular Pulse
-			if(time[i] <= t_start )
+			if(i < n_start)
 			{
 				heat[i] = h_back;
 			}
-			else if(time[i] > t_start && time[i] <= t_mid)
+			else if(i >= n_start && i <= n_mid)
 			{
 				heat[i] = h_back + h_nano*((time[i] - (t_start +tau))/t_mid);
 			}
-			else if(time[i] > t_mid && time[i] <= t_end )
+			else if(i > n_mid && i <= n_end )
 			{
 				heat[i] = h_back - h_nano*(time[i] - t_end)/t_mid;
 			}

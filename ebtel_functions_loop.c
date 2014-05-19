@@ -938,11 +938,11 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 		for(i=0;i<n;i++)
 		{
 			//Triangular Pulse
-			if(i < n_start)
+			if(i <= n_start)
 			{
 				heat[i] = h_back;
 			}
-			else if(i >= n_start && i <= n_mid)
+			else if(i > n_start && i <= n_mid)
 			{
 				heat[i] = h_back + h_nano*((time[i] - (t_start +tau))/t_mid);
 			}

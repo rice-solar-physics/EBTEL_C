@@ -11,7 +11,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 4;
+eb_case = 2;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -54,7 +54,7 @@ param(3) = heating_shape;
 param(4) = loop_length;
 usage=1;
 param(5) = usage;
-rtv=1;
+rtv=0;
 param(6) = rtv;
 dem_old = 0;
 param(7) = dem_old;
@@ -62,7 +62,7 @@ dynamic = 0;
 param(8) = dynamic;
 solver=0;
 param(9) = solver;
-mode=0;
+mode=1;
 param(10) = mode;
 %h_nano = 1e-2;
 param(11) = h_nano;
@@ -171,30 +171,34 @@ dT = abs(max(T) - max(Tidl));
 %% Plotting
 
 %Set the size of the figures
-height = 2.0; % width/golden ratio
-width = 0.5;
+height = 0.5; % width/golden ratio
+width = 2.0;
 scale = 1500; %scale the plots appropriately; adjust as needed
 
 figure(1)
 box('on')
 set(gcf,'Position',[0 0 scale*width scale*height])
 set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,1)
 hold on
-plot(time,heat,'LineWidth',2)
-plot(timeidl,heatidl,'--r','LineWidth',2)
+%plot(time,heat,'LineWidth',2)
+%plot(timeidl,heatidl,'--r','LineWidth',2)
+plot(time,abs(heat - heatidl))
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$h$ (erg~cm$^{-3}$~s$^{-1}$)','interpreter','latex')
 xlim([0 2*t_pulse_half])
 
-figure(2)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
+% figure(2)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,2)
 hold on
 plot(time,T/10^6,'LineWidth',2)
 plot(timeidl,Tidl/10^6,'--r','LineWidth',2)
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$T$~(MK)','interpreter','latex')
+title(['Loop Parameters, Case ' num2str(eb_case) ])
 hleg = legend('C','IDL');
 set(hleg,'Location','Best','FontSize',14);
 xlim([0 timeidl(end)])
@@ -202,10 +206,11 @@ xlim([0 timeidl(end)])
 %fn = ['temp_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
 %print(gcf,'-depsc',fn)
 
-figure(3)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
+% figure(3)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,3)
 hold on
 plot(time,P,'LineWidth',2)
 plot(timeidl,Pidl,'--r','LineWidth',2)
@@ -217,10 +222,11 @@ xlim([0 timeidl(end)])
 % fn = ['press_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
 % print(gcf,'-depsc',fn)
 
-figure(4)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
+% figure(4)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,4)
 hold on
 plot(time,n/10^8,'LineWidth',2)
 plot(timeidl,nidl/10^8,'--r','LineWidth',2)
@@ -232,10 +238,11 @@ xlim([0 timeidl(end)])
 % fn = ['ndens_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
 % print(gcf,'-depsc',fn)
 
-figure(5)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
+% figure(5)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,5)
 hold on
 plot(time,na/10^8,'LineWidth',2)
 plot(timeidl,naidl/10^8,'--r','LineWidth',2)
@@ -247,10 +254,11 @@ xlim([0 timeidl(end)])
 % fn = ['ndensa_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
 % print(gcf,'-depsc',fn)
 
-figure(6)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
+% figure(6)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+subplot(2,3,6)
 hold on
 plot(T/T_max_n,n/n_max,'LineWidth',2)
 plot(Tidl/T_max_nidl,nidl/n_max_idl,'--r','LineWidth',2)
@@ -259,76 +267,106 @@ ylabel('$n/n_{max}$','interpreter','latex')
 xlim([0.2 2.2])
 ylim([0.2 1.4])
 
-figure(7)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
-hold on
-plot(time,r3,'LineWidth',2)
-plot(timeidl,r3idl,'--r','LineWidth',2)
-xlabel('$t$ (s)','interpreter','latex')
-ylabel('$c_1$','interpreter','latex')
+% figure(7)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+% hold on
+% plot(time,r3,'LineWidth',2)
+% plot(timeidl,r3idl,'--r','LineWidth',2)
+% xlabel('$t$ (s)','interpreter','latex')
+% ylabel('$c_1$','interpreter','latex')
 
 %Plot differences between C and IDL solutions normalized to their
 %respective maximum values
-figure(8)
-box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
-set(gca,'FontSize',18,'FontName','Arial')
-hold on
-maxdiffT = max(abs(T - Tidl));
-plot(time,abs(T-Tidl)/maxdiffT,'k','LineWidth',2)
-maxdiffn = max(abs(n - nidl));
-plot(time,abs(n - nidl)/maxdiffn,'r','LineWidth',2)
-maxdiffna = max(abs(na - naidl));
-plot(time,abs(na - naidl)/maxdiffna,'b','LineWidth',2)
-maxdiffP = max(abs(P - Pidl));
-plot(time,abs(P - Pidl)/maxdiffP,'c','LineWidth',2)
-xlabel('$t$ (s)','interpreter','latex')
-ylabel('$\Delta$(C-IDL)','interpreter','latex')
-%Print max differences
-text(1/2*time(end),0.95,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
-    'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.91,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
-    'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.87,['$\Delta(n_a)_{max}$ = ' num2str(maxdiffna)],...
-    'interpreter','latex','FontSize',15)
-text(1/2*time(end),0.83,['$\Delta(P)_{max}$ = ' num2str(maxdiffP)],...
-    'interpreter','latex','FontSize',15);
-%Print average differences
-text(1/2*time(end),0.75,['$\langle\Delta(T)\rangle$ = ' num2str(mean(abs(T-Tidl)))],...
-    'interpreter','latex','FontSize',15);
-text(1/2*time(end),0.71,['$\langle\Delta(n)\rangle$ = ' num2str(mean(abs(n-nidl)))],...
-    'interpreter','latex','FontSize',15);
-text(1/2*time(end),0.67,['$\langle\Delta(na)\rangle$ = ' num2str(mean(abs(na-naidl)))],...
-    'interpreter','latex','FontSize',15);
-text(1/2*time(end),0.63,['$\langle\Delta(P)\rangle$ = ' num2str(mean(abs(P-Pidl)))],...
-    'interpreter','latex','FontSize',15);
-%Legend
-hleg = legend('$\Delta(T)$','$\Delta(n)$','$\Delta(n_a)$','$\Delta(P)$');
-set(hleg,'FontSize',18,'Location','Best','interpreter','latex')
-
-% %Additional T plot using data from EBTEL C and IDL
-% %First do some basic calculations for two component plasma
-% k_b = 1.38e-16;
-% mp = 1.67e-24;
-% n_he_n_p = 0.075;   %He/p abundance.
-% z_avg = (1 + 2*n_he_n_p)/(1 + n_he_n_p); %Include Helium
-% %z_avg = 1.; For Hydrad comparison.
-% kb_fact = 0.5*(1.+1./z_avg);
-% k_b = k_b*kb_fact; %Modify equation of state for non-e-p plasma
-% m_fact = (1 + n_he_n_p*4.)/(2 + 3.*n_he_n_p); %Include Helium
-% %m_fact = (1 + n_he_n_p*4.)/2.; For Hydrad comparison
-% mp = mp*m_fact*(1 + z_avg)/z_avg; %Average ion mass
-% 
-% TtestC = P./(2*k_b.*n);
-% TtestIDL = Pidl./(2*k_b.*nidl);
-% figure(9)
+% figure(8)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
 % hold on
-% plot(time,TtestC,'LineWidth',2)
-% plot(timeidl,TtestIDL,'--r','LineWidth',2)
-% xlabel('t')
-% ylabel('T')
+% maxdiffT = max(abs(T - Tidl));
+% Tdiff = abs(T-Tidl)/mean(Tidl);
+% plot(time,Tdiff,'k','LineWidth',2)
+% maxdiffn = max(abs(n - nidl));
+% ndiff = abs(n - nidl)/maxdiffn;
+% plot(time,ndiff,'r','LineWidth',2)
+% maxdiffna = max(abs(na - naidl));
+% nadiff = abs(na - naidl)/maxdiffna;
+% plot(time,nadiff,'b','LineWidth',2)
+% maxdiffP = max(abs(P - Pidl));
+% Pdiff = abs(P - Pidl)/maxdiffP;
+% plot(time,Pdiff,'c','LineWidth',2)
+% xlabel('$t$ (s)','interpreter','latex')
+% ylabel('$\Delta$(C-IDL)','interpreter','latex')
+% %Print max differences
+% text(1/2*time(end),0.95,['$\Delta(T)_{max}$ = ' num2str(maxdiffT)],...
+%     'interpreter','latex','FontSize',15)
+% text(1/2*time(end),0.91,['$\Delta(n)_{max}$ = ' num2str(maxdiffn)],...
+%     'interpreter','latex','FontSize',15)
+% text(1/2*time(end),0.87,['$\Delta(n_a)_{max}$ = ' num2str(maxdiffna)],...
+%     'interpreter','latex','FontSize',15)
+% text(1/2*time(end),0.83,['$\Delta(P)_{max}$ = ' num2str(maxdiffP)],...
+%     'interpreter','latex','FontSize',15);
+% %Print average differences
+% text(1/2*time(end),0.75,['$\langle\Delta(T)\rangle$ = ' num2str(mean(abs(T-Tidl)))],...
+%     'interpreter','latex','FontSize',15);
+% text(1/2*time(end),0.71,['$\langle\Delta(n)\rangle$ = ' num2str(mean(abs(n-nidl)))],...
+%     'interpreter','latex','FontSize',15);
+% text(1/2*time(end),0.67,['$\langle\Delta(na)\rangle$ = ' num2str(mean(abs(na-naidl)))],...
+%     'interpreter','latex','FontSize',15);
+% text(1/2*time(end),0.63,['$\langle\Delta(P)\rangle$ = ' num2str(mean(abs(P-Pidl)))],...
+%     'interpreter','latex','FontSize',15);
+% %Legend
+% hleg = legend('$\Delta(T)$','$\Delta(n)$','$\Delta(n_a)$','$\Delta(P)$');
+% set(hleg,'FontSize',18,'Location','Best','interpreter','latex')
+
+%Plot differences between temperature and density for average and apex
+%values
+deltaToverT = (T - Tidl)./Tidl;
+deltanovern = (n - nidl)./nidl;
+deltaPoverP = (P - Pidl)./Pidl;
+deltaTaoverTa = (ta - taidl)./taidl;
+deltanaoverna = (na - naidl)./naidl;
+
+figure(gcf+1)
+box('on')
+set(gcf,'Position',[0 0 scale*height scale*width])
+set(gca,'FontSize',14,'FontName','Arial')
+hold on
+plot(time,deltaToverT,'LineWidth',2)
+plot(time,deltanovern,'--','LineWidth',2)
+plot(time,deltaPoverP,'g','LineWidth',2)
+plot(time,deltaTaoverTa,'r')
+plot(time,deltanaoverna,'--r')
+plot([0 total_time],[0 0],'k--')
+xlabel('$t$~(s)','interpreter','latex')
+ylabel('$\Delta T/T,~\Delta n/n$','interpreter','latex')
+hleg = legend('$T$','$n$','$P$','$T_a$','$n_a$');
+set(hleg,'FontSize',14,'interpreter','latex','Location','Best')
+%Print some results on the plots
+
+
+% figure(3)
+% box('on')
+% set(gcf,'Position',[0 0 scale*width scale*height])
+% set(gca,'FontSize',18,'FontName','Arial')
+% subplot(2,2,1)
+% hist(abs(deltaToverT),linspace(0,max(deltaToverT),1000))
+% title('$\Delta T$','interpreter','latex')
+% xlim([0 1])
+% subplot(2,2,2)
+% hist(abs(deltaPoverP),linspace(0,max(deltaPoverP),1000))
+% title('$\Delta P$','interpreter','latex')
+% xlim([0 1])
+% subplot(2,2,3)
+% hist(abs(deltanovern),linspace(0,max(deltanovern),1000))
+% title('$\Delta n$','interpreter','latex')
+% xlim([0 1])
+% subplot(2,2,4)
+% hist(abs(deltanaoverna),linspace(0,max(deltanaoverna),1000))
+% title('$\Delta n_a$','interpreter','latex')
+% xlim([0 1])
+
 
 %cd(c_dir)
 
@@ -375,7 +413,7 @@ if usage == 1 || usage == 4
     plot(logtdem,log10meandem_tot,'g')
     plot(logtdem_idl,tot_idl,'--g')
     hold off
-    %axis([5.5 7.5 18 22])
+    axis([5.5 7.5 18 22])
     title(['DEM, Case ' num2str(eb_case)])
     xlabel('log($T$) (K)','interpreter','latex')
     ylabel('log(DEM) (cm$^{-5}$~K$^{-1}$)','interpreter','latex')
@@ -386,4 +424,3 @@ if usage == 1 || usage == 4
 %     plot(logtdem,logtdem + log10meandem_tot)
 %     axis([5.5 7.0 24 28])
 end
-

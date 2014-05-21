@@ -174,6 +174,17 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->cond = malloc(sizeof(double[ntot]));
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
 	
+	//DEBUG
+	param_setter->dn1 = malloc(sizeof(double[ntot]));
+	param_setter->dn2 = malloc(sizeof(double[ntot]));
+	param_setter->dn_nt = malloc(sizeof(double[ntot]));
+	param_setter->dn = malloc(sizeof(double[ntot]));
+	param_setter->dp1 = malloc(sizeof(double[ntot]));
+	param_setter->dp2 = malloc(sizeof(double[ntot]));
+	param_setter->dp3 = malloc(sizeof(double[ntot]));
+	param_setter->dp_nt = malloc(sizeof(double[ntot]));
+	param_setter->dp = malloc(sizeof(double[ntot]));
+	
 	if(opt.usage == 4 || opt.usage == 1)
 	{
 		if(opt.usage == 4)
@@ -453,7 +464,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		r12_tr = r1_tr/r2;
 
 		//Calculate equilibrium thermal conduction at base (-R_tr in Paper I)
-		f_eq = -r3*n*n*rad*loop_length;
+		f_eq = -r3*pow(n,2)*rad*loop_length;
 		par.f_eq = f_eq;
 		
 		//Calculate pv quantity to be used in velocity calculation
@@ -469,7 +480,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		if(opt.solver==0)	//Euler solver
 		{	
 			//Call the Euler routine
-			state_ptr = ebtel_euler(state,tau,par,opt);
+			state_ptr = ebtel_euler(state,tau,par,opt,i);
 		}
 		else //if(opt.solver==1)	//RK routine
 		{	
@@ -484,6 +495,18 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->ndens[i+1] = n;
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
+		
+		//DEBUG
+		//Save term-by-term values to param_setter structure
+		param_setter->dn1[i+1] = *(state_ptr + 3);
+		param_setter->dn2[i+1] = *(state_ptr + 4);
+		param_setter->dn_nt[i+1] = *(state_ptr + 5);
+		param_setter->dn[i+1] = *(state_ptr + 6);
+		param_setter->dp1[i+1] = *(state_ptr + 7);
+		param_setter->dp2[i+1] = *(state_ptr + 8);
+		param_setter->dp3[i+1] = *(state_ptr + 9);
+		param_setter->dp_nt[i+1] = *(state_ptr + 10);
+		param_setter->dp[i+1] = *(state_ptr + 11);
 		
 		//Free the state ptr as it will be malloc'd again on the next go around
 		free(state_ptr);
@@ -575,7 +598,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			}
 			
 			//Corona (EM distributed uniformly over temperature interval [tmin,tmax])
-			t_max = ebtel_max_val(t/r2,1e+4);
+			t_max = ebtel_max_val(t/r2,1.1e+4);
 			t_min = ebtel_max_val(t*(2.0 - 1/r2),1e+4);
 			j_max = (log10(t_max) - 4.0)*100;
 			j_min = (log10(t_min) - 4.0)*100;
@@ -652,6 +675,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Free up memory used by ebtel_kpar_set and ebtel_linspace functions
 	free(kptr);
 	kptr = NULL;
+	if(opt.usage==1 || opt.usage==4)
+	{
+		free(log_tdem_ptr);
+		log_tdem_ptr = NULL;
+	}
 	for(i=0;i<ntot;i++)
 	{
 		free(dem_tr[i]);
@@ -663,11 +691,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	dem_tr = NULL;
 	free(dem_cor);
 	dem_cor = NULL;
-	if(opt.usage==1 || opt.usage==4)
-	{
-		free(log_tdem_ptr);
-		log_tdem_ptr = NULL;
-	}
 	
 	//Exit and return the structure that has been set appropriately
 	return param_setter;
@@ -909,9 +932,9 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	double t_mid;
 	double t_m;
 	double t_h;
-	double n_start;
-	double n_end;
-	double n_mid;
+	int n_start;
+	int n_end;
+	int n_mid;
 	double *heat = malloc(sizeof(double[n]));
 	int i;
 
@@ -938,17 +961,17 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 		for(i=0;i<n;i++)
 		{
 			//Triangular Pulse
-			if(i <= n_start)
+			if(i < n_start)
 			{
 				heat[i] = h_back;
 			}
-			else if(i > n_start && i <= n_mid)
+			else if(i >= n_start && i <= n_mid)
 			{
-				heat[i] = h_back + h_nano*((time[i] - (t_start +tau))/t_mid);
+				heat[i] = h_back + h_nano*((time[i] - time[n_start])/t_mid);
 			}
 			else if(i > n_mid && i <= n_end )
 			{
-				heat[i] = h_back - h_nano*(time[i] - t_end)/t_mid;
+				heat[i] = h_back - h_nano*(time[i] - time[n_end])/t_mid;
 			}
 			else
 			{

@@ -164,7 +164,7 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		
 		for(i=0; i<451; i++)
 		{	
-			//Now write this data to a file. This will be a secondary table underneath the first
+			//Now write this data to a file. 
 			fprintf(out_file,"%e\t%e\t%e\t%e\n",*(params_final->logtdem + i), *(params_final->dem_tr_log10mean + i), \
 			*(params_final->dem_cor_log10mean + i),*(params_final->dem_tot_log10mean + i));
 		}

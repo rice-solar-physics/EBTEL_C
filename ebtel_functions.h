@@ -66,6 +66,16 @@ struct ebtel_params_st {
 		double *dem_tr_log10mean;
 		double *dem_cor_log10mean; 
 		double *dem_tot_log10mean;
+		//DEBUG
+		double *dn1;
+		double *dn2;
+		double *dn_nt;
+		double *dn;
+		double *dp1;
+		double *dp2;
+		double *dp3;
+		double *dp_nt;
+		double *dp;
 };
 struct rk_params {
 		double L;
@@ -136,7 +146,7 @@ double * ebtel_heating(double[], double, double, double, int, int);
 void ebtel_print_header(int, int, int, int, struct Option);
 
 //Declare prototype for ebtel_euler of type double
-double * ebtel_euler(double[], double, struct rk_params, struct Option);
+double * ebtel_euler(double[], double, struct rk_params, struct Option, int);
 
 //Declare prototype for ebtel_data_writer of type void
 void ebtel_file_writer(int, int, struct Option, struct ebtel_params_st *);

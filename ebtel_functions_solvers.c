@@ -33,7 +33,7 @@ option that can be chosen in ebtel_main.
 	
  *********************************************************************************/
  
- double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option opt)
+ double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option opt,int i)
  {
  	//Declare variables
  	double p;
@@ -41,12 +41,14 @@ option that can be chosen in ebtel_main.
  	double T;
  	double dn;
  	double dp;
- 	double *s_out = malloc(sizeof(double[3]));
+ 	double *s_out = malloc(sizeof(double[12]));
  
  	//Unravel the state vector
  	p = s[0];
  	n = s[1];
  	T = s[2];
+ 
+	/*
  
  	//Advance n in time
 	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T)))*tau;
@@ -58,6 +60,39 @@ option that can be chosen in ebtel_main.
 	
 	//Calculate T
 	T = p/(n*2.0*K_B);	//calculate new temperature
+	
+	*/
+	
+	//DEBUG
+	//Write pressure and density equations term by term to compare with IDL code
+	double dn1, dn2, dn_nt, dp1, dp2, dp3, dp_nt;
+	
+	dn1 = 0.2*par.f_eq*tau/(par.r12*K_B*T*par.L);
+	dn2 = -0.2*par.f*tau/(par.r12*K_B*T*par.L);
+	dn_nt = par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*par.L))*tau;
+	dn = dn1 + dn2 + dn_nt;
+	n = n + dn;
+	
+	dp1 = TWO_THIRDS*par.q2*tau;
+	dp2 = TWO_THIRDS*par.f_eq*tau/par.L;
+	dp3 = TWO_THIRDS*par.f_eq*tau/(par.L*par.r3);
+	dp_nt = -TWO_THIRDS*par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt)*tau;
+	dp = dp1 + dp2 + dp3 + dp_nt;
+	p = p + dp;
+	
+	//Add the terms to the state vector
+	s_out[3] = dn1;
+	s_out[4] = dn2;
+	s_out[5] = dn_nt;
+	s_out[6] = dn;
+	s_out[7] = dp1;
+	s_out[8] = dp2;
+	s_out[9] = dp3;
+	s_out[10] = dp_nt;
+	s_out[11] = dp;
+	
+	
+	T = p/(2.0*n*K_B);
 	
 	//Update the state vector and return it
 	s_out[0] = p;

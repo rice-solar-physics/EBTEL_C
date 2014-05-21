@@ -220,6 +220,29 @@ int main (void)
 	/****************Done writing data to file. Free up memory reserved by pointers.******************/
 	
 	//Free up memory used by the structure params_final
+	
+	//DEBUG
+	//Free up memory used in params_final structure by debug terms
+	free(params_final->dn1);
+	pararms_final->dn1 = NULL;
+	free(params_final->dn2);
+	pararms_final->dn2 = NULL;
+	free(params_final->dn_nt);
+	pararms_final->dn_nt = NULL;
+	free(params_final->dn);
+	pararms_final->dn = NULL;
+	free(params_final->dp1);
+	pararms_final->dp1 = NULL;
+	free(params_final->dp2);
+	pararms_final->dp2 = NULL;
+	free(params_final->dp3);
+	pararms_final->dp3 = NULL;
+	free(params_final->dp_nt);
+	pararms_final->dp_nt = NULL;
+	free(params_final->dp);
+	pararms_final->dp = NULL;
+	
+	
 	ebtel_free_mem(params_final);
 	free(heat_ptr);
 	free(time_ptr);

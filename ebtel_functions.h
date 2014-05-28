@@ -40,6 +40,7 @@ struct Option {
 	int solver;
 	int mode;
 	int heating_shape;
+	int index_dem;
 	double energy_nt;
 	double T0;
 	double n0;
@@ -63,6 +64,7 @@ struct ebtel_params_st {
 		double *rad_ratio;
 		double *cond;
 		double *rad_cor;
+		double *rad;
 		double *dem_tr_log10mean;
 		double *dem_cor_log10mean; 
 		double *dem_tot_log10mean;
@@ -140,7 +142,7 @@ double * ebtel_rk(double[], int, double, double, struct rk_params, struct Option
 double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option);
 
 //Declare prototype for ebtel_heating of type double
-double * ebtel_heating(double[], double, double, double, int, int);
+double * ebtel_heating(double[], double, double, double, double, int, int);
 
 //Declare prototype for ebtel_print_header of type void
 void ebtel_print_header(int, int, int, int, struct Option);

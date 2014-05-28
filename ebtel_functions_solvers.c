@@ -41,12 +41,16 @@ option that can be chosen in ebtel_main.
  	double T;
  	double dn;
  	double dp;
+	double pv;
  	double *s_out = malloc(sizeof(double[12]));
  
  	//Unravel the state vector
  	p = s[0];
  	n = s[1];
  	T = s[2];
+	
+	//Calculate enthalpy flux
+	pv = 0.4*(par.f_eq - par.f - par.flux_nt);
  
 	/*
  
@@ -65,20 +69,26 @@ option that can be chosen in ebtel_main.
 	
 	//DEBUG
 	//Write pressure and density equations term by term to compare with IDL code
-	double dn1, dn2, dn_nt, dp1, dp2, dp3, dp_nt;
+	double dn1, dn2, dn_nt, dp1, dp2, dp3, dp_nt, dn_original, dp_original;
 	
 	dn1 = 0.2*par.f_eq*tau/(par.r12*K_B*T*par.L);
 	dn2 = -0.2*par.f*tau/(par.r12*K_B*T*par.L);
 	dn_nt = par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*par.L))*tau;
 	dn = dn1 + dn2 + dn_nt;
-	n = n + dn;
+	
+	dn_original = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L)*tau;
+	
+	n = n + dn_original;
 	
 	dp1 = TWO_THIRDS*par.q2*tau;
 	dp2 = TWO_THIRDS*par.f_eq*tau/par.L;
 	dp3 = TWO_THIRDS*par.f_eq*tau/(par.L*par.r3);
 	dp_nt = -TWO_THIRDS*par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt)*tau;
 	dp = dp1 + dp2 + dp3 + dp_nt;
-	p = p + dp;
+	
+	dp_original = TWO_THIRDS*(par.q2 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
+	
+	p = p + dp_original;
 	
 	//Add the terms to the state vector
 	s_out[3] = dn1;
@@ -381,6 +391,7 @@ option that can be chosen in ebtel_main.
  	double f;
  	double f_eq;
  	double q;
+	double pv;
  	double dpdt;
  	double dndt;
  	double dTdt;
@@ -444,9 +455,14 @@ option that can be chosen in ebtel_main.
 		q = par.q2;
 	}
 	
+	//Calculate the enthalpy flux
+	pv = 0.4*(f_eq - f - par.flux_nt);
+	
 	//Now compute the derivatives of each of the quantities in our state vector
-	dpdt = TWO_THIRDS*(q + f_eq/par.L*(1.0 + 1.0/r3) - par.flux_nt/par.L*(1.0 - K_B*T/opt.energy_nt));	
-	dndt = 0.2*(f_eq - f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T));																																	
+	//dpdt = TWO_THIRDS*(q + f_eq/par.L*(1.0 + 1.0/r3) - par.flux_nt/par.L*(1.0 - K_B*T/opt.energy_nt));
+	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L);
+	//dndt = 0.2*(f_eq - f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T));
+	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L);
 	dTdt = T*(1/p*dpdt - 1/n*dndt);
 	
 	//Set the derivative state vector

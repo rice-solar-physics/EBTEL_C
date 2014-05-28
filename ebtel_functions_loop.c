@@ -63,6 +63,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	/*****Variable declarations*****/
 	//Int
 	int nk;
+	int index_dem = opt.index_dem;
 	int i;	//index over ntot
 	int j;	//index over 451
 	int flag_dem_tr;
@@ -134,12 +135,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double c_array[3];
 	double f_array[3];
 	double state[3];
-	double log_tdem[451];
-	double tdem[451];
-	double root_tdem[451];
-	double fourth_tdem[451];
-	double rad_dem[451];
-	double root_rad_dem[451];
+	double log_tdem[index_dem];
+	double tdem[index_dem];
+	double root_tdem[index_dem];
+	double fourth_tdem[index_dem];
+	double rad_dem[index_dem];
+	double root_rad_dem[index_dem];
 	double dem_cor_minus[ntot];
 	double dem_tr_minus[ntot];
 	double dem_tot_minus[ntot];
@@ -151,8 +152,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	dem_cor = malloc(ntot*sizeof(double *));
 	for(i = 0; i<ntot; i++)
 	{
-		dem_tr[i] = malloc(451*sizeof(double));
-		dem_cor[i] = malloc(451*sizeof(double));
+		dem_tr[i] = malloc(index_dem*sizeof(double));
+		dem_cor[i] = malloc(index_dem*sizeof(double));
 	}
 	
 	//struct
@@ -173,6 +174,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->coeff_1 = malloc(sizeof(double[ntot]));
 	param_setter->cond = malloc(sizeof(double[ntot]));
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
+	param_setter->rad = malloc(sizeof(double[ntot]));
 	
 	//DEBUG
 	param_setter->dn1 = malloc(sizeof(double[ntot]));
@@ -192,10 +194,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			param_setter->f_ratio = malloc(sizeof(double[ntot]));
 			param_setter->rad_ratio = malloc(sizeof(double[ntot]));
 		}
-		param_setter->logtdem = malloc(sizeof(double[451]));
-		param_setter->dem_tr_log10mean = malloc(sizeof(double[451]));
-		param_setter->dem_cor_log10mean = malloc(sizeof(double[451]));
-		param_setter->dem_tot_log10mean = malloc(sizeof(double[451]));
+		param_setter->logtdem = malloc(sizeof(double[index_dem]));
+		param_setter->dem_tr_log10mean = malloc(sizeof(double[index_dem]));
+		param_setter->dem_cor_log10mean = malloc(sizeof(double[index_dem]));
+		param_setter->dem_tot_log10mean = malloc(sizeof(double[index_dem]));
 	}
 	
 	/***********************************************************************************
@@ -205,9 +207,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Calculate initial r values. In Klimchuk et al. (2008), these are denoted by c1,c2,c3. 
 	//See ebtel_main.c documentation for correspondence between variables.
 	r1 = ebtel_calc_c3();	//ratio of base to apex temperature; c3 in Klimchuk et al. (2008), Paper I from here on.
-	r1_tr = r1;				//ratio of temperature at top of TR to apex temperature
+	r1_tr = r1;				//ratio of temperature at top of TR to apex temperature, can be set to 0.5 as well.
 	r2 = ebtel_calc_c2();	//ratio of average to apex temperature; c2 in Paper I
-	r3 = 2;					//ratio of TR to coronal radiative losses; c1 in Paper I
+	r3 = 2.0;					//ratio of TR to coronal radiative losses; c1 in Paper I
 	r4 = 1.0;				//ratio of average to base velocity
 	
 	//Set temperature bins.
@@ -230,6 +232,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Calculate radiative loss function.
 	rad = ebtel_rad_loss(1e+6,kpar,opt.rtv);
 	
+	
 	//Set up thermal conduction parameters
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(9.1e-28,0.5);
@@ -242,8 +245,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	if (opt.usage == 1 || opt.usage == 4)
 	{	
 		//Define temperature arrays for plotting and calculating DEM
-		log_tdem_ptr = ebtel_linspace(0,450,451);		//set the linspace pointer using the ebtel_linspace function
-		for(i = 0; i<451; i++)
+		log_tdem_ptr = ebtel_linspace(0,index_dem-1,index_dem);		//set the linspace pointer using the ebtel_linspace function
+		for(i = 0; i<index_dem; i++)
 		{
 			log_tdem[i] = *(log_tdem_ptr + i)/100 + 4;	//log of T in the region in which DEM is defined
 			param_setter->logtdem[i] = log_tdem[i];		//Save logtdem to our parameter structure
@@ -260,7 +263,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		c_array[0] = root_c2; c_array[1] = c3; c_array[2] = c4;
 		
 		//Radiation in the transition region. This loop just calculates the radiative loss function in the TR
-		for(i = 0; i<451; i++)
+		for(i = 0; i<index_dem; i++)
 		{
 			rad = ebtel_rad_loss(tdem[i],kpar,opt.rtv);		//Calculate the radiative loss function for temperature tdem[i]
 			rad_dem[i] = rad;								//Set radiative loss function in the TR
@@ -293,14 +296,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
 	nn = pow(heat[0]/((1+r3)*rad),0.5);
 	nn_old = nn;
-	
-	/*
-	//DEBUG
-	printf("Print seed values to debug iteration on tt\n");
-	printf("tt_old = %e\n",tt_old);
-	printf("rad = %e\n",rad);
-	printf("nn_old = %e\n",nn_old);
-	*/
 
 	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
 	tol = 1e+3;		//error tolerance
@@ -371,6 +366,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->coeff_1[0] = r3;
 	param_setter->heat[0] = heat[0];
 	param_setter->time[0] = 0;
+	param_setter->rad[0] = rad;
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
@@ -447,12 +443,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		else
 		{
 			f_sat = sat_limit*c_sat*n*pow(t,1.5);
-			f = -f_cl*f_sat/pow((pow(f_cl,2) + pow(f_sat,2)),0.5);
+			f = -f_cl*f_sat/pow((pow(f_cl,2.) + pow(f_sat,2)),0.5);
 		}
 		par.f = f;
 
 		//Calculate radiative loss
 		rad = ebtel_rad_loss(t,kpar,opt.rtv);
+		param_setter->rad[i+1] = rad;
 
 		//Calculate coefficients r1, r2, r3 (c3, c2, c1)
 		r3 = ebtel_calc_c1(t,n,loop_length,rad);
@@ -531,7 +528,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		if(opt.usage == 1 || opt.usage == 4)
 		{	
 			//Transition region
-			if(r12_tr*t > tdem[450])
+			if(r12_tr*t > tdem[index_dem-1])
 			{
 				printf(" Transition region T = %e K outside of DEM range\n",r12_tr*t);
 			}
@@ -553,7 +550,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Initialize dem_tr flag to zero. We want to know if dem_tr takes on negative values and if so we need to reset them.
 			flag_dem_tr = 0;
 			
-			for(j=0; j<451; j++)
+			for(j=0; j<index_dem; j++)
 			{
 				//Check to see whether we are in the TR. If so, calculate dem_TR. Note: r12_tr*t[i] = T_0
 				if( tdem[j] < r12_tr*t )
@@ -584,7 +581,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//If we tripped the flag_dem_tr, then we need to reset dem_tr
 			if(flag_dem_tr == 1)
 			{
-				for(j=0; j<451; j++)
+				for(j=0; j<index_dem; j++)
 				{
 					if(i != 0)
 					{
@@ -621,7 +618,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
         		rad_loss = 0;		//Initialize rad_loss to 0
         		
         		//Sum up radiative losses in the transition region
-        		for(j=0; j<451; j++)
+        		for(j=0; j<index_dem; j++)
         		{
         			if(tdem[j] < r12_tr*t)
         			{
@@ -652,7 +649,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Need to set final values for transition region and coronal radiative losses
 	if(opt.usage == 1 || opt.usage == 4)
 	{
-		for(j = 0; j < 451; j++)
+		for(j = 0; j < index_dem; j++)
 		{
 			dem_tr[ntot-1][j] = dem_tr[ntot-2][j];
 			dem_cor[ntot-1][j] = dem_cor[ntot-2][j];
@@ -716,7 +713,7 @@ double * ebtel_kpar_set(int rtv_opt)
 	{	
 		double *kpar = malloc(sizeof(double[7]));
 		//Raymond-Klimchuk Loss function
-		kpar[0] = 1.e+4;
+		kpar[0] = 1.0e+4;
 		kpar[1] = 9.3325e4;
 		kpar[2] = 4.67735e5;
         kpar[3] = 1.51356e6;
@@ -730,12 +727,12 @@ double * ebtel_kpar_set(int rtv_opt)
 	{
 		double *kpar = malloc(sizeof(double[6]));
 		//Rosner-Tucker-Vaiana Loss function
-		kpar[0] = pow(10,4.3);
-        kpar[1] = pow(10,4.6);
-        kpar[2] = pow(10,4.9);
-        kpar[3] = pow(10,5.4);
-        kpar[4] = pow(10,5.75);
-        kpar[5] = pow(10,6.3);
+		kpar[0] = pow(10.0,4.3);
+        kpar[1] = pow(10.0,4.6);
+        kpar[2] = pow(10.0,4.9);
+        kpar[3] = pow(10.0,5.4);
+        kpar[4] = pow(10.0,5.75);
+        kpar[5] = pow(10.0,6.3);
         
         return kpar;
 	}
@@ -767,13 +764,13 @@ double ebtel_rad_loss( double temp, double kpar[], int rtv_opt)
 	{
 		//RK loss function
     	if ( temp > kpar[6] ){ 
-        	rad = 1.96e-27*sqrt(temp);
+        	rad = 1.96e-27*pow(temp,0.5);
         }
     	else if ( temp > kpar[5] ){ 
         	rad = 5.4883e-16/temp;
         }
     	else if ( temp > kpar[4] ){
-        	rad = 3.4629e-25*(pow(temp,0.333));
+        	rad = 3.4629e-25*(pow(temp,1./3.));
         }
     	else if ( temp > kpar[3] ){ 
         	rad = 3.5300e-13/(pow(temp,1.5));
@@ -784,11 +781,8 @@ double ebtel_rad_loss( double temp, double kpar[], int rtv_opt)
     	else if ( temp > kpar[1] ){
         	rad = 8.8669e-17/temp;
         }
-    	else if ( temp > kpar[0] ){
-        	rad = 1.0909e-31*pow(temp,2);
-        }
-    	else if ( temp >= kpar[0] ){ 
-        	rad = 1.0909e-31*pow(temp,2);
+    	else if ( temp >= kpar[0] ){
+        	rad = 1.0909e-31*temp*temp;
         }
     	else{
         	rad = 0.0;
@@ -798,19 +792,19 @@ double ebtel_rad_loss( double temp, double kpar[], int rtv_opt)
 	{
 		//RTV loss function
 		if (temp > kpar[5]){ 
-        	rad = pow(10.,-17.73)/pow(temp,0.667);
+        	rad = pow(10.,-17.73)/pow(temp,2./3.);
         }
     	else if (temp > kpar[4] ){
         	rad = pow(10.,-21.94);
         }
     	else if (temp > kpar[3] ){
-        	rad = pow(10.,-10.4)/pow(temp,2);
+        	rad = pow(10.,-10.4)/pow(temp,2.);
         }
     	else if (temp > kpar[2] ){ 
         	rad = pow(10.,-21.2);
         }
     	else if ( temp > kpar[1] ){
-        	rad = pow(10.,-31.0)*pow(temp,2);
+        	rad = pow(10.,-31.0)*pow(temp,2.);
         }
     	else if ( temp >= kpar[0] ){ 
         	rad = pow(10.,-21.85);
@@ -868,10 +862,10 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 		//Calculate necessary coefficients for quadratic formula
 		a = KAPPA_0*pow(tdem,1.5);
 		b = -5.0*K_B*n*v;
-		p2kt2 = pow((p*exp(2.0*sin(PI/5.0)*L/(PI*sc))/(2*K_B*tdem)),2);	//(p/2kT)^2; calculate this here for convenience
+		p2kt2 = pow((p*exp(2.0*sin(PI/5.0)*L/(PI*sc))/(2.0*K_B*tdem)),2.0);	//(p/2kT)^2; calculate this here for convenience
 		c = -p2kt2*rad_dem;
-		dtds1 = (-b + sqrt(pow(b,2) - 4.0*a*c))/(2.0*a);
-		dtds2 = (-b - sqrt(pow(b,2) - 4.0*a*c))/(2.0*a);
+		dtds1 = (-b + sqrt(pow(b,2.0) - 4.0*a*c))/(2.0*a);
+		dtds2 = (-b - sqrt(pow(b,2.0) - 4.0*a*c))/(2.0*a);
 		dtds = ebtel_max_val(dtds1,dtds2);
 		dem_tr = 2.0*p2kt2/dtds;		//factor of 2 for both legs of the loop
 	}
@@ -894,7 +888,7 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 		dem_eq = c_a[2]*p/(root_rad_dem*fourth_tdem);
 
 		//Calculate DEM for the transition region
-		dem_tr = 2*(f_a[0]*dem_ev + f_a[2]*dem_eq - f_a[1]*dem_con)/(f_a[0] + f_a[2] - f_a[1]); //factor of 2 for both legs
+		dem_tr = 2.*(f_a[0]*dem_ev + f_a[2]*dem_eq - f_a[1]*dem_con)/(f_a[0] + f_a[2] - f_a[1]); //factor of 2 for both legs
 	}
 	
 	return dem_tr;
@@ -921,12 +915,11 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_half, int n, int heating_shape)
+double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_half, double t_start, int n, int heating_shape)
 {
 	//Declare variables
 	double h_back;
 	double h_thick;
-	double t_start;
 	double t_pulse;
 	double t_end;
 	double t_mid;
@@ -941,7 +934,6 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	//First set some general parameters
 	h_back = 3.4e-6;
 	h_thick = 0;
-	t_start = 0;
 	t_pulse = 2*t_pulse_half;
 	t_mid = t_start + t_pulse_half;
 	t_end = t_start + t_pulse;
@@ -983,11 +975,11 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	{
 		for(i=0;i<n;i++)
 		//Square Pulse
-		if(time[i] <= (t_start + tau))
+		if(i < n_start )
 		{
 			heat[i] = h_back;
 		}
-		else if(time[i] > t_start && time[i] < (t_end + tau))
+		else if(i >= n_start && i <= n_end)
 		{
 			heat[i] = h_back + h_nano;
 		}
@@ -1000,10 +992,10 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	{
 		//Gaussian
 		//set some parameters especially for the Gaussian heating
-		h_back = 3e-5;
-		t_m = 2000;
-		t_h = 40;
-		h_nano = 1;
+		//h_back = 3e-5;
+		t_m = t_pulse;
+		t_h = t_start;
+		//h_nano = 1;
 		for(i=0;i<n;i++)
 		{		
 			heat[i] = h_back + h_nano*exp(-pow((time[i] - t_m),2)/(2*pow(t_h,2)));

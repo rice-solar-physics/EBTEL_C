@@ -143,7 +143,7 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		}
 		
 		//Print the data to the file filename using tab delimited entries
-		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i));
+		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i));
 		
 	}
 	
@@ -172,6 +172,18 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		//Close the DEM data file
 		fclose(out_file);
 	}
+	
+	//DEBUG
+	//Print term-by-term values to separate debug file
+	out_file = fopen("data/ebtel_debug_C.txt","wt");
+	for(i = 1; i<n; i++)
+	{
+		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t\n",*(params_final->dn1 + i),*(params_final->dn2 + i), \
+			*(params_final->dn_nt + i), *(params_final->dn + i), *(params_final->dp1 + i), *(params_final->dp2 + i), \
+			*(params_final->dp3 + i), *(params_final->dp_nt + i), *(params_final->dp + i));
+	}
+	fclose(out_file);
+	
 	
 }
 
@@ -368,6 +380,8 @@ double * ebtel_linspace( int a, int b, int n)
 	par_struct->cond = NULL;
 	free(par_struct->rad_cor);
 	par_struct->rad_cor = NULL;
+	free(par_struct->rad);
+	par_struct->rad = NULL;
 	free(par_struct->dem_tr_log10mean);
 	par_struct->dem_tr_log10mean = NULL;
 	free(par_struct->dem_cor_log10mean);

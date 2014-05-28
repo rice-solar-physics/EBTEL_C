@@ -84,7 +84,7 @@ double  ebtel_calc_c1( double temp, double den, double llength, double rad )
 		r3 = r3_eqm;
 	}
 	else
-	{
+	{	
 		//Radiative loops transition from equilibrium (noneq2-->1)
 		r3 = (2*r3_eqm + r3_radn*(noneq2-1))/(1+noneq2);
 	}

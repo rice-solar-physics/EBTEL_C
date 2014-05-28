@@ -109,6 +109,7 @@ int main (void)
 	double L;
 	double h_nano;
 	double t_pulse_half;
+	double t_start;
 	
 	FILE *in_file;
 	
@@ -131,8 +132,8 @@ int main (void)
 		printf("Error! Could not open file.\n");
 	}
 	
-	fscanf(in_file,"%d\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
-	&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&opt.T0,&opt.n0);
+	fscanf(in_file,"%d\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
+	&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&t_start,&opt.index_dem,&opt.T0,&opt.n0);
 	
 	fclose(in_file);
 	
@@ -181,18 +182,10 @@ int main (void)
 	//3--Gaussian pulse
 	
 	//Call the heating function and have it return the heating array
-	heat_ptr = ebtel_heating(time, t_scale, h_nano, t_pulse_half, n, heating_shape);
+	heat_ptr = ebtel_heating(time, t_scale, h_nano, t_pulse_half, t_start, n, heating_shape);
 	for(i=0;i<n;i++)
 	{
 		heat[i] = *(heat_ptr + i);
-	}
-	
-	//Set loop length appropriately for Gaussian heating pulse. This heating shape only 
-	//appropriate for short loops.
-	if(heating_shape==3)
-	{
-		loop_length=25;
-		L=1e+8*loop_length;
 	}
 	
 	/************************************************************************************
@@ -224,23 +217,23 @@ int main (void)
 	//DEBUG
 	//Free up memory used in params_final structure by debug terms
 	free(params_final->dn1);
-	pararms_final->dn1 = NULL;
+	params_final->dn1 = NULL;
 	free(params_final->dn2);
-	pararms_final->dn2 = NULL;
+	params_final->dn2 = NULL;
 	free(params_final->dn_nt);
-	pararms_final->dn_nt = NULL;
+	params_final->dn_nt = NULL;
 	free(params_final->dn);
-	pararms_final->dn = NULL;
+	params_final->dn = NULL;
 	free(params_final->dp1);
-	pararms_final->dp1 = NULL;
+	params_final->dp1 = NULL;
 	free(params_final->dp2);
-	pararms_final->dp2 = NULL;
+	params_final->dp2 = NULL;
 	free(params_final->dp3);
-	pararms_final->dp3 = NULL;
+	params_final->dp3 = NULL;
 	free(params_final->dp_nt);
-	pararms_final->dp_nt = NULL;
+	params_final->dp_nt = NULL;
 	free(params_final->dp);
-	pararms_final->dp = NULL;
+	params_final->dp = NULL;
 	
 	
 	ebtel_free_mem(params_final);

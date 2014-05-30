@@ -74,6 +74,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double *kptr;
 	double *state_ptr;
 	double *log_tdem_ptr;
+	double *static_eq_ptr;
 	
 	//Double
 	double r1;
@@ -282,47 +283,15 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws
 	*/
 	
-	//Check if the heating array begins with a zero. If so, return an error.
-	if (heat[0] == 0)
-	{
-		printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
-	}
-
-	//(A) EBTEL Equilibrium
-
-	//First set up trial values for static equilibrium (i.e. d/dt = 0)
-	tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
-	printf("tt_old = %e\n",tt_old);
-	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
-	nn = pow(heat[0]/((1+r3)*rad),0.5);
-	nn_old = nn;
-
-	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
-	tol = 1e+3;		//error tolerance
-
-	for(i=0; i<=100; i++)
-	{
-		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
-		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
-		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
-		nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
-		err = tt_new - tt_old;															//difference between t_i, T_i-1
-		err_n = nn - nn_old;	
-		//Break the loop if the error gets below a certain threshold
-		if(fabs(err)<tol)// && fabs(err_n)<tol)
-		{
-			printf("r3 = %e\n",r3);													//display calculated parameters
-			printf("tt_new = %e\n",tt_new);
-			printf("tt_old = %e\n",tt_old);
-			printf("err = %e\n",err);
-			printf("Broke on iteration %d\n",i);
-			tt_old = tt_new;
-			nn_old = nn;
-			break;
-		}
-		tt_old = tt_new;
-		nn_old = nn;
-	}
+	//Calculate initial temperature using static equilibrium. Calculate initial c1 coefficient and radiative loss as well.
+	static_eq_ptr = ebtel_static_eq(heat,kpar,r3,loop_length,opt);
+	r3 = *(static_eq_ptr + 0);
+	rad = *(static_eq_ptr + 1);
+	tt_old = *(static_eq_ptr + 2);
+	
+	//Free the pointer used in the static equilibrium calculation
+	free(static_eq_ptr);
+	static_eq_ptr = NULL;
 
 	//To use parameters consistent with the cases invoked in Paper II, we read in initial values for n,T rather than
 	//calculating them using scaling laws or static equilibrium
@@ -363,10 +332,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->tapex[0] = ta;
 	param_setter->napex[0] = na;
 	param_setter->papex[0] = pa;
+	param_setter->rad[0] = rad;
 	param_setter->coeff_1[0] = r3;
 	param_setter->heat[0] = heat[0];
 	param_setter->time[0] = 0;
-	param_setter->rad[0] = rad;
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");

@@ -161,4 +161,7 @@ double ebtel_min_val(double, double);
 //Declare prototype for ebtel_calc_abundance of type void
 void ebtel_calc_abundance(void);
 
+//Declare prototype for ebtel_static_eq of type double
+double * ebtel_static_eq(double[], double[], double, double, struct Option);
+
 #endif

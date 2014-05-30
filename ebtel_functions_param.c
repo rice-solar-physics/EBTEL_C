@@ -193,3 +193,78 @@ void ebtel_calc_abundance(void)
     M_P = m_p*m_fact*(1.0 + z_avg)/z_avg; //Average ion mass
 	K_B = k_b*kb_fact; //Modify equation of state for non-e-p plasma
 }
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_static_eq
+
+FUNCTION_DESCRIPTION: This function calculates the initial temperature 
+
+INPUTS:
+	
+	
+OUTPUTS:
+
+***********************************************************************************/
+
+double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
+{
+	//Variable declarations
+	double tt_old;
+	double nn_old;
+	double tt_new;
+	double rad;
+	double nn;
+	double err;
+	double err_n;
+	double tol;
+	double *return_array = malloc(sizeof(double[3]));
+	
+	//Check if the heating array begins with a zero. If so, return an error.
+	if (heat[0] == 0)
+	{
+		printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
+	}
+
+	//First set up trial values for static equilibrium (i.e. d/dt = 0)
+	tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
+	printf("tt_old = %e\n",tt_old);
+	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
+	nn = pow(heat[0]/((1+r3)*rad),0.5);
+	nn_old = nn;
+
+	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
+	tol = 1e+3;		//error tolerance
+
+	for(i=0; i<=100; i++)
+	{
+		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
+		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
+		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
+		nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
+		err = tt_new - tt_old;															//difference between t_i, T_i-1
+		err_n = nn - nn_old;	
+		//Break the loop if the error gets below a certain threshold
+		if(fabs(err)<tol)// && fabs(err_n)<tol)
+		{
+			printf("r3 = %e\n",r3);													//display calculated parameters
+			printf("tt_new = %e\n",tt_new);
+			printf("tt_old = %e\n",tt_old);
+			printf("err = %e\n",err);
+			printf("Broke on iteration %d\n",i);
+			tt_old = tt_new;
+			nn_old = nn;
+			break;
+		}
+		tt_old = tt_new;
+		nn_old = nn;
+	}
+	
+	//We want to return our value of tt_old in addition to the final values of r3 and rad so we set the fields of our array and return the pointer
+	return_array[0] = r3;
+	return_array[1] = rad;
+	return_array[2] = tt_old;
+	
+	return return_arrray;
+}
+

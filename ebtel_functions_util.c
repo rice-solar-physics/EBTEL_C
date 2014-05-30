@@ -22,10 +22,11 @@ FUNCTION_DESCRIPTION: This function prints a header to the screen and tells the 
 what input is being used in this implementation of the model. 
 
 INPUTS:
-	a--starting point
-	b--ending point
-	n--number of entries
-	
+	n--total number of steps
+	heating_shape--type of heating function used
+	loop_length--half-length of the coronal loop (Mm)
+	total_time--time the simulation was run for (s)
+	Option opt--data structure that holds input parameters
 OUTPUTS:
 	
 
@@ -288,6 +289,7 @@ double * ebtel_linspace( int a, int b, int n)
  	else					//Consider case where num_1 = num_2; Could set either one to the max since it does not matter
  	{
  		max_val = num_1;
+		printf("Num_1 = Num_2. Num_1 is the maximum value by default.\n");
  	}
  	
  	return max_val;
@@ -325,6 +327,7 @@ double * ebtel_linspace( int a, int b, int n)
  	else					//Consider the case where the two are equal. Doesn't matter which we return
  	{
  		min_val = num_1;
+		printf("Num_1 = Num_2. Num_1 is the minimum value by default.\n")
  	}
  	
  	return min_val;

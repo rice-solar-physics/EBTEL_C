@@ -74,7 +74,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double *kptr;
 	double *state_ptr;
 	double *log_tdem_ptr;
-	double *static_eq_ptr;
+	double *ic_ptr;
 	
 	//Double
 	double r1;
@@ -88,22 +88,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double root_c2;
 	double c3;
 	double c4;
-	double tt_old;
-	double tt_new;
-	double tt;
-	double nn;
-	double nn_old;
-	double err;
-	double err_n;
-	double tol;
 	double sc;
-	double lambda_0;
-	double bb;
-	double q_0;
-	double t_0;
-	double v_0;
-	double p_0;
-	double n_0;
 	double f_cl;
 	double f;
 	double f_sat;
@@ -280,20 +265,28 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 							Initial Static Equilibrium
 	***********************************************************************************/
 	/*
-	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws
+	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws (set by ic_mode in opt structure)
 	*/
 	
 	//Calculate initial temperature using static equilibrium. Calculate initial c1 coefficient and radiative loss as well.
-	static_eq_ptr = ebtel_static_eq(heat,kpar,r3,loop_length,opt);
-	r3 = *(static_eq_ptr + 0);
-	rad = *(static_eq_ptr + 1);
-	tt = *(static_eq_ptr + 2);
-	nn = *(static_eq_ptr + 3);
+	ic_ptr = ebtel_calc_ic(heat,kpar,r3,loop_length,opt);
+	r3 = *(ic_ptr + 0);
+	rad = *(ic_ptr + 1);
+	t = *(ic_ptr + 2);
+	n = *(ic_ptr + 3);
+	p = *(ic_ptr + 4);
+	v = *(ic_ptr + 5);
 	
 	//Free the pointer used in the static equilibrium calculation
 	free(static_eq_ptr);
 	static_eq_ptr = NULL;
-
+	
+	//Set remaining initial parameters before iterating in time
+	ta = t/r2;
+	sc = ebtel_calc_lambda(t);
+	na = n*r2*exp(-2.0*loop_length/(PI*sc)*(1.0-sin(PI/5.0)));
+	pa = 2*K_B*na*ta;
+	
 	//To use parameters consistent with the cases invoked in Paper II, we read in initial values for n,T rather than
 	//calculating them using scaling laws or static equilibrium
 	if(opt.mode==1)
@@ -301,25 +294,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		tt = opt.T0;
 		nn = opt.n0;
 	}
-	
-	
-	//Print out the coefficients that we are starting the model with
-	printf("********************************************************************\n");
-	printf("Model Parameters\n");
-	printf("r1 = %e\n",r1);
-	printf("r2 = %e\n",r2);
-	printf("r3 = %e\n",r3);
-	printf("********************************************************************\n");
-	
-	//Set some initial parameters before iterating in time
-	t = tt;
-	n = nn;
-	p = 2*K_B*n*t;
-	v = 0;
-	ta = t/r2;
-	sc = ebtel_calc_lambda(t);
-	na = n*r2*exp(-2.0*loop_length/(PI*sc)*(1.0-sin(PI/5.0)));
-	pa = 2*K_B*na*ta;
 	
 	//Set the initial values of our parameter structure
 	param_setter->temp[0] = t;
@@ -337,27 +311,18 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
 	printf("Model Parameters\n");
+	printf("r1 = %e\n",r1);
+	printf("r2 = %e\n",r2);
+	printf("r3 = %e\n",r3);
+	printf("********************************************************************\n");
+	
+	//Print out the coefficients that we are starting the model with
+	printf("********************************************************************\n");
+	printf("Model Parameters\n");
 	printf("L = %e\n",loop_length);
 	printf("Q = %e\n",heat[0]);
 	printf("T, Ta = %e, %e\n",param_setter->temp[0],param_setter->tapex[0]);
 	printf("n, na = %e, %e\n",param_setter->ndens[0],param_setter->napex[0]);
-	printf("********************************************************************\n");
-	
-	//Alternatively, we could use the scaling laws to determine our initial conditions
-	lambda_0 = 1.95e-18;			//lambda = lambda_0*T
-	bb = -TWO_THIRDS;//-0.5				//power law for radiative loss function
-	q_0 = heat[0];
-	t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
-	p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
-	n_0 = 0.5*p_0/(K_B*t_0);
-	v_0 = 0;
-	
-	//Print scaling law values to the screen
-	printf("********************************************************************\n");
-	printf("Scaling Law Values\n");
-	printf("T_0 = %e\n",t_0);
-	printf("P_0 = %e\n",p_0);
-	printf("n_0 = %e\n",n_0);
 	printf("********************************************************************\n");
 	
 	/***********************************************************************************

@@ -40,6 +40,7 @@ struct Option {
 	int mode;
 	int heating_shape;
 	int index_dem;
+	int ic_mode;
 	double energy_nt;
 	double T0;
 	double n0;
@@ -162,6 +163,6 @@ double ebtel_min_val(double, double);
 void ebtel_calc_abundance(void);
 
 //Declare prototype for ebtel_static_eq of type double
-double * ebtel_static_eq(double[], double[], double, double, struct Option);
+double * ebtel_calc_ic(double[], double[], double, double, struct Option);
 
 #endif

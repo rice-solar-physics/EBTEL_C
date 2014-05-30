@@ -215,67 +215,114 @@ OUTPUTS:
 
 double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
 {
-	//Variable declarations
-	int i;
-	double tt_old;
-	double nn_old;
-	double tt_new;
-	double rad;
-	double nn;
-	double err;
-	double err_n;
-	double tol;
+	//Variable declarations for both cases
+	double *return_array = malloc(sizeof(double[6]));
 	double r2 = ebtel_calc_c2();
-	double *return_array = malloc(sizeof(double[4]));
 	
-	//Check if the heating array begins with a zero. If so, return an error.
-	if (heat[0] == 0)
+	if(opt.ic_mode == 0)
 	{
-		printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
-	}
-
-	//First set up trial values for static equilibrium (i.e. d/dt = 0)
-	tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
-	printf("tt_old = %e\n",tt_old);
-	rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
-	nn = pow(heat[0]/((1+r3)*rad),0.5);
-	nn_old = nn;
-
-	//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
-	tol = 1e+3;		//error tolerance
-
-	for(i=0; i<=100; i++)
-	{
-		r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
-		tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
-		rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
-		nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
-		err = tt_new - tt_old;															//difference between t_i, T_i-1
-		err_n = nn - nn_old;	
-		//Break the loop if the error gets below a certain threshold
-		if(fabs(err)<tol)// && fabs(err_n)<tol)
+		//Variable declarations
+		int i;
+		double tt_old;
+		double nn_old;
+		double tt_new;
+		double rad;
+		double nn;
+		double err;
+		double err_n;
+		double tol;
+	
+		//Check if the heating array begins with a zero. If so, return an error.
+		if (heat[0] == 0)
 		{
-			printf("r3 = %e\n",r3);													//display calculated parameters
-			printf("tt_new = %e\n",tt_new);
-			printf("tt_old = %e\n",tt_old);
-			printf("err = %e\n",err);
-			printf("Broke on iteration %d\n",i);
+			printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
+		}
+
+		//First set up trial values for static equilibrium (i.e. d/dt = 0)
+		tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
+		printf("tt_old = %e\n",tt_old);
+		rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
+		nn = pow(heat[0]/((1+r3)*rad),0.5);
+		nn_old = nn;
+
+		//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
+		tol = 1e+3;		//error tolerance
+
+		for(i=0; i<=100; i++)
+		{
+			r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
+			tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
+			rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
+			nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
+			err = tt_new - tt_old;															//difference between t_i, T_i-1
+			err_n = nn - nn_old;	
+			//Break the loop if the error gets below a certain threshold
+			if(fabs(err)<tol)// && fabs(err_n)<tol)
+			{
+				printf("r3 = %e\n",r3);													//display calculated parameters
+				printf("tt_new = %e\n",tt_new);
+				printf("tt_old = %e\n",tt_old);
+				printf("err = %e\n",err);
+				printf("Broke on iteration %d\n",i);
+				tt_old = tt_new;
+				nn_old = nn;
+				break;
+			}
 			tt_old = tt_new;
 			nn_old = nn;
-			break;
 		}
-		tt_old = tt_new;
-		nn_old = nn;
+	
+		//Calculate the density,pressure,volume
+		nn = pow(heat[0]/((1+r3)*rad),0.5);
+		p = 2*K_B*n*tt_old;
+	
+		//Set array values
+		return_array[0] = r3;
+		return_array[1] = rad;
+		return_array[2] = tt_old;
+		return_array[3] = nn;
+		return_array[4] = p;
+		return_array[5] = v;
+	}
+	else if(opt.ic_mode == 1)
+	{
+		//Variable declarations
+		double lambda_0;
+		double bb;
+		double q_0;
+		double t_0;
+		double p_0;
+		double n_0;
+		double v_0;
+		double rad;
+		
+		//Alternatively, we could use the scaling laws to determine our initial conditions
+		lambda_0 = 1.95e-18;			//lambda = lambda_0*T
+		bb = -TWO_THIRDS;//-0.5				//power law for radiative loss function
+		q_0 = heat[0];
+		t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
+		p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
+		n_0 = 0.5*p_0/(K_B*t_0);
+		v_0 = 0;
+	
+		//Print scaling law values to the screen
+		printf("********************************************************************\n");
+		printf("Scaling Law Values\n");
+		printf("T_0 = %e\n",t_0);
+		printf("P_0 = %e\n",p_0);
+		printf("n_0 = %e\n",n_0);
+		printf("********************************************************************\n");
+		
+		//Set array values
+		rad = ebtel_rad_loss(t_0,kpar,opt);
+		return_array[0] = ebtel_calc_c1(t_0,n_0,loop_length,rad);
+		return_array[1] = rad;
+		return_array[2] = t_0;
+		return_array[3] = n_0;
+		return_array[4] = p_0;
+		return_array[5] = v_0;
 	}
 	
-	//Calculate the density
-	nn = pow(heat[0]/((1+r3)*rad),0.5);
-	
-	//We want to return our value of tt_old in addition to the final values of r3 and rad so we set the fields of our array and return the pointer
-	return_array[0] = r3;
-	return_array[1] = rad;
-	return_array[2] = tt_old;
-	return_array[3] = nn;
 	
 	return return_array;
 }

@@ -126,10 +126,12 @@ param(12) = t_pulse_half;
 param(13) = t_start;
 index_dem = 451;
 param(14) = index_dem;
+ic_mode = 0;
+param(15) = ic_mode;
 %T0 = 1.3e+6;
-param(15) = T0;
+param(16) = T0;
 %n0 = 9.2e+8;
-param(16) = n0;
+param(17) = n0;
 
 %Print the param vector to a file
 fileID = fopen('ebtel_parameters.txt','w');

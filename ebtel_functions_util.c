@@ -36,7 +36,7 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 {
 	//Print a header and tell the user what options are being used to begin the model
 	printf("************************************************************************************\n");
-	printf("           Enthalpy Based Thermal Evolution of Loops (EBTEL)                        \n");
+	printf("            Enthalpy Based Thermal Evolution of Loops (EBTEL)                       \n");
 	printf("************************************************************************************\n\n");
 	printf("Original code written in IDL by J.A. Klimchuk, S. Patsourakos, P.J. Cargill\n");
 	printf("See Klimchuk, J.A, S. Patsourakos & P.J. Cargill 2008, ApJ 682:1351-2362\n");
@@ -87,6 +87,15 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 		else
 		{printf("Using new method to calculate DEM in the TR\n");
 		}
+	}
+	if(opt.mode==0)
+	{printf("Using static equilibrium to calculate initial conditions\n");
+	}
+	else if(opt.mode==1)
+	{printf("Forcing initial conditions with T_0 = %f MK and n_0 = %f*10^8 cm^-3\n",opt.T0/pow(10,6),opt.n0/pow(10,8));
+	}
+	else if(opt.mode==2)
+	{printf("Using scaling laws to calculate initial conditions\n");
 	}
 	printf("\n");
 }

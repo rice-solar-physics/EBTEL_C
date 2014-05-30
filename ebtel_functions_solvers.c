@@ -427,7 +427,7 @@ option that can be chosen in ebtel_main.
  	
  	//Compute heat flux. Can use one of two methods:
  	//(1)classical or (0)dynamic heat flux
-	if(opt.classical==1)
+	if(opt.dynamic==0)
 	{
 		f = par.c1*pow(T/par.r2,3.5)/par.L;
 	}

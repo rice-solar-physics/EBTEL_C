@@ -55,7 +55,7 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	{printf("Heating: Square heating pulse\n");
 	}
 	else
-	{printf("Heating: Gaussian heating pulse (note: L has been altered for this heating option)\n");
+	{printf("Heating: Gaussian heating pulse\n");
 	}
 	if(opt.solver==1)
 	{printf("Solving equations using fourth order Runge-Kutta routine\n");

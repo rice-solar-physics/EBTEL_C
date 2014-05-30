@@ -32,7 +32,6 @@ double TWO_THIRDS;
 
 //Declare structures
 struct Option {
-	int classical;
 	int dynamic;
 	int dem_old;
 	int rtv;

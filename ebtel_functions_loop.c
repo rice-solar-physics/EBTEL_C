@@ -425,7 +425,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		//Set up non-thermal electron flux for usage option 3
 		if(opt.usage==3)
 		{
-			par.flux_nt = loop_length*heat[i]/10;
+			par.flux_nt = loop_length*heat[i];
 		}
 		else
 		{
@@ -436,7 +436,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		f_cl = c1*pow(t/r2,SEVEN_HALVES)/loop_length;	//Classical heat flux calculation
 
 		//Decide on whether to use classical or dynamic heat flux
-		if(opt.classical==1)
+		if(opt.dynamic==0)
 		{
 			f = f_cl;
 		}
@@ -567,7 +567,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 					}
 					
 					//Check whether it is classical or dynamic to set the f_ratio value
-					if(opt.classical == 1)
+					if(opt.dynamic == 0)
 					{
 						f_ratio = f/f_eq;
 					}
@@ -651,6 +651,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	{
 		for(j = 0; j < index_dem; j++)
 		{
+			//Set the last entry that was left empty by the loop on t
 			dem_tr[ntot-1][j] = dem_tr[ntot-2][j];
 			dem_cor[ntot-1][j] = dem_cor[ntot-2][j];
 			
@@ -782,7 +783,7 @@ double ebtel_rad_loss( double temp, double kpar[], int rtv_opt)
         	rad = 8.8669e-17/temp;
         }
     	else if ( temp >= kpar[0] ){
-        	rad = 1.0909e-31*temp*temp;
+        	rad = 1.0909e-31*pow(temp,2.);
         }
     	else{
         	rad = 0.0;
@@ -975,18 +976,21 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	{
 		for(i=0;i<n;i++)
 		//Square Pulse
-		if(i < n_start )
 		{
-			heat[i] = h_back;
+			if(i < n_start )
+			{
+				heat[i] = h_back;
+			}
+			else if(i >= n_start && i <= n_end)
+			{
+				heat[i] = h_back + h_nano;
+			}
+			else
+			{
+				heat[i] = h_back;
+			}
 		}
-		else if(i >= n_start && i <= n_end)
-		{
-			heat[i] = h_back + h_nano;
-		}
-		else
-		{
-			heat[i] = h_back;
-		}
+		
     }
 	else
 	{

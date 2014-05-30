@@ -90,9 +90,9 @@ int main (void)
 	//KAPPA_0 = 1e-6;
 	KAPPA_0 = 8.12e-7;
 	PI = M_PI;
-	TWO_SEVENTHS = 0.285714285714;
+	TWO_SEVENTHS = 2./7.;
 	SEVEN_HALVES = 3.5;
-	TWO_THIRDS = 0.66666667;
+	TWO_THIRDS = 2./3.;
 	
 	//Set global variables based on He/H abundance
 	ebtel_calc_abundance();
@@ -130,6 +130,7 @@ int main (void)
 	if(in_file == NULL)
 	{
 		printf("Error! Could not open file.\n");
+		return 1;
 	}
 	
 	fscanf(in_file,"%d\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
@@ -163,14 +164,6 @@ int main (void)
 	opt.t_pulse_half = t_pulse_half;
 	opt.tau = t_scale;
 	opt.h_nano = h_nano;
-	if(opt.dynamic == 0)
-	{
-		opt.classical = 1;
-	}
-	else
-	{
-		opt.classical = 0;
-	}
 	opt.energy_nt = 8.01e-8;	//50 keV in ergs
 	
 	/************************************************************************************

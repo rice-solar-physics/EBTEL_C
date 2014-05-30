@@ -196,7 +196,7 @@ void ebtel_calc_abundance(void)
 
 /***********************************************************************************
 
-FUNCTION NAME: ebtel_static_eq
+FUNCTION NAME: ebtel_calc_ic
 
 FUNCTION_DESCRIPTION: This function calculates the initial temperature using the static equilibrium
 conditions for the hydrodynamic equations. 
@@ -209,17 +209,17 @@ INPUTS:
 	opt--Option structure of input values
 	
 OUTPUTS:
-	return_array--array that holds r3 coefficient, radiative loss, and resulting initial temperature
+	return_array--array that holds r3, rad, t, n, p, and v
 
 ***********************************************************************************/
 
-double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
+double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
 {
 	//Variable declarations for both cases
 	double *return_array = malloc(sizeof(double[6]));
 	double r2 = ebtel_calc_c2();
 	
-	if(opt.ic_mode == 0)
+	if(opt.mode == 0 || opt.mode == 1)
 	{
 		//Variable declarations
 		int i;
@@ -228,6 +228,8 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 		double tt_new;
 		double rad;
 		double nn;
+		double p;
+		double v;
 		double err;
 		double err_n;
 		double tol;
@@ -272,9 +274,20 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 			nn_old = nn;
 		}
 	
-		//Calculate the density,pressure,volume
+		//Calculate the density
 		nn = pow(heat[0]/((1+r3)*rad),0.5);
-		p = 2*K_B*n*tt_old;
+		
+		//To use parameters consistent with the cases invoked in Paper II, we read in initial values for n,T rather than
+		//calculating them using scaling laws or static equilibrium
+		if(opt.mode == 1)
+		{
+			tt_old = opt.T0;
+			nn = opt.n0;
+		}
+		
+		//Calculate resulting pressure, velocity
+		p = 2*K_B*nn*tt_old;
+		v = 0;
 	
 		//Set array values
 		return_array[0] = r3;
@@ -284,7 +297,7 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 		return_array[4] = p;
 		return_array[5] = v;
 	}
-	else if(opt.ic_mode == 1)
+	else if(opt.mode == 2)
 	{
 		//Variable declarations
 		double lambda_0;
@@ -298,7 +311,7 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 		
 		//Alternatively, we could use the scaling laws to determine our initial conditions
 		lambda_0 = 1.95e-18;			//lambda = lambda_0*T
-		bb = -TWO_THIRDS;//-0.5				//power law for radiative loss function
+		bb = -TWO_THIRDS;//-0.5			//power law for radiative loss function
 		q_0 = heat[0];
 		t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
 		p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
@@ -314,7 +327,7 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 		printf("********************************************************************\n");
 		
 		//Set array values
-		rad = ebtel_rad_loss(t_0,kpar,opt);
+		rad = ebtel_rad_loss(t_0,kpar,opt.rtv);
 		return_array[0] = ebtel_calc_c1(t_0,n_0,loop_length,rad);
 		return_array[1] = rad;
 		return_array[2] = t_0;

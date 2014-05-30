@@ -268,7 +268,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws (set by ic_mode in opt structure)
 	*/
 	
-	//Calculate initial temperature using static equilibrium. Calculate initial c1 coefficient and radiative loss as well.
+	//Calculate initial temperature, density, pressure, and velocity using one of the two methods.
 	ic_ptr = ebtel_calc_ic(heat,kpar,r3,loop_length,opt);
 	r3 = *(ic_ptr + 0);
 	rad = *(ic_ptr + 1);
@@ -278,22 +278,14 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	v = *(ic_ptr + 5);
 	
 	//Free the pointer used in the static equilibrium calculation
-	free(static_eq_ptr);
-	static_eq_ptr = NULL;
+	free(ic_ptr);
+	ic_ptr = NULL;
 	
 	//Set remaining initial parameters before iterating in time
 	ta = t/r2;
 	sc = ebtel_calc_lambda(t);
 	na = n*r2*exp(-2.0*loop_length/(PI*sc)*(1.0-sin(PI/5.0)));
 	pa = 2*K_B*na*ta;
-	
-	//To use parameters consistent with the cases invoked in Paper II, we read in initial values for n,T rather than
-	//calculating them using scaling laws or static equilibrium
-	if(opt.mode==1)
-	{
-		tt = opt.T0;
-		nn = opt.n0;
-	}
 	
 	//Set the initial values of our parameter structure
 	param_setter->temp[0] = t;
@@ -316,9 +308,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	printf("r3 = %e\n",r3);
 	printf("********************************************************************\n");
 	
-	//Print out the coefficients that we are starting the model with
-	printf("********************************************************************\n");
-	printf("Model Parameters\n");
+	//Print out the parameters that we are starting the model with
 	printf("L = %e\n",loop_length);
 	printf("Q = %e\n",heat[0]);
 	printf("T, Ta = %e, %e\n",param_setter->temp[0],param_setter->tapex[0]);

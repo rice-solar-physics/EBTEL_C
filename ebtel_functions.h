@@ -40,7 +40,6 @@ struct Option {
 	int mode;
 	int heating_shape;
 	int index_dem;
-	int ic_mode;
 	double energy_nt;
 	double T0;
 	double n0;

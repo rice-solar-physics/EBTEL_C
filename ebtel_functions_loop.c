@@ -287,7 +287,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	static_eq_ptr = ebtel_static_eq(heat,kpar,r3,loop_length,opt);
 	r3 = *(static_eq_ptr + 0);
 	rad = *(static_eq_ptr + 1);
-	tt_old = *(static_eq_ptr + 2);
+	tt = *(static_eq_ptr + 2);
+	nn = *(static_eq_ptr + 3);
 	
 	//Free the pointer used in the static equilibrium calculation
 	free(static_eq_ptr);
@@ -300,11 +301,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		tt = opt.T0;
 		nn = opt.n0;
 	}
-	else
-	{
-		tt = tt_old;
-		nn = pow(heat[0]/((1+r3)*rad),0.5);
-	}
+	
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");

@@ -12,7 +12,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 5;
+eb_case = 1;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -116,7 +116,7 @@ dynamic = 0;
 param(8) = dynamic;
 solver=0;
 param(9) = solver;
-mode=1;
+mode=0;
 param(10) = mode;
 %h_nano = 1e-2;
 param(11) = h_nano;
@@ -275,8 +275,8 @@ plot(timeidl,heatidl,'--r','LineWidth',2)
 %plot(time,abs(heat - heatidl))
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$h$ (erg~cm$^{-3}$~s$^{-1}$)','interpreter','latex')
-xlim([t_pulse_half - 2*t_start t_pulse_half+t_start*7])
-%xlim([0 500])
+%xlim([t_pulse_half - 2*t_start t_pulse_half+t_start*7])
+xlim([0 500])
 ylim([0 h_nano+0.1*h_nano])
 
 % figure(2)

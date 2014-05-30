@@ -198,18 +198,25 @@ void ebtel_calc_abundance(void)
 
 FUNCTION NAME: ebtel_static_eq
 
-FUNCTION_DESCRIPTION: This function calculates the initial temperature 
+FUNCTION_DESCRIPTION: This function calculates the initial temperature using the static equilibrium
+conditions for the hydrodynamic equations. 
 
 INPUTS:
-	
+	heat--heating array
+	kpar--temperature bins used to calculate the radiative loss function
+	r3--ratio of TR and coronal radiative losses (coefficient c1 from Papers I,II)
+	loop_length--loop half-length (Mm)
+	opt--Option structure of input values
 	
 OUTPUTS:
+	return_array--array that holds r3 coefficient, radiative loss, and resulting initial temperature
 
 ***********************************************************************************/
 
 double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
 {
 	//Variable declarations
+	int i;
 	double tt_old;
 	double nn_old;
 	double tt_new;
@@ -218,7 +225,8 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 	double err;
 	double err_n;
 	double tol;
-	double *return_array = malloc(sizeof(double[3]));
+	double r2 = ebtel_calc_c2();
+	double *return_array = malloc(sizeof(double[4]));
 	
 	//Check if the heating array begins with a zero. If so, return an error.
 	if (heat[0] == 0)
@@ -260,11 +268,15 @@ double * ebtel_static_eq(double heat[], double kpar[], double r3, double loop_le
 		nn_old = nn;
 	}
 	
+	//Calculate the density
+	nn = pow(heat[0]/((1+r3)*rad),0.5);
+	
 	//We want to return our value of tt_old in addition to the final values of r3 and rad so we set the fields of our array and return the pointer
 	return_array[0] = r3;
 	return_array[1] = rad;
 	return_array[2] = tt_old;
+	return_array[3] = nn;
 	
-	return return_arrray;
+	return return_array;
 }
 

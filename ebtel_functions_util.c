@@ -327,7 +327,7 @@ double * ebtel_linspace( int a, int b, int n)
  	else					//Consider the case where the two are equal. Doesn't matter which we return
  	{
  		min_val = num_1;
-		printf("Num_1 = Num_2. Num_1 is the minimum value by default.\n")
+		printf("Num_1 = Num_2. Num_1 is the minimum value by default.\n");
  	}
  	
  	return min_val;

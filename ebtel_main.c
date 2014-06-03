@@ -100,11 +100,11 @@ int main (void)
 	//Int
 	int i;
 	int n;
-	int total_time;
 	int heating_shape;
 	int loop_length;
 	
 	//Double
+	double total_time;
 	double t_scale;
 	double L;
 	double h_nano;
@@ -133,8 +133,7 @@ int main (void)
 		return 1;
 	}
 	
-	fscanf(in_file,"%d\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le\n",&total_time,&t_scale,&heating_shape,\
-	&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&t_start,&opt.index_dem,&opt.T0,&opt.n0);
+	fscanf(in_file,"%le\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le\n",&total_time,&t_scale,&heating_shape,&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&t_start,&opt.index_dem,&opt.T0,&opt.n0);
 	
 	fclose(in_file);
 	
@@ -143,14 +142,14 @@ int main (void)
 	************************************************************************************/
 	
 	//Set total number of steps using the timestep and total time
-	n = total_time/t_scale;
+	n = ceil(total_time/t_scale);
 	
 	//Declare arrays of size n
 	double time[n];
 	double heat[n];
 	
 	//Build the time array
-	time_ptr = ebtel_linspace(0,total_time,n);
+	time_ptr = ebtel_colon_operator(0.,total_time,t_scale);
 	for(i=0; i<n; i++)
 	{
 		time[i] = *(time_ptr + i);

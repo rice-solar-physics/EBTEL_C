@@ -268,6 +268,7 @@ figure(1)
 box('on')
 set(gcf,'Position',[0 0 scale*width scale*height])
 set(gca,'FontSize',18,'FontName','Arial')
+set(gcf,'PaperPositionMode','auto')
 subplot(row,col,1)
 hold on
 plot(time,heat,'LineWidth',2)
@@ -276,7 +277,7 @@ plot(timeidl,heatidl,'--r','LineWidth',2)
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$h$ (erg~cm$^{-3}$~s$^{-1}$)','interpreter','latex')
 %xlim([t_pulse_half - 2*t_start t_pulse_half+t_start*7])
-xlim([0 500])
+xlim([0 t_start+2*t_pulse_half+50])
 ylim([0 h_nano+0.1*h_nano])
 
 % figure(2)
@@ -292,7 +293,7 @@ xlabel('$t$~(s)','interpreter','latex')
 ylabel('$T$~(MK)','interpreter','latex')
 title(['Loop Parameters, Case ' num2str(eb_case) ])
 hleg = legend('C','IDL');
-set(hleg,'Location','Best','FontSize',14);
+set(hleg,'Location','Best','FontSize',10);
 xlim([0 timeidl(end)])
 
 %fn = ['temp_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
@@ -362,6 +363,10 @@ ylabel('$n/n_{max}$','interpreter','latex')
 xlim([0.2 2.2])
 ylim([0.2 1.4])
 
+%Save the figure
+% print(gcf,'-depsc',...
+%     ['/Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_' num2str(eb_case) '_parameters']);
+
 %Velocity and r3 coefficient
 % subplot(2,4,7)
 % hold on
@@ -424,7 +429,7 @@ ylim([0.2 1.4])
 
 %Plot differences between C and IDL solutions normalized to their
 %respective maximum values
-if tau==1
+if length(time) == length(timeidl)
 
     % figure(gcf+1)
     % box('on')
@@ -490,6 +495,7 @@ if tau==1
     box('on')
     set(gcf,'Position',[0 0 scale*height scale*width])
     set(gca,'FontSize',14,'FontName','Arial')
+    set(gcf,'PaperPositionMode','auto')
     hold on
     plot(time,deltaPoverP,'g','LineWidth',2)
     plot(time,deltaToverT,'LineWidth',2)
@@ -501,7 +507,10 @@ if tau==1
     ylabel('$\Delta T/T,~\Delta n/n$','interpreter','latex')
     hleg = legend('$P$','$T$','$n$','$T_a$','$n_a$');
     set(hleg,'FontSize',14,'interpreter','latex','Location','Best')
-    %Print some results on the plots
+    
+%     %Print the figure
+%     print(gcf,'-depsc',...
+%     ['/Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_' num2str(eb_case) '_diff']);
 
 end
 
@@ -568,6 +577,7 @@ if usage == 1 || usage == 4
     box('on')
     set(gcf,'Position',[0 0 scale*width scale*height])
     set(gca,'FontSize',18,'FontName','Arial')
+    set(gcf,'PaperPositionMode','auto')
     hold on
     plot(logtdem,log10meandem_tr,'b')
     plot(logtdem,log10meandem_cor,'r')
@@ -585,6 +595,10 @@ if usage == 1 || usage == 4
     ylabel('log(DEM) (cm$^{-5}$~K$^{-1}$)','interpreter','latex')
     hleg=legend('TR','Corona','TR, IDL','Corona, IDL','Total','Total, IDL');
     set(hleg,'Location','Best','FontSize',14)
+    
+%     %Print the figure
+%     print(gcf,'-depsc',...
+%     ['/Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_' num2str(eb_case) '_dem']);
     
 %     figure(gcf+1)
 %     plot(logtdem,dem_tr_diff)

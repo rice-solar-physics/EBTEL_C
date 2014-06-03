@@ -164,4 +164,7 @@ void ebtel_calc_abundance(void);
 //Declare prototype for ebtel_static_eq of type double
 double * ebtel_calc_ic(double[], double[], double, double, struct Option);
 
+//Declare prototype for ebtel_colon_operator of type double *
+double * ebtel_colon_operator(double, double, double);
+
 #endif

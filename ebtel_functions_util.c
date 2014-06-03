@@ -216,20 +216,27 @@ OUTPUTS:
 double * ebtel_linspace( int a, int b, int n)
 {
 	int i;
-	//<DEBUG>
-	//double start = a;
-	//double end = b;
-	//double N = n;
-	//</DEBUG>
+	double B = b;
+	double A = a;
+	double N = n;
 	double *linspace = malloc(sizeof(double[n]));
 	
 	//Declare necessary variables
-	double interval = (b - a)/(n-1);	//spacing between points
+	double interval = (B - A)/(N-1);	//spacing between points
+	
+	//DEBUG
+	/*
+	printf("a = %d\n",a);
+	printf("b = %d\n",b);
+	printf("n = %d\n",n);
+	printf("delta = %f\n",interval);
+	*/
 	
 	//Make the array
-	for(i = 0; i<n; i++)
+	linspace[0] = a;
+	for(i = 1; i<n; i++)
 	{
-		linspace[i] = a + i*interval;
+		linspace[i] = interval + *(linspace + (i-1));
 	}
 
 	return linspace;

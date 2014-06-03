@@ -153,7 +153,7 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		}
 		
 		//Print the data to the file filename using tab delimited entries
-		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i));
+		fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i));
 		
 	}
 	
@@ -216,6 +216,11 @@ OUTPUTS:
 double * ebtel_linspace( int a, int b, int n)
 {
 	int i;
+	//<DEBUG>
+	//double start = a;
+	//double end = b;
+	//double N = n;
+	//</DEBUG>
 	double *linspace = malloc(sizeof(double[n]));
 	
 	//Declare necessary variables
@@ -229,6 +234,51 @@ double * ebtel_linspace( int a, int b, int n)
 
 	return linspace;
 }
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_colon_operator
+
+FUNCTION_DESCRIPTION: This function is similar to the linspace function in MATLAB. It creates a one-dimensional array with specified number of entries and starting and ending point. 
+
+INPUTS:
+	a--starting point
+	b--ending point
+	d--spacing between entries
+	
+OUTPUTS:
+	colon_array--pointer to array with values between a and b spaced by d
+
+***********************************************************************************/
+
+double * ebtel_colon_operator(double a, double b, double d)
+{
+	//Declare variables
+	int i = 0;					//initialize counter
+	int size = ceil((b - a)/d);	//set array size
+	if(size == (b-a)/d)			//add 1 to size if there is no underflow in the array
+	{
+		size = size + 1;
+	}
+	double *colon_operator = malloc(sizeof(double[size]));	//reserve memory for the pointer
+	
+	//Begin the loop to set the array
+	while(*(colon_operator + i) < b)
+	{
+		colon_operator[i] = a + i*d;
+		i++;
+		
+		//If we've reached the condition, we don't want to set the next entry
+		if(a + i*d > b)
+		{
+			break;
+		}
+	}
+	
+	//Return the pointer
+	return colon_operator;
+}
+
 
  /**********************************************************************************
  

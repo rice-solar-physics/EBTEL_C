@@ -20,6 +20,8 @@ DESCRIPTION: This file gives the function prototypes for functions in defined in
 #include <string.h>
 #include <time.h>
 #include <float.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 //Declare global variables
 double K_B;

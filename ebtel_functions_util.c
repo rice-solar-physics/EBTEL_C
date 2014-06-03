@@ -47,6 +47,7 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	printf("------\n");
 	printf("Number of steps: %d\n",n);
 	printf("Total time: %d s\n",total_time);
+	printf("Time step: %f s\n",opt.tau);
 	printf("Loop half-length: %d Mm\n",loop_length);
 	printf("Usage option(see documentation): %d\n",opt.usage);
 	if(heating_shape==1)
@@ -127,6 +128,12 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 	char filename_out[64];
 	char filename_out_dem[64];
 	FILE *out_file;
+	
+	//Check and see if directory 'data' exists. If it does not, then create a new one.
+	struct stat st = {0};
+	if(stat("data",&st) == -1){
+		mkdir("data",0777);
+	}
 	
 	//Open the file that we are going to write the data to 
 	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt.usage,opt.heating_shape,opt.solver);

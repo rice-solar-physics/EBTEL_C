@@ -194,7 +194,7 @@ option that can be chosen in ebtel_main.
  	//Now compute the final resulting state vector
  	for(i=0; i<n; i++)
  	{
- 		s_out[i] = s[i] + 0.16667*tau*(*(f1+i) + *(f4+i) + 2*( *(f2+i) + *(f3+i) ));
+ 		s_out[i] = s[i] + 1./6.*tau*(*(f1+i) + *(f4+i) + 2.*( *(f2+i) + *(f3+i) ));
  	}
  	
  	//Free memory of all f functions
@@ -463,7 +463,7 @@ option that can be chosen in ebtel_main.
 	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L);
 	//dndt = 0.2*(f_eq - f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T));
 	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L);
-	dTdt = T*(1/p*dpdt - 1/n*dndt);
+	dTdt = T*(1./p*dpdt - 1./n*dndt);
 	
 	//Set the derivative state vector
 	derivs[0] = dpdt;

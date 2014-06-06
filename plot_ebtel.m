@@ -12,7 +12,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 1;
+eb_case = 8;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -116,7 +116,7 @@ dynamic = 0;
 param(8) = dynamic;
 solver=0;
 param(9) = solver;
-mode=0;
+mode=1;
 param(10) = mode;
 %h_nano = 1e-2;
 param(11) = h_nano;
@@ -257,12 +257,12 @@ fprintf('Delta(t_Pmax) = %g\n',abs(t_Pmax - t_Pmax_idl));
 %% Plotting
 
 %Set the size of the figures
-height = 0.5; % width/golden ratio
-width = 2.0;
+height = 2.0; % width/golden ratio
+width = 0.5;
 scale = 1500; %scale the plots appropriately; adjust as needed
 
-row = 2;
-col = 3;
+row = 3;
+col = 2;
 
 figure(1)
 box('on')
@@ -277,7 +277,8 @@ plot(timeidl,heatidl,'--r','LineWidth',2)
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$h$ (erg~cm$^{-3}$~s$^{-1}$)','interpreter','latex')
 %xlim([t_pulse_half - 2*t_start t_pulse_half+t_start*7])
-xlim([0 t_start+2*t_pulse_half+50])
+%xlim([0 t_start+2*t_pulse_half+50])
+xlim([0 400])
 ylim([0 h_nano+0.1*h_nano])
 
 % figure(2)
@@ -291,13 +292,13 @@ plot(timeidl,Tidl/10^6,'--r','LineWidth',2)
 %plot(time,(T - Tidl)/10^6)
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$T$~(MK)','interpreter','latex')
-title(['Loop Parameters, Case ' num2str(eb_case) ])
+%title(['Loop Parameters, Case ' num2str(eb_case) ])
 hleg = legend('C','IDL');
 set(hleg,'Location','Best','FontSize',10);
 xlim([0 timeidl(end)])
 
-%fn = ['temp_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
-%print(gcf,'-depsc',fn)
+% fn = ['temp_c_' num2str(eb_case) 's_' num2str(solver) 'h_' num2str(heating_shape)];
+% print(gcf,'-depsc',fn)
 
 % figure(3)
 % box('on')
@@ -494,7 +495,7 @@ if length(time) == length(timeidl)
     figure(gcf+1)
     box('on')
     set(gcf,'Position',[0 0 scale*height scale*width])
-    set(gca,'FontSize',14,'FontName','Arial')
+    set(gca,'FontSize',18,'FontName','Arial')
     set(gcf,'PaperPositionMode','auto')
     hold on
     plot(time,deltaPoverP,'g','LineWidth',2)

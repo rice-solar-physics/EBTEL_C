@@ -42,7 +42,7 @@ option that can be chosen in ebtel_main.
  	double dn;
  	double dp;
 	double pv;
- 	double *s_out = malloc(sizeof(double[12]));
+ 	double *s_out = malloc(sizeof(double[3]));
  
  	//Unravel the state vector
  	p = s[0];
@@ -52,56 +52,15 @@ option that can be chosen in ebtel_main.
 	//Calculate enthalpy flux
 	pv = 0.4*(par.f_eq - par.f - par.flux_nt);
  
-	/*
- 
- 	//Advance n in time
-	dn = (0.2*(par.f_eq - par.f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T)))*tau;
+	//Advance n in time
+	dn = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L)*tau;
 	n = n + dn;
 	
 	//Advance p in time
-	dp = TWO_THIRDS*(par.q2 + par.f_eq/par.L*(1.0 + 1.0/par.r3) - par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt))*tau;
-	p = p + dp;	 
+	dp = TWO_THIRDS*(par.q2 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
+	p = p + dp;
 	
 	//Calculate T
-	T = p/(n*2.0*K_B);	//calculate new temperature
-	
-	*/
-	
-	//DEBUG
-	//Write pressure and density equations term by term to compare with IDL code
-	double dn1, dn2, dn_nt, dp1, dp2, dp3, dp_nt, dn_original, dp_original;
-	
-	dn1 = 0.2*par.f_eq*tau/(par.r12*K_B*T*par.L);
-	dn2 = -0.2*par.f*tau/(par.r12*K_B*T*par.L);
-	dn_nt = par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*par.L))*tau;
-	dn = dn1 + dn2 + dn_nt;
-	
-	dn_original = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L)*tau;
-	
-	n = n + dn_original;
-	
-	dp1 = TWO_THIRDS*par.q2*tau;
-	dp2 = TWO_THIRDS*par.f_eq*tau/par.L;
-	dp3 = TWO_THIRDS*par.f_eq*tau/(par.L*par.r3);
-	dp_nt = -TWO_THIRDS*par.flux_nt/par.L*(1.0 - 1.5*K_B*T/opt.energy_nt)*tau;
-	dp = dp1 + dp2 + dp3 + dp_nt;
-	
-	dp_original = TWO_THIRDS*(par.q2 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
-	
-	p = p + dp_original;
-	
-	//Add the terms to the state vector
-	s_out[3] = dn1;
-	s_out[4] = dn2;
-	s_out[5] = dn_nt;
-	s_out[6] = dn;
-	s_out[7] = dp1;
-	s_out[8] = dp2;
-	s_out[9] = dp3;
-	s_out[10] = dp_nt;
-	s_out[11] = dp;
-	
-	
 	T = p/(2.0*n*K_B);
 	
 	//Update the state vector and return it

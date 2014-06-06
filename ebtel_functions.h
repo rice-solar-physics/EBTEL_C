@@ -69,16 +69,6 @@ struct ebtel_params_st {
 		double *dem_tr_log10mean;
 		double *dem_cor_log10mean; 
 		double *dem_tot_log10mean;
-		//DEBUG
-		double *dn1;
-		double *dn2;
-		double *dn_nt;
-		double *dn;
-		double *dp1;
-		double *dp2;
-		double *dp3;
-		double *dp_nt;
-		double *dp;
 };
 struct rk_params {
 		double L;

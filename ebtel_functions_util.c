@@ -189,19 +189,6 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		//Close the DEM data file
 		fclose(out_file);
 	}
-	
-	//DEBUG
-	//Print term-by-term values to separate debug file
-	out_file = fopen("data/ebtel_debug_C.txt","wt");
-	for(i = 1; i<n; i++)
-	{
-		fprintf(out_file,"%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t\n",*(params_final->dn1 + i),*(params_final->dn2 + i), \
-			*(params_final->dn_nt + i), *(params_final->dn + i), *(params_final->dp1 + i), *(params_final->dp2 + i), \
-			*(params_final->dp3 + i), *(params_final->dp_nt + i), *(params_final->dp + i));
-	}
-	fclose(out_file);
-	
-	
 }
 
 /***********************************************************************************
@@ -230,14 +217,6 @@ double * ebtel_linspace( int a, int b, int n)
 	
 	//Declare necessary variables
 	double interval = (B - A)/(N-1);	//spacing between points
-	
-	//DEBUG
-	/*
-	printf("a = %d\n",a);
-	printf("b = %d\n",b);
-	printf("n = %d\n",n);
-	printf("delta = %f\n",interval);
-	*/
 	
 	//Make the array
 	linspace[0] = a;

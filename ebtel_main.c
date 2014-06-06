@@ -72,7 +72,8 @@ int main (void)
 {	
 	//Use clock to time the entire EBTEL program
 	clock_t time_start;
-	clock_t time_finish;
+	clock_t time_diff;
+	double time_elapsed;
 	
 	//Start the timer
 	time_start = clock();
@@ -191,10 +192,6 @@ int main (void)
 	//is a pointer to an array
 	params_final = ebtel_loop_solver(n, L, total_time, time, heat, opt);
 	
-	//Save the heating and time arrays to the parameter structure
-	//params_final->time = time_ptr;
-	//params_final->heat = heat_ptr;
-	
 	/************************************************************************************
 									Save the Data
 	************************************************************************************/
@@ -206,37 +203,18 @@ int main (void)
 	
 	//Free up memory used by the structure params_final
 	
-	//DEBUG
-	//Free up memory used in params_final structure by debug terms
-	free(params_final->dn1);
-	params_final->dn1 = NULL;
-	free(params_final->dn2);
-	params_final->dn2 = NULL;
-	free(params_final->dn_nt);
-	params_final->dn_nt = NULL;
-	free(params_final->dn);
-	params_final->dn = NULL;
-	free(params_final->dp1);
-	params_final->dp1 = NULL;
-	free(params_final->dp2);
-	params_final->dp2 = NULL;
-	free(params_final->dp3);
-	params_final->dp3 = NULL;
-	free(params_final->dp_nt);
-	params_final->dp_nt = NULL;
-	free(params_final->dp);
-	params_final->dp = NULL;
-	
-	
 	ebtel_free_mem(params_final);
 	free(heat_ptr);
+	heat_ptr = NULL;
 	free(time_ptr);
+	time_ptr = NULL;
 	
 	//Stop the timer
-	time_finish = clock();
+	time_diff = clock() - time_start;
+	time_elapsed = time_diff*1000/CLOCKS_PER_SEC;
 	
 	//Time elapsed
-	printf("The process took %ld seconds to run\n",(time_finish - time_start)/CLOCKS_PER_SEC);
+	printf("The process took %f milliseconds to run\n",time_elapsed);
 	
 	//Exit with no errors
 	return 0;

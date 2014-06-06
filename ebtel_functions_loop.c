@@ -162,17 +162,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
 	param_setter->rad = malloc(sizeof(double[ntot]));
 	
-	//DEBUG
-	param_setter->dn1 = malloc(sizeof(double[ntot]));
-	param_setter->dn2 = malloc(sizeof(double[ntot]));
-	param_setter->dn_nt = malloc(sizeof(double[ntot]));
-	param_setter->dn = malloc(sizeof(double[ntot]));
-	param_setter->dp1 = malloc(sizeof(double[ntot]));
-	param_setter->dp2 = malloc(sizeof(double[ntot]));
-	param_setter->dp3 = malloc(sizeof(double[ntot]));
-	param_setter->dp_nt = malloc(sizeof(double[ntot]));
-	param_setter->dp = malloc(sizeof(double[ntot]));
-	
 	if(opt.usage == 4 || opt.usage == 1)
 	{
 		if(opt.usage == 4)
@@ -413,18 +402,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->ndens[i+1] = n;
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
-		
-		//DEBUG
-		//Save term-by-term values to param_setter structure
-		param_setter->dn1[i+1] = *(state_ptr + 3);
-		param_setter->dn2[i+1] = *(state_ptr + 4);
-		param_setter->dn_nt[i+1] = *(state_ptr + 5);
-		param_setter->dn[i+1] = *(state_ptr + 6);
-		param_setter->dp1[i+1] = *(state_ptr + 7);
-		param_setter->dp2[i+1] = *(state_ptr + 8);
-		param_setter->dp3[i+1] = *(state_ptr + 9);
-		param_setter->dp_nt[i+1] = *(state_ptr + 10);
-		param_setter->dp[i+1] = *(state_ptr + 11);
 		
 		//Free the state ptr as it will be malloc'd again on the next go around
 		free(state_ptr);

@@ -139,7 +139,7 @@ double * ebtel_heating(double[], double, double, double, double, int, int);
 void ebtel_print_header(int, int, int, int, struct Option);
 
 //Declare prototype for ebtel_euler of type double
-double * ebtel_euler(double[], double, struct rk_params, struct Option, int);
+double * ebtel_euler(double[], double, struct rk_params, struct Option);
 
 //Declare prototype for ebtel_data_writer of type void
 void ebtel_file_writer(int, int, struct Option, struct ebtel_params_st *);

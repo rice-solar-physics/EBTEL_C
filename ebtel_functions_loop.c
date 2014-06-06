@@ -21,37 +21,30 @@ FUNCTION NAME: ebtel_loop_solver
 FUNCTION DESCRIPTION: Given some heating input, this function solves the 0-D hydrodynamic equations spatially averaged over a loop half-length, computing the temperature, density, and pressure as functions of time. Given appropriate initial conditions (see below), the differential emission measure of the transition region and corona can also be calculated. 
 
 INPUTS:
-   ttime--time array
-   heat--heating rate array (erg cm^-3 s^-1)
-   looplength--loop half length (cm) (top of the chromosphere to apex)
-   opt--keyword structure: (set to ON (1) or OFF (0))
-        classical--set to use the unsaturated classical heat flux
+	ntot--total number of steps to be taken in the time integration
+	loop_length--half-length of the coronal loop (cm) (top of chrmosphere to apex)
+	total_time--total time over which the simulation will run (s)
+   	ttime--time array
+   	heat--heating rate array (erg cm^-3 s^-1)
+   	opt--keyword structure: (set to ON (1) or OFF (0))
         dynamic--set to use dynamical r1 and r2
         dem_old--set to use old technique of computing DEM(T) in the TR
         rtv--set to use Rosner, Tucker, & Vaiana radiative loss function
         usage--this keyword is not optional and must be set to determine
-               proper usage. See USAGE section below.
+               proper usage. See USAGE section in ebtel_main.c.
+		solver--Euler solver (0) or RK solver (1)
+		mode--IC calculation: static eq. (0), force with inputs (1), scaling laws (2)
+		heating_shape--specifies which heating function to use
+		index_dem--gives range over which the DEM is calculated
         Following value is not a keyword and contains actual values:
         energy_nt--mean energy of the nonthermal electrons (keV)
-
+		T0--initial temperature (only used if mode=1) (K)
+		n0--initial density (only used if mode=1) (cm^-3)
+		h_nano--maximum value of the heating function (erg cm^-3 s^-1)
+		t_pulse_half--time between onset of heating function and max heating (s)
+		tau--time step (s)
 OUTPUTS:
-   t--temperature (K) array corresponding to time array (avg. over coronal
-      section of the loop)
-   n--electron number density array (cm^-3) (coronal average)
-   p--pressure array (dyn cm^-2) (coronal avg.)
-   v--velocity array (cm s^-1) (r4 * velocity at base of corona)
-   dem_tr--differential emission measure of transition region, dem(time,T), both legs
-             (dem = n^2 * ds/dT  cm^-5 K^-1)
-             (Note:  dem_tr is not reliable when a nonthermal electron flux is used.)
-   dem_cor--differential emission measure of corona, dem(time,T), both legs
-             (Int{dem_cor+dem_tr dT} gives the total emission measure of a 
-             loop strand having a cross sectional area of 1 cm^2)
-   logtdem--logT array corresponding to dem_tr and dem_cor
-   f_ratio--ratio of heat flux to equilibrium heat flux
-             (ratio of heat flux to tr. reg. radiative loss rate)
-   rad_ratio--ratio of tr. reg. radiative loss rate from dem_tr and from r3*(coronal rate)
-   cond--conductive loss from the corona
-   rad_cor--coronal radiative loss
+   param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
 ***********************************************************************************/
 
 struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, double time[], double heat[], struct Option opt)
@@ -387,7 +380,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		if(opt.solver==0)	//Euler solver
 		{	
 			//Call the Euler routine
-			state_ptr = ebtel_euler(state,tau,par,opt,i);
+			state_ptr = ebtel_euler(state,tau,par,opt);
 		}
 		else //if(opt.solver==1)	//RK routine
 		{	
@@ -804,9 +797,11 @@ square, or Gaussian pulse.
 
 INPUTS:
 	time--time array for our model
-	tau--timestep
-	h_nano--maximum nanoflare heating
+	tau--timestep (s)
+	h_nano--maximum nanoflare heating (erg cm^-3 s^-1)
 	t_pulse_half--half the duration of the heating pulse
+	t_start--time at which the heating function is turned on (s)
+	n--total number of entries in heating array
 	heating_shape--indicates which heating profile will be used
 	
 OUTPUTS:

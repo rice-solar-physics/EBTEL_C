@@ -33,7 +33,7 @@ option that can be chosen in ebtel_main.
 	
  *********************************************************************************/
  
- double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option opt,int i)
+ double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option opt)
  {
  	//Declare variables
  	double p;
@@ -330,7 +330,8 @@ option that can be chosen in ebtel_main.
 			 (0)t: q1
 			 (1)t + half_tau: (q1 + q2)/2
 			 (2)t + tau: q2
-	par--structure that holds necessary parameters	
+	par--structure that holds necessary parameters
+ 	opt--structre that holds input parameters
  
  Return
  	derivs--updated derivative state vector
@@ -418,9 +419,7 @@ option that can be chosen in ebtel_main.
 	pv = 0.4*(f_eq - f - par.flux_nt);
 	
 	//Now compute the derivatives of each of the quantities in our state vector
-	//dpdt = TWO_THIRDS*(q + f_eq/par.L*(1.0 + 1.0/r3) - par.flux_nt/par.L*(1.0 - K_B*T/opt.energy_nt));
 	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L);
-	//dndt = 0.2*(f_eq - f)/(par.r12*K_B*T*par.L) + par.flux_nt/(opt.energy_nt*par.L)*(1.0 - 0.2*opt.energy_nt/(par.r12*K_B*T));
 	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L);
 	dTdt = T*(1./p*dpdt - 1./n*dndt);
 	

@@ -209,13 +209,12 @@ OUTPUTS:
 
 double * ebtel_linspace( int a, int b, int n)
 {
-	int i;
-	double B = b;
-	double A = a;
-	double N = n;
-	double *linspace = malloc(sizeof(double[n]));
-	
 	//Declare necessary variables
+	int i;
+	double B = b;	//cast as doubles
+	double A = a;	
+	double N = n;	
+	double *linspace = malloc(sizeof(double[n]));
 	double interval = (B - A)/(N-1);	//spacing between points
 	
 	//Make the array
@@ -232,7 +231,7 @@ double * ebtel_linspace( int a, int b, int n)
 
 FUNCTION NAME: ebtel_colon_operator
 
-FUNCTION_DESCRIPTION: This function is similar to the linspace function in MATLAB. It creates a one-dimensional array with specified number of entries and starting and ending point. 
+FUNCTION_DESCRIPTION: This function is similar to using the colon operator in MATLAB. It takes the starting point, end point, and spacing and creates an array beginning at a and ending at b with each of the points separated by d. If it cannot make it exactly to b, the function will always undershoot b. 
 
 INPUTS:
 	a--starting point

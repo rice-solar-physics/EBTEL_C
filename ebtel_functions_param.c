@@ -237,7 +237,7 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		//Check if the heating array begins with a zero. If so, return an error.
 		if (heat[0] == 0)
 		{
-			printf("No initial loop heating: heat(0)=0. Provide valid heating input.\n");
+			printf("ERROR! No initial loop heating: heat(0)=0. Provide valid heating input.\n");
 		}
 
 		//First set up trial values for static equilibrium (i.e. d/dt = 0)

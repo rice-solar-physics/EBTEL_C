@@ -218,6 +218,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 	//Variable declarations for both cases
 	double *return_array = malloc(sizeof(double[6]));
 	double r2 = ebtel_calc_c2();
+	double heat = ebtel_heating(0,opt);
 	
 	if(opt.mode == 0 || opt.mode == 1)
 	{
@@ -233,7 +234,6 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 		double err;
 		double err_n;
 		double tol;
-		double heat = ebtel_heating(0,opt);
 	
 		//Check if the heating array begins with a zero. If so, return an error.
 		if (heat == 0)
@@ -242,7 +242,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 		}
 
 		//First set up trial values for static equilibrium (i.e. d/dt = 0)
-		tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
+		tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat/KAPPA_0,TWO_SEVENTHS);
 		printf("tt_old = %e\n",tt_old);
 		rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
 		nn = pow(heat/((1+r3)*rad),0.5);
@@ -314,7 +314,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 		lambda_0 = 1.95e-18;			//lambda = lambda_0*T
 		bb = -TWO_THIRDS;//-0.5			//power law for radiative loss function
 		q_0 = heat;
-		t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
+		t_0 = r2*pow((3.5/KAPPA_0*heat),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
 		p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
 		n_0 = 0.5*p_0/(K_B*t_0);
 		v_0 = 0;

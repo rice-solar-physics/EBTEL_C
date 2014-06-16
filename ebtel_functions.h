@@ -134,7 +134,7 @@ double * ebtel_rk(double[], int, double, double, struct rk_params, struct Option
 double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option);
 
 //Declare prototype for ebtel_heating of type double
-double ebtel_heating(double, double, double, double, int, int);
+double ebtel_heating(double, struct Option);
 
 //Declare prototype for ebtel_print_header of type void
 void ebtel_print_header(int, int, int, int, struct Option);

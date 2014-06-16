@@ -318,8 +318,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	for(i = 0; i < ntot-1; i++)
 	{
 		//Update the parameter structure
-		par.q1 = ebtel_heating(time+tau,opt);
-		par.q2 = ebtel_heating(time,opt);
+		par.q1 = ebtel_heating(time[i]+tau,opt);
+		par.q2 = ebtel_heating(time[i],opt);
 		
 		//Save time and heat to main data structure
 		param_setter->heat[i+1] = par.q1;
@@ -812,7 +812,6 @@ OUTPUTS:
 double ebtel_heating(double time, struct Option opt)
 {
 	//Declare variables
-	double heating_shape
 	double h_back;
 	double h_thick;
 	double t_pulse;
@@ -827,7 +826,7 @@ double ebtel_heating(double time, struct Option opt)
 	h_thick = 0;
 	t_pulse = 2*opt.t_pulse_half;
 	t_mid = opt.t_start + opt.t_pulse_half;
-	t_end = opt.t_start + opt.t_pulse;
+	t_end = opt.t_start + t_pulse;
 	
 	//Choose which heating model to use
 	//1--triangular pulse (recommended, used in Paper I,II)

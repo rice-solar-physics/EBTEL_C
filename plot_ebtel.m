@@ -100,7 +100,7 @@ end
 %First set each parameter appropriately
 %total_time = 6000;
 param(1) = total_time;
-tau = 5;
+tau = 1;
 param(2) = tau;
 %heating_shape = 1;
 param(3) = heating_shape;

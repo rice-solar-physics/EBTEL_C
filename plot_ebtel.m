@@ -12,7 +12,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 8;
+eb_case = 1;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -100,7 +100,7 @@ end
 %First set each parameter appropriately
 %total_time = 6000;
 param(1) = total_time;
-tau = 1;
+tau = 5;
 param(2) = tau;
 %heating_shape = 1;
 param(3) = heating_shape;

@@ -809,7 +809,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_half, double t_start, int n, int heating_shape)
+double ebtel_heating(double time, double h_nano, double t_pulse_half, double t_start, int n, int heating_shape)
 {
 	//Declare variables
 	double h_back;
@@ -819,11 +819,7 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	double t_mid;
 	double t_m;
 	double t_h;
-	int n_start;
-	int n_end;
-	int n_mid;
-	double *heat = malloc(sizeof(double[n]));
-	int i;
+	double heat;
 
 	//First set some general parameters
 	h_back = 3.4e-6;
@@ -832,11 +828,6 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	t_mid = t_start + t_pulse_half;
 	t_end = t_start + t_pulse;
 	
-	//Set indices
-	n_start = t_start/tau;
-	n_end = n_start + t_pulse/tau;
-	n_mid = n_start + t_pulse/tau/2;
-	
 	//Choose which heating model to use
 	//1--triangular pulse (recommended, used in Paper I,II)
 	//2--square pulse 
@@ -844,46 +835,38 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 	
 	if(heating_shape == 1)
 	{
-		for(i=0;i<n;i++)
+		//Triangular Pulse
+		if(time < t_start)
 		{
-			//Triangular Pulse
-			if(i < n_start)
-			{
-				heat[i] = h_back;
-			}
-			else if(i >= n_start && i <= n_mid)
-			{
-				heat[i] = h_back + h_nano*((time[i] - time[n_start])/t_mid);
-			}
-			else if(i > n_mid && i <= n_end )
-			{
-				heat[i] = h_back - h_nano*(time[i] - time[n_end])/t_mid;
-			}
-			else
-			{
-				heat[i] = h_back;
-			}
+			heat = h_back;
+		}
+		else if(time >= t_start && time <= t_mid)
+		{
+			heat = h_back + h_nano*((time - t_start)/t_mid);
+		}
+		else if(time > t_mid && time <= t_end )
+		{
+			heat = h_back - h_nano*(time - t_end)/t_mid;
+		}
+		else
+		{
+			heat = h_back;
 		}
     }
 	else if(heating_shape == 2)
 	{
-		for(i=0;i<n;i++)
-		//Square Pulse
+		if(time < t_start )
 		{
-			if(i < n_start )
-			{
-				heat[i] = h_back;
-			}
-			else if(i >= n_start && i <= n_end)
-			{
-				heat[i] = h_back + h_nano;
-			}
-			else
-			{
-				heat[i] = h_back;
-			}
+			heat = h_back;
 		}
-		
+		else if(time >= t_start && time <= t_end)
+		{
+			heat = h_back + h_nano;
+		}
+		else
+		{
+			heat = h_back;
+		}		
     }
 	else
 	{
@@ -892,14 +875,11 @@ double * ebtel_heating(double time[], double tau, double h_nano, double t_pulse_
 		//h_back = 3e-5;
 		t_m = t_pulse;
 		t_h = t_start;
-		//h_nano = 1;
-		for(i=0;i<n;i++)
-		{		
-			heat[i] = h_back + h_nano*exp(-pow((time[i] - t_m),2)/(2*pow(t_h,2)));
-		}
+		//h_nano = 1;	
+		heat = h_back + h_nano*exp(-pow((time - t_m),2)/(2*pow(t_h,2)));
 	}
 
-	//Return the heat pointer
+	//Return the heating value
 	return heat;
 }
  

@@ -116,7 +116,6 @@ int main (void)
 	
 	//Pointers
 	double *time_ptr;
-	double *heat_ptr;
 	
 	//Char
 	char filename_in[64];
@@ -147,7 +146,6 @@ int main (void)
 	
 	//Declare arrays of size n
 	double time[n];
-	double heat[n];
 	
 	//Build the time array
 	time_ptr = ebtel_colon_operator(0.,total_time,t_scale);
@@ -162,6 +160,7 @@ int main (void)
 	//Set members of the Option opt structure
 	opt.heating_shape = heating_shape;
 	opt.t_pulse_half = t_pulse_half;
+	opt.t_start = t_start;
 	opt.tau = t_scale;
 	opt.h_nano = h_nano;
 	opt.energy_nt = 8.01e-8;	//50 keV in ergs
@@ -174,12 +173,6 @@ int main (void)
 	//2--square pulse 
 	//3--Gaussian pulse
 	
-	//Call the heating function and have it return the heating array
-	heat_ptr = ebtel_heating(time, t_scale, h_nano, t_pulse_half, t_start, n, heating_shape);
-	for(i=0;i<n;i++)
-	{
-		heat[i] = *(heat_ptr + i);
-	}
 	
 	/************************************************************************************
 									Start the Model
@@ -190,7 +183,7 @@ int main (void)
 	
 	//Make the call to the ebtel_loop_solver function. This function sets the members of the structure params_final. Each member 
 	//is a pointer to an array
-	params_final = ebtel_loop_solver(n, L, total_time, time, heat, opt);
+	params_final = ebtel_loop_solver(n, L, total_time, time, opt);
 	
 	/************************************************************************************
 									Save the Data
@@ -204,8 +197,6 @@ int main (void)
 	//Free up memory used by the structure params_final
 	
 	ebtel_free_mem(params_final);
-	free(heat_ptr);
-	heat_ptr = NULL;
 	free(time_ptr);
 	time_ptr = NULL;
 	

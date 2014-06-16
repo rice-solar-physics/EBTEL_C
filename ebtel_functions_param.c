@@ -213,7 +213,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_length, struct Option opt)
+double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Option opt)
 {
 	//Variable declarations for both cases
 	double *return_array = malloc(sizeof(double[6]));
@@ -233,9 +233,10 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		double err;
 		double err_n;
 		double tol;
+		double heat = ebtel_heating(0,opt);
 	
 		//Check if the heating array begins with a zero. If so, return an error.
-		if (heat[0] == 0)
+		if (heat == 0)
 		{
 			printf("ERROR! No initial loop heating: heat(0)=0. Provide valid heating input.\n");
 		}
@@ -244,7 +245,7 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		tt_old = r2*pow(3.5*r3/(1 + r3)*loop_length*loop_length*heat[0]/KAPPA_0,TWO_SEVENTHS);
 		printf("tt_old = %e\n",tt_old);
 		rad = ebtel_rad_loss(tt_old,kpar,opt.rtv);
-		nn = pow(heat[0]/((1+r3)*rad),0.5);
+		nn = pow(heat/((1+r3)*rad),0.5);
 		nn_old = nn;
 
 		//Compute initial values for parameters t and n by iterating on temperature (tt) and R_tr/R_c (r3)
@@ -253,9 +254,9 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		for(i=0; i<=100; i++)
 		{
 			r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad);										//recalculate r3 coefficient
-			tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat[0]/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
+			tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat/KAPPA_0),TWO_SEVENTHS);	//temperature at new r3
 			rad = ebtel_rad_loss(tt_new,kpar,opt.rtv);											//radiative loss at new temperature
-			nn = pow(heat[0]/((1+r3)*rad),0.5);												//density at new r3 and new rad
+			nn = pow(heat/((1+r3)*rad),0.5);												//density at new r3 and new rad
 			err = tt_new - tt_old;															//difference between t_i, T_i-1
 			err_n = nn - nn_old;	
 			//Break the loop if the error gets below a certain threshold
@@ -275,7 +276,7 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		}
 	
 		//Calculate the density
-		nn = pow(heat[0]/((1+r3)*rad),0.5);
+		nn = pow(heat/((1+r3)*rad),0.5);
 		
 		//To use parameters consistent with the cases invoked in Paper II, we read in initial values for n,T rather than
 		//calculating them using scaling laws or static equilibrium
@@ -312,7 +313,7 @@ double * ebtel_calc_ic(double heat[], double kpar[], double r3, double loop_leng
 		//Alternatively, we could use the scaling laws to determine our initial conditions
 		lambda_0 = 1.95e-18;			//lambda = lambda_0*T
 		bb = -TWO_THIRDS;//-0.5			//power law for radiative loss function
-		q_0 = heat[0];
+		q_0 = heat;
 		t_0 = r2*pow((3.5/KAPPA_0*heat[0]),TWO_SEVENTHS)*pow(loop_length,2.0*TWO_SEVENTHS);
 		p_0 = pow(r2,-SEVEN_HALVES*0.5)*pow(8.0/7.0*KAPPA_0/lambda_0,0.5)*K_B*pow(t_0,((11.0-2.0*bb)/4.0))/loop_length;
 		n_0 = 0.5*p_0/(K_B*t_0);

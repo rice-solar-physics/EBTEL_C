@@ -47,7 +47,7 @@ OUTPUTS:
    param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
 ***********************************************************************************/
 
-struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, double time[], double heat[], struct Option opt)
+struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, double time[], struct Option opt)
 {
 	/***********************************************************************************
 								Variable Declarations
@@ -247,11 +247,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 							Initial Static Equilibrium
 	***********************************************************************************/
 	/*
-	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws (set by ic_mode in opt structure)
+	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws (set by mode in opt structure)
 	*/
 	
 	//Calculate initial temperature, density, pressure, and velocity using one of the two methods.
-	ic_ptr = ebtel_calc_ic(heat,kpar,r3,loop_length,opt);
+	ic_ptr = ebtel_calc_ic(kpar,r3,loop_length,opt);
 	r3 = *(ic_ptr + 0);
 	rad = *(ic_ptr + 1);
 	t = *(ic_ptr + 2);
@@ -279,7 +279,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->papex[0] = pa;
 	param_setter->rad[0] = rad;
 	param_setter->coeff_1[0] = r3;
-	param_setter->heat[0] = heat[0];
+	param_setter->heat[0] = ebtel_heating(0,opt);
 	param_setter->time[0] = 0;
 	
 	//Print out the coefficients that we are starting the model with
@@ -292,7 +292,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//Print out the parameters that we are starting the model with
 	printf("L = %e\n",loop_length);
-	printf("Q = %e\n",heat[0]);
+	printf("Q = %e\n",param_setter->heat[0]);
 	printf("T, Ta = %e, %e\n",param_setter->temp[0],param_setter->tapex[0]);
 	printf("n, na = %e, %e\n",param_setter->ndens[0],param_setter->napex[0]);
 	printf("********************************************************************\n");
@@ -318,17 +318,17 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	for(i = 0; i < ntot-1; i++)
 	{
 		//Update the parameter structure
-		par.q1 = heat[i+1];
-		par.q2 = heat[i];
+		par.q1 = ebtel_heating(time+tau,opt);
+		par.q2 = ebtel_heating(time,opt);
 		
 		//Save time and heat to main data structure
-		param_setter->heat[i+1] = heat[i+1];
+		param_setter->heat[i+1] = par.q1;
 		param_setter->time[i+1] = time[i+1];
 		
 		//Set up non-thermal electron flux for usage option 3
 		if(opt.usage==3)
 		{
-			par.flux_nt = loop_length*heat[i];
+			par.flux_nt = loop_length*par.q2;
 		}
 		else
 		{
@@ -809,9 +809,10 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double ebtel_heating(double time, double h_nano, double t_pulse_half, double t_start, int n, int heating_shape)
+double ebtel_heating(double time, struct Option opt)
 {
 	//Declare variables
+	double heating_shape
 	double h_back;
 	double h_thick;
 	double t_pulse;
@@ -824,44 +825,44 @@ double ebtel_heating(double time, double h_nano, double t_pulse_half, double t_s
 	//First set some general parameters
 	h_back = 3.4e-6;
 	h_thick = 0;
-	t_pulse = 2*t_pulse_half;
-	t_mid = t_start + t_pulse_half;
-	t_end = t_start + t_pulse;
+	t_pulse = 2*opt.t_pulse_half;
+	t_mid = opt.t_start + opt.t_pulse_half;
+	t_end = opt.t_start + opt.t_pulse;
 	
 	//Choose which heating model to use
 	//1--triangular pulse (recommended, used in Paper I,II)
 	//2--square pulse 
 	//3--Gaussian pulse
 	
-	if(heating_shape == 1)
+	if(opt.heating_shape == 1)
 	{
 		//Triangular Pulse
-		if(time < t_start)
+		if(time < opt.t_start)
 		{
 			heat = h_back;
 		}
-		else if(time >= t_start && time <= t_mid)
+		else if(time >= opt.t_start && time <= t_mid)
 		{
-			heat = h_back + h_nano*((time - t_start)/t_mid);
+			heat = h_back + opt.h_nano*((time - opt.t_start)/t_mid);
 		}
 		else if(time > t_mid && time <= t_end )
 		{
-			heat = h_back - h_nano*(time - t_end)/t_mid;
+			heat = h_back - opt.h_nano*(time - t_end)/t_mid;
 		}
 		else
 		{
 			heat = h_back;
 		}
     }
-	else if(heating_shape == 2)
+	else if(opt.heating_shape == 2)
 	{
-		if(time < t_start )
+		if(time < opt.t_start )
 		{
 			heat = h_back;
 		}
-		else if(time >= t_start && time <= t_end)
+		else if(time >= opt.t_start && time <= t_end)
 		{
-			heat = h_back + h_nano;
+			heat = h_back + opt.h_nano;
 		}
 		else
 		{
@@ -874,9 +875,9 @@ double ebtel_heating(double time, double h_nano, double t_pulse_half, double t_s
 		//set some parameters especially for the Gaussian heating
 		//h_back = 3e-5;
 		t_m = t_pulse;
-		t_h = t_start;
+		t_h = opt.t_start;
 		//h_nano = 1;	
-		heat = h_back + h_nano*exp(-pow((time - t_m),2)/(2*pow(t_h,2)));
+		heat = h_back + opt.h_nano*exp(-pow((time - t_m),2)/(2*pow(t_h,2)));
 	}
 
 	//Return the heating value

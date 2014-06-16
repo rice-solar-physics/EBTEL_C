@@ -47,7 +47,7 @@ OUTPUTS:
    param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
 ***********************************************************************************/
 
-struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, double time[], struct Option opt)
+struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, struct Option opt)
 {
 	/***********************************************************************************
 								Variable Declarations
@@ -109,6 +109,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double rad_ratio;
 	double f_ratio;
 	double tau;
+	double time = 0;	//initialize time to zero
 	
 	//Double array (single index)
 	double c_array[3];
@@ -279,8 +280,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->papex[0] = pa;
 	param_setter->rad[0] = rad;
 	param_setter->coeff_1[0] = r3;
-	param_setter->heat[0] = ebtel_heating(0,opt);
-	param_setter->time[0] = 0;
+	param_setter->heat[0] = ebtel_heating(time,opt);
+	param_setter->time[0] = time;
 	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
@@ -313,17 +314,21 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Set the initial timestep from opt structure.
 	//This will be static if we are not using our adaptive solver
 	tau = opt.tau;
+	i = 0;
 	
 	//Begin the loop over the timesteps
-	for(i = 0; i < ntot-1; i++)
+	while(time < total_time)
 	{
 		//Update the parameter structure
-		par.q1 = ebtel_heating(time[i]+tau,opt);
-		par.q2 = ebtel_heating(time[i],opt);
+		par.q1 = ebtel_heating(time,opt);
+		par.q2 = ebtel_heating(time+tau,opt);
+		
+		//Update time
+		time = time + tau;
 		
 		//Save time and heat to main data structure
-		param_setter->heat[i+1] = par.q1;
-		param_setter->time[i+1] = time[i+1];
+		param_setter->heat[i+1] = par.q2;
+		param_setter->time[i+1] = time;
 		
 		//Set up non-thermal electron flux for usage option 3
 		if(opt.usage==3)
@@ -385,7 +390,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		else //if(opt.solver==1)	//RK routine
 		{	
 			//Call the RK routine
-			state_ptr = ebtel_rk(state,3,time[i],tau,par,opt);	
+			state_ptr = ebtel_rk(state,3,param_setter->time[i],tau,par,opt);	
 		}
 
 		//Update p,n,t and save to structure
@@ -532,7 +537,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->rad_cor[i] = rad_cor;
 		
 		//Increment the counter
-		//i++;
+		i++;
 	}
 	
 	//End of loop

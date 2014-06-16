@@ -12,7 +12,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 1;
+eb_case = 8;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -576,7 +576,7 @@ if usage == 1 || usage == 4
     
     figure(gcf+1)
     box('on')
-    set(gcf,'Position',[0 0 scale*width scale*height])
+    set(gcf,'Position',[0 0 scale*height scale*width])
     set(gca,'FontSize',18,'FontName','Arial')
     set(gcf,'PaperPositionMode','auto')
     hold on

@@ -92,7 +92,7 @@ struct ebtel_rka_st {
 };
 
 //Declare prototype for ebtel_loop_solver of type struct *
-struct ebtel_params_st *ebtel_loop_solver( int, double, double, double[], struct Option);
+struct ebtel_params_st *ebtel_loop_solver( int, double, double, struct Option);
 
 //Declare prototype for ebtel_kpar_set of type void
 double * ebtel_kpar_set( int);

@@ -99,7 +99,6 @@ int main (void)
 	ebtel_calc_abundance();
 	
 	//Int
-	int i;
 	int n;
 	int heating_shape;
 	int loop_length;
@@ -113,9 +112,6 @@ int main (void)
 	double t_start;
 	
 	FILE *in_file;
-	
-	//Pointers
-	double *time_ptr;
 	
 	//Char
 	char filename_in[64];
@@ -143,16 +139,6 @@ int main (void)
 	
 	//Set total number of steps using the timestep and total time
 	n = ceil(total_time/t_scale);
-	
-	//Declare arrays of size n
-	double time[n];
-	
-	//Build the time array
-	time_ptr = ebtel_colon_operator(0.,total_time,t_scale);
-	for(i=0; i<n; i++)
-	{
-		time[i] = *(time_ptr + i);
-	}
 	
 	//Define loop half-length and change to appropriate units
 	L = 1e8*loop_length;	//convert from Mm to cm
@@ -183,7 +169,7 @@ int main (void)
 	
 	//Make the call to the ebtel_loop_solver function. This function sets the members of the structure params_final. Each member 
 	//is a pointer to an array
-	params_final = ebtel_loop_solver(n, L, total_time, time, opt);
+	params_final = ebtel_loop_solver(n, L, total_time, opt);
 	
 	/************************************************************************************
 									Save the Data
@@ -195,10 +181,7 @@ int main (void)
 	/****************Done writing data to file. Free up memory reserved by pointers.******************/
 	
 	//Free up memory used by the structure params_final
-	
 	ebtel_free_mem(params_final);
-	free(time_ptr);
-	time_ptr = NULL;
 	
 	//Stop the timer
 	time_diff = clock() - time_start;

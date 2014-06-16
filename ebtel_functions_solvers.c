@@ -57,7 +57,7 @@ option that can be chosen in ebtel_main.
 	n = n + dn;
 	
 	//Advance p in time
-	dp = TWO_THIRDS*(par.q2 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
+	dp = TWO_THIRDS*(par.q1 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
 	p = p + dp;
 	
 	//Calculate T

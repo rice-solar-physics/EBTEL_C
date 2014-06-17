@@ -138,6 +138,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//struct
 	struct rk_params par;
+	struct ebtel_rka_st *adapt;
 	struct ebtel_params_st *param_setter = malloc(sizeof(struct ebtel_params_st));
 	assert(param_setter != NULL);
 	
@@ -387,10 +388,19 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Call the Euler routine
 			state_ptr = ebtel_euler(state,tau,par,opt);
 		}
-		else //if(opt.solver==1)	//RK routine
+		elseif(opt.solver==1)	//RK routine
 		{	
 			//Call the RK routine
 			state_ptr = ebtel_rk(state,3,param_setter->time[i],tau,par,opt);	
+		}
+		else
+		{
+			//Call the adaptive RK routine
+			adapt = ebtel_rk_adapt(state,3,param_setter->time[i],tau,1e-2,par,opt);
+			state_ptr[0] = *(adapt->state + 0);
+			state_ptr[1] = *(adapt->state + 1);
+			state_ptr[2] = *(adapt->state + 2);
+			tau = adapt->tau;
 		}
 
 		//Update p,n,t and save to structure

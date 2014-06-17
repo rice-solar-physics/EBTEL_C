@@ -388,18 +388,17 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Call the Euler routine
 			state_ptr = ebtel_euler(state,tau,par,opt);
 		}
-		elseif(opt.solver==1)	//RK routine
+		else if(opt.solver==1)	//RK routine
 		{	
 			//Call the RK routine
 			state_ptr = ebtel_rk(state,3,param_setter->time[i],tau,par,opt);	
 		}
-		else
-		{
+		else if(opt.solver==2)
+		{	
 			//Call the adaptive RK routine
-			adapt = ebtel_rk_adapt(state,3,param_setter->time[i],tau,1e-2,par,opt);
-			state_ptr[0] = *(adapt->state + 0);
-			state_ptr[1] = *(adapt->state + 1);
-			state_ptr[2] = *(adapt->state + 2);
+			adapt = ebtel_rk_adapt(state,3,param_setter->time[i],tau,opt.error,par,opt);
+			//Set the state vectore and timestep
+			state_ptr = adapt->state;
 			tau = adapt->tau;
 		}
 
@@ -411,9 +410,20 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
 		
-		//Free the state ptr as it will be malloc'd again on the next go around
-		free(state_ptr);
-		state_ptr = NULL;
+		//If the adaptive solver is being used, free memory used by this structure
+		if(opt.solver==2)
+		{
+			//Free the structure as it will be malloc'd on the next go around
+			free(adapt->state);
+			adapt->state = NULL;
+			free(adapt);
+		}
+		else
+		{
+			//Free the state ptr as it will be malloc'd again on the next go around
+			free(state_ptr);
+			state_ptr = NULL;
+		}
 		
 		v = pv/p; 			//calculate new velocity
 		param_setter->vel[i+1] = v*r4;

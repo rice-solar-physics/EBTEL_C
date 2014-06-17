@@ -12,7 +12,7 @@ close all
 %text file.
 
 %Decide which case we are plotting first
-eb_case = 8;
+eb_case = 1;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -100,13 +100,13 @@ end
 %First set each parameter appropriately
 %total_time = 6000;
 param(1) = total_time;
-tau = 1;
+tau = 0.1;
 param(2) = tau;
 %heating_shape = 1;
 param(3) = heating_shape;
 %loop_length = 75;
 param(4) = loop_length;
-usage=1;
+usage=2;
 param(5) = usage;
 rtv=1;
 param(6) = rtv;
@@ -114,7 +114,7 @@ dem_old = 0;
 param(7) = dem_old;
 dynamic = 0;
 param(8) = dynamic;
-solver=0;
+solver=2;
 param(9) = solver;
 mode=1;
 param(10) = mode;
@@ -126,10 +126,12 @@ param(12) = t_pulse_half;
 param(13) = t_start;
 index_dem = 451;
 param(14) = index_dem;
+error = 1e-6;
+param(15) = error;
 %T0 = 1.3e+6;
-param(15) = T0;
+param(16) = T0;
 %n0 = 9.2e+8;
-param(16) = n0;
+param(17) = n0;
 
 %Print the param vector to a file
 fileID = fopen('ebtel_parameters.txt','w');
@@ -261,12 +263,12 @@ height = 2.0; % width/golden ratio
 width = 0.5;
 scale = 1500; %scale the plots appropriately; adjust as needed
 
-row = 3;
-col = 2;
+row = 2;
+col = 3;
 
 figure(1)
 box('on')
-set(gcf,'Position',[0 0 scale*width scale*height])
+set(gcf,'Position',[0 0 scale*height scale*width])
 set(gca,'FontSize',18,'FontName','Arial')
 set(gcf,'PaperPositionMode','auto')
 subplot(row,col,1)
@@ -277,8 +279,8 @@ plot(timeidl,heatidl,'--r','LineWidth',2)
 xlabel('$t$~(s)','interpreter','latex')
 ylabel('$h$ (erg~cm$^{-3}$~s$^{-1}$)','interpreter','latex')
 %xlim([t_pulse_half - 2*t_start t_pulse_half+t_start*7])
-%xlim([0 t_start+2*t_pulse_half+50])
-xlim([0 400])
+xlim([0 t_start+2*t_pulse_half+50])
+%xlim([0 400])
 ylim([0 h_nano+0.1*h_nano])
 
 % figure(2)

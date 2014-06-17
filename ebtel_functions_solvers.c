@@ -196,7 +196,7 @@ option that can be chosen in ebtel_main.
  	//Int
  	int i;
  	int j;
- 	int max_try = 1000;
+ 	int max_try = 100;
  	//Double
  	double safe1 = 0.9;
  	double safe2 = 4.0;
@@ -228,7 +228,8 @@ option that can be chosen in ebtel_main.
  		
  		//First small step
  		half_tau = 0.5*tau;
- 		x_small_1 = ebtel_rk(s,n,t_save,half_tau,par,opt);
+		x_small_1 = ebtel_rk(s,n,t_save,half_tau,par,opt);
+		
  		//Unpack the x_small_1 pointer
  		for(j=0;j<n;j++)
  		{
@@ -289,6 +290,9 @@ option that can be chosen in ebtel_main.
  			x_small_2 = NULL;
  			free(x_big);
  			x_big = NULL;
+			
+			//DEBUG
+			printf("Took %d iterations to converge with tau = %le at t = %le\n",i,tau,time);
  			
  			//Return the structure
  			return rka_params;

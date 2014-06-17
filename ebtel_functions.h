@@ -49,6 +49,7 @@ struct Option {
 	double t_pulse_half;
 	double t_start;
 	double tau;
+	double error;
 };
 struct ebtel_params_st {
 		double *heat;

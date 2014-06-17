@@ -129,7 +129,7 @@ int main (void)
 		return 1;
 	}
 	
-	fscanf(in_file,"%le\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le\n",&total_time,&t_scale,&heating_shape,&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&t_start,&opt.index_dem,&opt.T0,&opt.n0);
+	fscanf(in_file,"%le\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le%le\n",&total_time,&t_scale,&heating_shape,&loop_length,&opt.usage,&opt.rtv,&opt.dem_old,&opt.dynamic,&opt.solver,&opt.mode,&h_nano,&t_pulse_half,&t_start,&opt.index_dem,&opt.error,&opt.T0,&opt.n0);
 	
 	fclose(in_file);
 	

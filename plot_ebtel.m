@@ -11,6 +11,8 @@ close all
 %Loops (EBTEL) model. The model is written in C and data is output to a
 %text file.
 
+%% Print the input file
+
 %Decide which case we are plotting first
 eb_case = 1;
 if eb_case==1
@@ -100,13 +102,13 @@ end
 %First set each parameter appropriately
 %total_time = 6000;
 param(1) = total_time;
-tau = 0.1;
+tau = 1;
 param(2) = tau;
 %heating_shape = 1;
 param(3) = heating_shape;
 %loop_length = 75;
 param(4) = loop_length;
-usage=2;
+usage=1;
 param(5) = usage;
 rtv=1;
 param(6) = rtv;
@@ -138,11 +140,16 @@ fileID = fopen('ebtel_parameters.txt','w');
 fprintf(fileID,'%d\n',param);
 fclose(fileID);
 
-%Start the model now that we have set our inputs appropriately
+%% Start the model now that we have set our inputs appropriately
 
 %Utilize the EBTEL makefile
 %To clean up the object files and executable, run make clean in the command
 %line
+
+%DEBUG (remove these lines when making later plots)
+unix('rm -r data')  %remove the data folder so we know if program isn't working
+unix('make clean')  %clean up the object files and old executable
+
 unix('make')
 
 %Compute the executables
@@ -609,3 +616,20 @@ if usage == 1 || usage == 4
 %     ylabel('DEM_{TR} diff')
     
 end
+
+
+%DEBUG--plot the timestep versus time
+figure(gcf+1)
+box('on')
+set(gcf,'Position',[0 0 scale*height scale*width])
+set(gca,'FontSize',18,'FontName','Arial')
+set(gcf,'PaperPositionMode','auto')
+delta_time = diff(time);
+hold on
+plot(time(2:end),delta_time)
+plot(time,T/max(T)*max(delta_time),'k--')
+plot([min(time) max(time)],[tau tau],'r','LineWidth',2)
+xlabel('time')
+ylabel('tau')
+legend('tau','temp','Location','Best')
+xlim([0 total_time])

@@ -325,25 +325,19 @@ double * ebtel_colon_operator(double a, double b, double d)
  *********************************************************************************/
  
  double ebtel_max_val(double num_1, double num_2)
- {
- 	//Declare max value
- 	double max_val;
- 	
+ {	
  	if(num_1 > num_2)	
  	{
- 		max_val = num_1;
+ 		return num_1;
  	}
  	else if(num_2 > num_1)
  	{
- 		max_val = num_2;
+ 		return num_2;
  	}
- 	else					//Consider case where num_1 = num_2; Could set either one to the max since it does not matter
+ 	else  
  	{
- 		max_val = num_1;
-		printf("Num_1 = Num_2. Num_1 is the maximum value by default.\n");
+ 		return num_1;
  	}
- 	
- 	return max_val;
  }
  
  /**********************************************************************************
@@ -378,7 +372,6 @@ double * ebtel_colon_operator(double a, double b, double d)
  	else					//Consider the case where the two are equal. Doesn't matter which we return
  	{
  		min_val = num_1;
-		printf("Num_1 = Num_2. Num_1 is the minimum value by default.\n");
  	}
  	
  	return min_val;

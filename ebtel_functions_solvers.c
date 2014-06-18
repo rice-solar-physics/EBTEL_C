@@ -197,6 +197,7 @@ option that can be chosen in ebtel_main.
  	int i;
  	int j;
  	int max_try = 100;
+	
  	//Double
  	double safe1 = 0.9;
  	double safe2 = 4.0;
@@ -208,15 +209,18 @@ option that can be chosen in ebtel_main.
  	double half_tau;
  	double old_tau;
  	double epsilon = 1.0e-16;
- 	//Pointers
+ 	
+	//Pointers
  	double *x_small_1;
  	double *x_small_2;
  	double *x_big;
- 	//Arrays
+ 	
+	//Arrays
  	double s_small_1[n];
  	double s_small_2[n];
  	double s_big[n];
- 	//Structure
+ 	
+	//Structure
  	struct ebtel_rka_st *rka_params = malloc(sizeof(struct ebtel_rka_st));
  	//Reserve memory for structure members that will be set
  	rka_params->state=malloc(sizeof(double[n]));
@@ -228,7 +232,10 @@ option that can be chosen in ebtel_main.
  		
  		//First small step
  		half_tau = 0.5*tau;
+		
+		//DEBUG
 		x_small_1 = ebtel_rk(s,n,t_save,half_tau,par,opt);
+		//x_small_1 = ebtel_euler(s,half_tau,par,opt);
 		
  		//Unpack the x_small_1 pointer
  		for(j=0;j<n;j++)
@@ -240,16 +247,24 @@ option that can be chosen in ebtel_main.
  		time = t_save + half_tau;
  		
  		//Second small step
- 		x_small_2 = ebtel_rk(s_small_1,n,time,half_tau,par,opt);
- 		//Unpack the x_small_2 pointer
+ 		
+		//DEBUG
+		x_small_2 = ebtel_rk(s_small_1,n,time,half_tau,par,opt);
+ 		//x_small_2 = ebtel_euler(s_small_1,half_tau,par,opt);
+		
+		//Unpack the x_small_2 pointer
  		for(j=0;j<n;j++)
  		{
  			s_small_2[j] = *(x_small_2 + j);
  		}
  		
  		//Take single big time-step
- 		x_big = ebtel_rk(s,n,t_save,tau,par,opt);
- 		//Unpack the x_big pointer
+ 		
+		//DEBUG
+		x_big = ebtel_rk(s,n,t_save,tau,par,opt);
+ 		//x_big = ebtel_euler(s,tau,par,opt);
+		
+		//Unpack the x_big pointer
  		for(j=0;j<n;j++)
  		{
  			s_big[j] = *(x_big + j);
@@ -259,17 +274,36 @@ option that can be chosen in ebtel_main.
  		time = t_save + tau;
  		
  		//Compute estimated truncation error
+		
+		//DEBUG
+		/*
  		for(j=0;j<n;j++)
  		{
  			scale = err*(fabs(s_small_2[j]) + fabs(s_big[j]))/2.0;
- 			x_diff = s_small_2[j] - s_big[j];
+			x_diff = s_small_2[j] - s_big[j];
  			//Return the maximum value of the error ratio
- 			error_ratio = ebtel_max_val(error_ratio,(fabs(x_diff)/(scale + epsilon)));
- 		}
+			
+			//DEBUG--test if max_val function is causing the problem
+			//error_ratio = ebtel_max_val(error_ratio,fabs(x_diff)/(scale + epsilon));
+			
+			if((fabs(x_diff)/(scale + epsilon)) > error_ratio)
+			{
+				error_ratio = fabs(x_diff)/(scale + epsilon);
+			}
+			
+		}
+		*/
+	
+		//Use only the temperature for adapting
+		
+		scale = err*(fabs(s_small_2[2]) + fabs(s_big[2]))/2.0;
+		x_diff = s_small_2[2] - s_big[2];
+		error_ratio = fabs(x_diff)/(scale + epsilon);
  		
+		
  		//Estimate new tau value (including safety factors)
  		old_tau = tau;
- 		tau = safe1*old_tau*pow(error_ratio,-0.20);
+ 		tau = safe1*old_tau*pow(error_ratio,-1./5.);
  		tau = ebtel_max_val(tau,old_tau/safe2);
  		tau = ebtel_min_val(tau,safe2*old_tau);
  		
@@ -292,8 +326,9 @@ option that can be chosen in ebtel_main.
  			x_big = NULL;
 			
 			//DEBUG
-			printf("Took %d iterations to converge with tau = %le at t = %le\n",i,tau,time);
- 			
+			//Print the timestep
+			printf("tau = %le\n",tau);
+			
  			//Return the structure
  			return rka_params;
  		}
@@ -308,12 +343,18 @@ option that can be chosen in ebtel_main.
  	}
  	
  	//If we've finished the loop without meeting the error requirement, then return an error
- 	printf("Error: Adaptive Runge-Kutta routine failed. Returned 0 to state, time, tau.\n");
- 	//Set the structure fields
-	rka_params->tau = tau;
+ 	printf("Error: Adaptive Runge-Kutta routine failed. Using small step and old tau.\n");
+ 	
+	//DEBUG
+	//Want to know when we failed
+	printf("At %d iteration with tau = %le at t = %le\n",i,tau,time);
+	printf("error_ratio = %le\n",error_ratio);
+	
+	//Set the structure fields to zero.
+	rka_params->tau = 0;
 	for(j=0;j<n;j++)
 	{
-		rka_params->state[j] = s_small_2[j];
+		rka_params->state[j] = 0;
 	}
 	return rka_params;
  	

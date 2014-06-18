@@ -59,6 +59,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	int index_dem = opt.index_dem;
 	int i;	//index over ntot
 	int j;	//index over 451
+	int k;	//index used for averaging over temporal DEM dimensions
 	int flag_dem_tr;
 	int j_min;
 	int j_max;
@@ -216,13 +217,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	{	
 		//Define temperature arrays for plotting and calculating DEM
 		log_tdem_ptr = ebtel_linspace(0,index_dem-1,index_dem);		//set the linspace pointer using the ebtel_linspace function
-		for(i = 0; i<index_dem; i++)
+		for(j = 0; j<index_dem; j++)
 		{
-			log_tdem[i] = *(log_tdem_ptr + i)/100 + 4;	//log of T in the region in which DEM is defined
-			param_setter->logtdem[i] = log_tdem[i];		//Save logtdem to our parameter structure
-			tdem[i] = pow(10,log_tdem[i]);				//T in the region in which DEM is defined
-			root_tdem[i] = sqrt(tdem[i]);				//T^1/2 in the region in which DEM is defined
-			fourth_tdem[i] =  pow(tdem[i],0.25);			//T^1/4 in the region in which DEM is defined
+			log_tdem[j] = *(log_tdem_ptr + j)/100 + 4;	//log of T in the region in which DEM is defined
+			param_setter->logtdem[j] = log_tdem[j];		//Save logtdem to our parameter structure
+			tdem[j] = pow(10,log_tdem[j]);				//T in the region in which DEM is defined
+			root_tdem[j] = sqrt(tdem[j]);				//T^1/2 in the region in which DEM is defined
+			fourth_tdem[j] =  pow(tdem[j],0.25);			//T^1/4 in the region in which DEM is defined
 		}
 		
 		//These coefficients will be used in the old method of calculating DEM
@@ -233,15 +234,15 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		c_array[0] = root_c2; c_array[1] = c3; c_array[2] = c4;
 		
 		//Radiation in the transition region. This loop just calculates the radiative loss function in the TR
-		for(i = 0; i<index_dem; i++)
+		for(j = 0; j<index_dem; j++)
 		{
-			rad = ebtel_rad_loss(tdem[i],kpar,opt.rtv);		//Calculate the radiative loss function for temperature tdem[i]
-			rad_dem[i] = rad;								//Set radiative loss function in the TR
-			if (tdem[i] < 1e+4)
+			rad = ebtel_rad_loss(tdem[j],kpar,opt.rtv);		//Calculate the radiative loss function for temperature tdem[i]
+			rad_dem[j] = rad;								//Set radiative loss function in the TR
+			if (tdem[j] < 1e+4)
 			{
-				rad_dem[i] = 1;								//Check to see if we are outside the allowed temperature range
+				rad_dem[j] = 1;								//Check to see if we are outside the allowed temperature range
 			}
-			root_rad_dem[i] = sqrt(rad_dem[i]);
+			root_rad_dem[j] = sqrt(rad_dem[j]);
 		}
 	}
 	
@@ -513,6 +514,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			//Corona (EM distributed uniformly over temperature interval [tmin,tmax])
 			t_max = ebtel_max_val(t/r2,1.1e+4);
 			t_min = ebtel_max_val(t*(2.0 - 1/r2),1e+4);
+			
 			j_max = (log10(t_max) - 4.0)*100;
 			j_min = (log10(t_min) - 4.0)*100;
 			
@@ -563,26 +565,32 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//End of loop
 	
 	//Need to set final values for transition region and coronal radiative losses
+	//Note that here, i is no longer an index but the number of iterations taken to reach the total time.
+	//When the non-adaptive solver is used, i=ntot.
+	
+	//DEBUG--print the number of iterations 
+	printf("The length of the loop parameters will be i = %d\n",i);
+	
 	if(opt.usage == 1 || opt.usage == 4)
 	{
 		for(j = 0; j < index_dem; j++)
 		{
 			//Set the last entry that was left empty by the loop on t
-			dem_tr[ntot-1][j] = dem_tr[ntot-2][j];
-			dem_cor[ntot-1][j] = dem_cor[ntot-2][j];
+			dem_tr[i-1][j] = dem_tr[i-2][j];
+			dem_cor[i-1][j] = dem_cor[i-2][j];
 			
 			//Create a single dimensional array from a doubly indexed array
-			for(i = 0; i<ntot; i++)
+			for(k = 0; k<i; k++)
 			{
-				dem_cor_minus[i] = dem_cor[i][j];
-				dem_tr_minus[i] = dem_tr[i][j];
-				dem_tot_minus[i] = dem_tr[i][j] + dem_cor[i][j];
+				dem_cor_minus[k] = dem_cor[k][j];
+				dem_tr_minus[k] = dem_tr[k][j];
+				dem_tot_minus[k] = dem_tr[k][j] + dem_cor[k][j];
 			}
 			
 			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}. We will return these arrays 
-			param_setter->dem_cor_log10mean[j] = log10(ebtel_avg_val(dem_cor_minus,ntot));
-			param_setter->dem_tr_log10mean[j] = log10(ebtel_avg_val(dem_tr_minus,ntot));
-			param_setter->dem_tot_log10mean[j] = log10(ebtel_avg_val(dem_tot_minus,ntot));
+			param_setter->dem_cor_log10mean[j] = log10(ebtel_avg_val(dem_cor_minus,i));
+			param_setter->dem_tr_log10mean[j] = log10(ebtel_avg_val(dem_tr_minus,i));
+			param_setter->dem_tot_log10mean[j] = log10(ebtel_avg_val(dem_tot_minus,i));
 		}
 	}
 	

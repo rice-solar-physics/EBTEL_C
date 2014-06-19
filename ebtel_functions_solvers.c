@@ -203,7 +203,7 @@ option that can be chosen in ebtel_main.
  	double safe2 = 4.0;
  	double scale;
  	double x_diff;
- 	double error_ratio = 0.0;
+ 	double error_ratio;
  	double t_save = t;
  	double time;
  	double half_tau;
@@ -233,9 +233,7 @@ option that can be chosen in ebtel_main.
  		//First small step
  		half_tau = 0.5*tau;
 		
-		//DEBUG
 		x_small_1 = ebtel_rk(s,n,t_save,half_tau,par,opt);
-		//x_small_1 = ebtel_euler(s,half_tau,par,opt);
 		
  		//Unpack the x_small_1 pointer
  		for(j=0;j<n;j++)
@@ -247,10 +245,7 @@ option that can be chosen in ebtel_main.
  		time = t_save + half_tau;
  		
  		//Second small step
- 		
-		//DEBUG
 		x_small_2 = ebtel_rk(s_small_1,n,time,half_tau,par,opt);
- 		//x_small_2 = ebtel_euler(s_small_1,half_tau,par,opt);
 		
 		//Unpack the x_small_2 pointer
  		for(j=0;j<n;j++)
@@ -258,11 +253,8 @@ option that can be chosen in ebtel_main.
  			s_small_2[j] = *(x_small_2 + j);
  		}
  		
- 		//Take single big time-step
- 		
-		//DEBUG
-		x_big = ebtel_rk(s,n,t_save,tau,par,opt);
- 		//x_big = ebtel_euler(s,tau,par,opt);
+ 		//Take single big step
+ 		x_big = ebtel_rk(s,n,t_save,tau,par,opt);
 		
 		//Unpack the x_big pointer
  		for(j=0;j<n;j++)
@@ -274,32 +266,14 @@ option that can be chosen in ebtel_main.
  		time = t_save + tau;
  		
  		//Compute estimated truncation error
-		
-		//DEBUG
-		/*
- 		for(j=0;j<n;j++)
+		error_ratio = 0.0;
+		for(j=0;j<n;j++)
  		{
  			scale = err*(fabs(s_small_2[j]) + fabs(s_big[j]))/2.0;
 			x_diff = s_small_2[j] - s_big[j];
  			//Return the maximum value of the error ratio
-			
-			//DEBUG--test if max_val function is causing the problem
-			//error_ratio = ebtel_max_val(error_ratio,fabs(x_diff)/(scale + epsilon));
-			
-			if((fabs(x_diff)/(scale + epsilon)) > error_ratio)
-			{
-				error_ratio = fabs(x_diff)/(scale + epsilon);
-			}
-			
+			error_ratio = ebtel_max_val(error_ratio,fabs(x_diff)/(scale + epsilon));
 		}
-		*/
-	
-		//Use only the temperature for adapting
-		
-		scale = err*(fabs(s_small_2[2]) + fabs(s_big[2]))/2.0;
-		x_diff = s_small_2[2] - s_big[2];
-		error_ratio = fabs(x_diff)/(scale + epsilon);
- 		
 		
  		//Estimate new tau value (including safety factors)
  		old_tau = tau;

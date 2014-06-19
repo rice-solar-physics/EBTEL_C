@@ -374,7 +374,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		f_eq = -r3*pow(n,2)*rad*loop_length;
 		par.f_eq = f_eq;
 		
-		//Calculate pv quantity to be used in velocity calculation
+		//Calculate pv quantity to be used in velocity calculation (enthalpy flux)
 		pv = 0.4*(f_eq - f - par.flux_nt);
 		
 		/*****Step parameters forward in time using (1) RK method or (0) Euler stepper method*****/
@@ -411,7 +411,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
 		
-		//If the adaptive solver is being used, free memory used by this structure
+		//Free memory used by the state pointer. Free the adapt structure if we are using the adapt method.
 		if(opt.solver==2)
 		{
 			//Free the structure as it will be malloc'd on the next go around
@@ -448,6 +448,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			if(r12_tr*t > tdem[index_dem-1])
 			{
 				printf(" Transition region T = %e K outside of DEM range\n",r12_tr*t);
+				exit(0);
 			}
 			
 			if(f != f_eq)

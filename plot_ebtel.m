@@ -14,7 +14,7 @@ close all
 %% Print the input file
 
 %Decide which case we are plotting first
-eb_case = 1;
+eb_case = 3;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -128,7 +128,7 @@ param(12) = t_pulse_half;
 param(13) = t_start;
 index_dem = 451;
 param(14) = index_dem;
-error = 1e-6;
+error = 1e-4;
 param(15) = error;
 %T0 = 1.3e+6;
 param(16) = T0;
@@ -628,8 +628,11 @@ delta_time = diff(time);
 hold on
 plot(time(2:end),delta_time)
 plot(time,T/max(T)*max(delta_time),'k--')
+plot(time,n/max(n)*max(delta_time),'g--')
+plot(time,P/max(P)*max(delta_time),'m--')
 plot([min(time) max(time)],[tau tau],'r','LineWidth',2)
-xlabel('time')
-ylabel('tau')
-legend('tau','temp','Location','Best')
+xlabel('$t$~(s)','interpreter','latex')
+ylabel('$\tau$','interpreter','latex')
+hleg = legend('$\tau$','$T$','$n$','$P$');
+set(hleg,'Location','Best','interpreter','latex')
 xlim([0 total_time])

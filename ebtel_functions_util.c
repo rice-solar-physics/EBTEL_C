@@ -336,7 +336,7 @@ double * ebtel_colon_operator(double a, double b, double d)
  	}
  	else  
  	{
- 		return num_1;
+ 		return num_2;
  	}
  }
  

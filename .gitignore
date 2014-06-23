@@ -1,0 +1,14 @@
+#Ignore data folder
+/data/*
+/test_data/*
+#Ignore tex report
+/report/*
+#Ignore testing functions
+adaptive_step_tester.c
+adaptive_step_tester
+colon_test.c
+colon_test
+#Ignore executables
+ebtel
+#Ignore object files
+*.o

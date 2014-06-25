@@ -152,15 +152,6 @@ int main (void)
 	opt.energy_nt = 8.01e-8;	//50 keV in ergs
 	
 	/************************************************************************************
-										Heating
-	************************************************************************************/
-	//Choose which heating model to use
-	//1--triangular pulse (recommended, used in Paper I,II)
-	//2--square pulse 
-	//3--Gaussian pulse
-	
-	
-	/************************************************************************************
 									Start the Model
 	************************************************************************************/
 	
@@ -176,7 +167,7 @@ int main (void)
 	************************************************************************************/
 	
 	//Write the contents of params_final to a file. See output for filename.
-	ebtel_file_writer(loop_length, n, opt, params_final);
+	ebtel_file_writer(loop_length, opt, params_final);
 	
 	/****************Done writing data to file. Free up memory reserved by pointers.******************/
 	

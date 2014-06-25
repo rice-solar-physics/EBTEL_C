@@ -257,7 +257,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	2 possible methods: (A) use EBTEL equilibrium (recommended) (B) use scaling laws (set by mode in opt structure)
 	*/
 	
-	//Calculate initial temperature, density, pressure, and velocity using one of the two methods.
+	//Calculate initial temperature, density, pressure, and velocity.
 	ic_ptr = ebtel_calc_ic(kpar,r3,loop_length,opt);
 	r3 = *(ic_ptr + 0);
 	rad = *(ic_ptr + 1);
@@ -288,8 +288,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->coeff_1[0] = r3;
 	param_setter->heat[0] = ebtel_heating(time,opt);
 	param_setter->time[0] = time;
-	
-	//DEBUG--save the timestep
 	param_setter->tau[0] = opt.tau;
 	
 	//Print out the coefficients that we are starting the model with
@@ -323,6 +321,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Set the initial timestep from opt structure.
 	//This will be static if we are not using our adaptive solver
 	tau = opt.tau;
+	
+	//Initialize the counter
 	i = 0;
 	
 	//Begin the loop over the timesteps
@@ -410,15 +410,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			tau = adapt->tau;
 		}
 
-		//Update p,n,t and save to structure
+		//Update p,n,t,tau and save to structure
 		p = *(state_ptr + 0);
 		param_setter->press[i+1] = p;
 		n = *(state_ptr + 1);
 		param_setter->ndens[i+1] = n;
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
-		
-		//DEBUG--save the timestep
 		param_setter->tau[i+1] = tau;
 		
 		//Free memory used by the state pointer. Free the adapt structure if we are using the adapt method.
@@ -436,7 +434,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			state_ptr = NULL;
 		}
 		
-		v = pv/p; 			//calculate new velocity
+		//calculate new velocity
+		v = pv/p; 			
 		param_setter->vel[i+1] = v*r4;
 		
 		//Calculate new scale height
@@ -578,9 +577,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//Need to set final values for transition region and coronal radiative losses
 	//When the non-adaptive solver is used, i_max=ntot.
 	i_max = i;
-	
-	//DEBUG--print the number of iterations 
-	printf("The length of the loop parameters will be i = %d\n",i);
+	//Set structure field to be used in file writer
+	param_setter->i_max = i_max;
 	
 	if(opt.usage == 1 || opt.usage == 4)
 	{
@@ -598,14 +596,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 				dem_tot_minus[k] = dem_tr[k][j] + dem_cor[k][j];
 			}
 			
-			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}. We will return these arrays
-			/* 
-			param_setter->dem_cor_log10mean[j] = log10(ebtel_avg_val(dem_cor_minus,i_max));
-			param_setter->dem_tr_log10mean[j] = log10(ebtel_avg_val(dem_tr_minus,i_max));
-			param_setter->dem_tot_log10mean[j] = log10(ebtel_avg_val(dem_tot_minus,i_max));
-			*/
-			
-			//DEBUG--testing weighted average
+			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}.
 			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,i_max,param_setter->tau));
 			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,i_max,param_setter->tau));
 			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,i_max,param_setter->tau));

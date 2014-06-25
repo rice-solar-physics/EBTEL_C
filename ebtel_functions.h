@@ -52,9 +52,10 @@ struct Option {
 	double error;
 };
 struct ebtel_params_st {
+		int i_max;
 		double *heat;
 		double *time;
-		double *tau;	//DEBUG--save timestep
+		double *tau;
 		double *temp;
 		double *ndens;
 		double *press;
@@ -145,7 +146,7 @@ void ebtel_print_header(int, int, int, int, struct Option);
 double * ebtel_euler(double[], double, struct rk_params, struct Option);
 
 //Declare prototype for ebtel_data_writer of type void
-void ebtel_file_writer(int, int, struct Option, struct ebtel_params_st *);
+void ebtel_file_writer(int, struct Option, struct ebtel_params_st *);
 
 //Declare prototype for ebtel_rk_adapt of type struct ebtel_rka_st
 struct ebtel_rka_st *ebtel_rk_adapt(double[], int, double, double, double, struct rk_params, struct Option);

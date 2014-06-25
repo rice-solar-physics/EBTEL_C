@@ -119,10 +119,11 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_params_st *params_final)
+void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_st *params_final)
 {
 	//Declare variables
 	int i;
+	int n = params_final->i_max;
 	double f_ratio[n];
 	double rad_ratio[n];
 	char filename_out[64];
@@ -178,7 +179,7 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		//Open the DEM data file
 		out_file = fopen(filename_out_dem,"wt");
 		
-		for(i=0; i<451; i++)
+		for(i=0; i<opt.index_dem; i++)
 		{	
 			//Now write this data to a file. 
 			fprintf(out_file,"%e\t%e\t%e\t%e\n",*(params_final->logtdem + i), *(params_final->dem_tr_log10mean + i), \

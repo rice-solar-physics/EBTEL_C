@@ -31,6 +31,9 @@ double PI;
 double TWO_SEVENTHS;
 double SEVEN_HALVES;
 double TWO_THIRDS;
+double ROOT_C2;
+double C3;
+double C4;
 
 //Declare structures
 struct Option {
@@ -119,7 +122,7 @@ double ebtel_calc_lambda(double);
 double * ebtel_linspace( int, int, int);
 
 //Declare prototype for ebtel_calc_tr_dem of type double
-double ebtel_calc_tr_dem( double, double, double, double, double, double, double, double[], double[], int );
+double ebtel_calc_tr_dem( double, double, double, double, double, double, double, double[], int );
 
 //Declare prototype for ebtel_avg_val of type double
 double ebtel_avg_val(double[], int );

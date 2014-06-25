@@ -44,7 +44,7 @@ INPUTS:
 		t_pulse_half--time between onset of heating function and max heating (s)
 		tau--time step (s)
 OUTPUTS:
-   param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
+   	param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
 ***********************************************************************************/
 
 struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double total_time, struct Option opt)
@@ -63,7 +63,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	int flag_dem_tr;
 	int j_min;
 	int j_max;
-	int i_max;
 	
 	//Pointers
 	double *kptr;
@@ -80,9 +79,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double rad;
 	double c1;
 	double c_sat;
-	double root_c2;
-	double c3;
-	double c4;
 	double sc;
 	double f_cl;
 	double f;
@@ -113,8 +109,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double tau;
 	double time = 0;	//initialize time to zero
 	
-	//Double array (single index)
-	double c_array[3];
+	//Array 
 	double f_array[3];
 	double state[3];
 	double log_tdem[index_dem];
@@ -127,7 +122,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	double dem_tr_minus[ntot];
 	double dem_tot_minus[ntot];
 	
-	//Double array (dynamically allocate memory to avoid segmentation fault)
+	//Two-dimensional array (dynamically allocate memory to avoid segmentation fault)
 	double **dem_tr;
 	dem_tr = malloc(ntot*sizeof(double *));
 	double **dem_cor;
@@ -184,7 +179,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	r1 = ebtel_calc_c3();	//ratio of base to apex temperature; c3 in Klimchuk et al. (2008), Paper I from here on.
 	r1_tr = r1;				//ratio of temperature at top of TR to apex temperature, can be set to 0.5 as well.
 	r2 = ebtel_calc_c2();	//ratio of average to apex temperature; c2 in Paper I
-	r3 = 2.0;					//ratio of TR to coronal radiative losses; c1 in Paper I
+	r3 = 2.0;				//ratio of TR to coronal radiative losses; c1 in Paper I
 	r4 = 1.0;				//ratio of average to base velocity
 	
 	//Set temperature bins.
@@ -230,12 +225,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			fourth_tdem[j] =  pow(tdem[j],0.25);			//T^1/4 in the region in which DEM is defined
 		}
 		
-		//These coefficients will be used in the old method of calculating DEM
-		root_c2 = pow((KAPPA_0/(20*K_B)),0.5)/K_B;		//Calculate the root of c2 to avoid overflow in our calculation of dem_ev
-		c3 = -5*K_B;
-		c4 = pow((KAPPA_0/14),0.5)/K_B;
-		//Make c_array for use in ebtel_calc_tr_dem function
-		c_array[0] = root_c2; c_array[1] = c3; c_array[2] = c4;
+		//These coefficients will be used in the old method of calculating DEM (global variables)
+		ROOT_C2 = pow((KAPPA_0/(20*K_B)),0.5)/K_B;		//Calculate the root of c2 to avoid overflow in our calculation of dem_ev
+		C3 = -5*K_B;
+		C4 = pow((KAPPA_0/14),0.5)/K_B;
 		
 		//Radiation in the transition region. This loop just calculates the radiative loss function in the TR
 		for(j = 0; j<index_dem; j++)
@@ -483,7 +476,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 				if( tdem[j] < r12_tr*t )
 				{
 					//Make call to function that calculates DEM for TR using method specified by opt.dem_old.
-					dem_tr[i][j] = ebtel_calc_tr_dem(tdem[j],n,v,p,loop_length,sc,rad_dem[j],c_array,f_array,opt.dem_old);
+					dem_tr[i][j] = ebtel_calc_tr_dem(tdem[j],n,v,p,loop_length,sc,rad_dem[j],f_array,opt.dem_old);
 					
 					//Check whether the dem is less than zero and set the flag if the condition holds
 					if(dem_tr[i][j] < 0)
@@ -574,22 +567,25 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	
 	//End of loop
 	
-	//Need to set final values for transition region and coronal radiative losses
-	//When the non-adaptive solver is used, i_max=ntot.
-	i_max = i;
-	//Set structure field to be used in file writer
-	param_setter->i_max = i_max;
+	/***********************************************************************************
+						Format Data and Free Pointers
+	***********************************************************************************/
 	
+	//Set structure field to be used in file writer
+	param_setter->i_max = i;
+	
+	//Format DEM data to be printed to file.
+	//Take weighted time average for each T_DEM
 	if(opt.usage == 1 || opt.usage == 4)
 	{
 		for(j = 0; j < index_dem; j++)
 		{
 			//Set the last entry that was left empty by the loop on t
-			dem_tr[i_max-1][j] = dem_tr[i_max-2][j];
-			dem_cor[i_max-1][j] = dem_cor[i_max-2][j];
+			dem_tr[param_setter->i_max-1][j] = dem_tr[param_setter->i_max-2][j];
+			dem_cor[param_setter->i_max-1][j] = dem_cor[param_setter->i_max-2][j];
 			
 			//Create a single dimensional array from a doubly indexed array
-			for(k = 0; k<i_max; k++)
+			for(k = 0; k<param_setter->i_max; k++)
 			{
 				dem_cor_minus[k] = dem_cor[k][j];
 				dem_tr_minus[k] = dem_tr[k][j];
@@ -597,9 +593,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 			}
 			
 			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}.
-			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,i_max,param_setter->tau));
-			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,i_max,param_setter->tau));
-			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,i_max,param_setter->tau));
+			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,param_setter->i_max,param_setter->tau));
+			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,param_setter->i_max,param_setter->tau));
+			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,param_setter->i_max,param_setter->tau));
 		}
 	}
 	
@@ -776,7 +772,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, double sc, double rad_dem, double c_a[3], double f_a[3], int option)
+double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, double sc, double rad_dem, double f_a[3], int option)
 {
 	double dem_tr;	//Declare what will be returned by the function
 
@@ -815,11 +811,11 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 		double fourth_tdem = pow(tdem,0.25);
 		
 		//Approximation to TR reg. DEM when evaporation dominates
-		dem_ev = (c_a[0]/n)*(c_a[0]*pow(p,2)/root_tdem)/v;
+		dem_ev = (ROOT_C2/n)*(ROOT_C2*pow(p,2)/root_tdem)/v;
 		//Approximation to TR reg. DEM when condensation dominates
-		dem_con = c_a[1]*n*v/rad_dem;
+		dem_con = C3*n*v/rad_dem;
 		//Approximation to TR reg. DEM under equilibrium conditions
-		dem_eq = c_a[2]*p/(root_rad_dem*fourth_tdem);
+		dem_eq = C4*p/(root_rad_dem*fourth_tdem);
 
 		//Calculate DEM for the transition region
 		dem_tr = 2.*(f_a[0]*dem_ev + f_a[2]*dem_eq - f_a[1]*dem_con)/(f_a[0] + f_a[2] - f_a[1]); //factor of 2 for both legs

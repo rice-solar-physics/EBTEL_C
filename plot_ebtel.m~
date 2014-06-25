@@ -14,7 +14,7 @@ close all
 %% Print the input file
 
 %Decide which case we are plotting first
-eb_case = 9;
+eb_case = 1;
 if eb_case==1
     loop_length = 75;
     total_time = 10000;
@@ -128,7 +128,7 @@ param(12) = t_pulse_half;
 param(13) = t_start;
 index_dem = 451;
 param(14) = index_dem;
-error = 1e-6;
+error = 1e-5;
 param(15) = error;
 %T0 = 1.3e+6;
 param(16) = T0;

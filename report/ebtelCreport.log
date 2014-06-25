@@ -1,0 +1,1267 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/MacPorts 2013_6) (format=pdflatex 2014.6.11)  19 JUN 2014 12:12
+entering extended mode
+ \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**ebtelCreport.tex
+(./ebtelCreport.tex
+LaTeX2e <2011/06/27>
+Babel <3.9f> and hyphenation patterns for 43 languages loaded.
+(/opt/local/share/texmf-texlive/tex/latex/aastex/aastex.cls
+Document Class: aastex 2005/06/22 5.2/AAS markup document class
+Class aastex Info: Original \LaTeX2.09 style by Chris Biemesderfer (chris@seago
+at.com). Adapted to \LaTeXe by A. Ogawa (ogawa@teleport.com) on input line 83.
+(/opt/local/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/opt/local/share/texmf-texlive/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/opt/local/share/texmf-texlive/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+)
+(/opt/local/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/opt/local/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/opt/local/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/opt/local/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/opt/local/share/texmf-texlive/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/opt/local/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(/opt/local/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/opt/local/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks15
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/opt/local/share/texmf-texlive/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip43
+\bibsep=\skip44
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count88
+)
+(/opt/local/share/texmf-texlive/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks16
+\verbatim@line=\toks17
+\verbatim@in@stream=\read1
+)
+\@slugcmmntwidth=\dimen105
+\abstract@box=\box26
+\c@editornote=\count89
+\c@cureqno=\count90
+\tnotemarkskip=\skip45
+\@abovenoteskip=\dimen106
+\pt@box=\box27
+\pt@width=\dimen107
+\pt@line=\count91
+\pt@column=\count92
+\pt@nlines=\count93
+\pt@ncol=\count94
+\pt@page=\count95
+\tabbaseskip=\dimen108
+\pt@tmpcapwidth=\dimen109
+\spew@tblnotesbox=\box28
+\restof@tblnotesbox=\box29
+\noteheight=\dimen110
+\pt@tabnoteminht=\dimen111
+\firsttabskip=\dimen112
+\captionbox=\box30
+\pt@reduceline=\dimen113
+\extra@vspace=\dimen114
+\c@plate=\count96
+\my@footins=\box31
+)
+(/opt/local/share/texmf-texlive/tex/latex/oberdiek/epstopdf.sty
+Package: epstopdf 2010/02/09 v2.5 Conversion with epstopdf on the fly (HO)
+
+(/opt/local/share/texmf-texlive/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/opt/local/share/texmf-texlive/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/opt/local/share/texmf-texlive/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/opt/local/share/texmf-texlive/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+)))
+(/opt/local/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip46
+
+For additional information on amsmath, use the `?' option.
+(/opt/local/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/opt/local/share/texmf-texlive/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks18
+\ex@=\dimen115
+))
+(/opt/local/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen116
+)
+(/opt/local/share/texmf-texlive/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count97
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count98
+\leftroot@=\count99
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count100
+\DOTSCASE@=\count101
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box32
+\strutbox@=\box33
+\big@size=\dimen117
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count102
+\c@MaxMatrixCols=\count103
+\dotsspace@=\muskip10
+\c@parentequation=\count104
+\dspbrk@lvl=\count105
+\tag@help=\toks19
+\row@=\count106
+\column@=\count107
+\maxfields@=\count108
+\andhelp@=\toks20
+\eqnshift@=\dimen118
+\alignsep@=\dimen119
+\tagshift@=\dimen120
+\tagwidth@=\dimen121
+\totwidth@=\dimen122
+\lineht@=\dimen123
+\@envbody=\toks21
+\multlinegap=\skip47
+\multlinetaggap=\skip48
+\mathdisplay@stack=\toks22
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/opt/local/share/texmf-texlive/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip49
+\subfigcapskip=\skip50
+\subfigcaptopadj=\dimen124
+\subfigbottomskip=\skip51
+\subfigcapmargin=\dimen125
+\subfiglabelskip=\skip52
+\c@subfigure=\count109
+\c@lofdepth=\count110
+\c@subtable=\count111
+\c@lotdepth=\count112
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/opt/local/share/texmf-texlive/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip53
+\subfig@bottom=\skip54
+)
+(/opt/local/share/texmf-texlive/tex/latex/graphics/lscape.sty
+Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+)
+(/opt/local/share/texmf-texlive/tex/latex/rotating/rotating.sty
+Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
+
+(/opt/local/share/texmf-texlive/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count113
+\rotFPtop=\skip55
+\rotFPbot=\skip56
+\rot@float@box=\box34
+\rot@mess@toks=\toks23
+)
+(/opt/local/share/texmf-texlive/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen126
+\WF@size=\dimen127
+\c@WF@wrappedlines=\count114
+\WF@box=\box35
+\WF@everypar=\toks24
+Package: wrapfig 2003/01/31  v 3.6
+)
+(/opt/local/share/texmf-texlive/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+(/opt/local/share/texmf-texlive/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(/opt/local/share/texmf-texlive/tex/latex/soul/soul.sty
+Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
+\SOUL@word=\toks25
+\SOUL@lasttoken=\toks26
+\SOUL@cmds=\toks27
+\SOUL@buffer=\toks28
+\SOUL@token=\toks29
+\SOUL@spaceskip=\skip57
+\SOUL@ttwidth=\dimen128
+\SOUL@uldp=\dimen129
+\SOUL@ulht=\dimen130
+)
+(/opt/local/share/texmf-texlive/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/opt/local/share/texmf-texlive/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/opt/local/share/texmf-texlive/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count115
+\Gm@cntv=\count116
+\c@Gm@tempcnt=\count117
+\Gm@bindingoffset=\dimen131
+\Gm@wd@mp=\dimen132
+\Gm@odd@mp=\dimen133
+\Gm@even@mp=\dimen134
+\Gm@layoutwidth=\dimen135
+\Gm@layoutheight=\dimen136
+\Gm@layouthoffset=\dimen137
+\Gm@layoutvoffset=\dimen138
+\Gm@dimlist=\toks30
+)
+(/opt/local/share/texmf-texlive/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count118
+\float@exts=\toks31
+\float@box=\box36
+\@float@everytoks=\toks32
+\@floatcapt=\box37
+) (./ebtelCreport.aux)
+\openout1 = `ebtelCreport.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+(/opt/local/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count119
+\scratchdimen=\dimen139
+\scratchbox=\box38
+\nofMPsegments=\count120
+\nofMParguments=\count121
+\everyMPshowfont=\toks33
+\MPscratchCnt=\count122
+\MPscratchDim=\dimen140
+\MPnumerator=\count123
+\makeMPintoPDFobject=\count124
+\everyMPtoPDFconversion=\toks34
+)
+AAS preprint substyle, v5.2 <12 Dec 2003>.
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: letterpaper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-35.84006pt
+* \headheight=10.84006pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=0.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=17.22217pt plus 4.30554pt minus 2.15277pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Font Info:    Try loading font information for U+lasy on input line 32.
+(/opt/local/share/texmf-texlive/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 32.
+
+(/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 32.
+
+(/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [1
+
+{/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 69.
+
+(/opt/local/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 69.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 96.
+
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_parameters.eps>
+(epstopdf)                    date: 2014-06-05 12:36:42
+(epstopdf)                    size: 281228 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 12:36:55
+(epstopdf)                    size: 112488 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_1_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_1_parameters.eps>
+(epstopdf)             \includegraphics on input line 98.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_parameters-eps-
+converted-to.pdf, id=16, 752.8125pt x 731.73375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_1_parameters-eps-converted-to.pdf used on input line 98.
+(pdftex.def)             Requested size: 469.75502pt x 456.61789pt.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 103.
+
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_parameters.eps>
+(epstopdf)                    date: 2014-06-05 12:57:06
+(epstopdf)                    size: 273874 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 12:57:12
+(epstopdf)                    size: 108268 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_5_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_5_parameters.eps>
+(epstopdf)             \includegraphics on input line 105.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_parameters-eps-
+converted-to.pdf, id=17, 752.8125pt x 731.73375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_5_parameters-eps-converted-to.pdf used on input line 105.
+(pdftex.def)             Requested size: 469.75502pt x 456.61789pt.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 110.
+
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_parameters.eps>
+(epstopdf)                    date: 2014-06-05 13:01:40
+(epstopdf)                    size: 274170 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 13:02:17
+(epstopdf)                    size: 108232 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_8_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_8_parameters.eps>
+(epstopdf)             \includegraphics on input line 112.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_parameters-eps-
+converted-to.pdf, id=18, 752.8125pt x 731.73375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_8_parameters-eps-converted-to.pdf used on input line 112.
+(pdftex.def)             Requested size: 469.75502pt x 456.61789pt.
+ [2]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 120.
+
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_dem.eps>
+(epstopdf)                    date: 2014-06-03 17:25:54
+(epstopdf)                    size: 134613 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 12:16:42
+(epstopdf)                    size: 12654 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_1_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_1_dem.eps>
+(epstopdf)             \includegraphics on input line 124.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_dem-eps-convert
+ed-to.pdf, id=23, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_1_dem-eps-converted-to.pdf used on input line 124.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:14:01
+(epstopdf)                    size: 134910 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:22:44
+(epstopdf)                    size: 12917 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_2_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_2_dem.eps>
+(epstopdf)             \includegraphics on input line 127.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_dem-eps-convert
+ed-to.pdf, id=24, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_2_dem-eps-converted-to.pdf used on input line 127.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:12:40
+(epstopdf)                    size: 137149 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:22:44
+(epstopdf)                    size: 13903 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_3_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_3_dem.eps>
+(epstopdf)             \includegraphics on input line 130.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_dem-eps-convert
+ed-to.pdf, id=25, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_3_dem-eps-converted-to.pdf used on input line 130.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:10:37
+(epstopdf)                    size: 134910 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:22:45
+(epstopdf)                    size: 12971 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_4_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_4_dem.eps>
+(epstopdf)             \includegraphics on input line 133.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_dem-eps-convert
+ed-to.pdf, id=26, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_4_dem-eps-converted-to.pdf used on input line 133.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 140.
+
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_1_solver_0_tau.eps>
+(epstopdf)                    date: 2014-06-05 14:53:00
+(epstopdf)                    size: 331026 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_1_solver_0_tau-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:53:10
+(epstopdf)                    size: 105437 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/step_data/case_1_solver_0_tau-eps-converted-to.pdf
+ /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_solve
+r_0_tau.eps>
+(epstopdf)             \includegraphics on input line 144.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_solve
+r_0_tau-eps-converted-to.pdf, id=27, 1068.99374pt x 659.46375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_
+solver_0_tau-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_s
+olver_0_tau-eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/step_data/case_1_solver_0_tau-eps-converted-to.pdf used on input line 144.
+(pdftex.def)             Requested size: 211.38832pt x 130.40114pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_1_solver_1_tau.eps>
+(epstopdf)                    date: 2014-06-05 14:55:09
+(epstopdf)                    size: 331939 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_1_solver_1_tau-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:55:16
+(epstopdf)                    size: 112087 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/step_data/case_1_solver_1_tau-eps-converted-to.pdf
+ /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_solve
+r_1_tau.eps>
+(epstopdf)             \includegraphics on input line 147.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_solve
+r_1_tau-eps-converted-to.pdf, id=28, 1086.0575pt x 659.46375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_
+solver_1_tau-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_s
+olver_1_tau-eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/step_data/case_1_solver_1_tau-eps-converted-to.pdf used on input line 147.
+(pdftex.def)             Requested size: 211.38832pt x 128.34837pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_8_solver_0_tau.eps>
+(epstopdf)                    date: 2014-06-05 14:45:27
+(epstopdf)                    size: 248603 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_8_solver_0_tau-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:47:12
+(epstopdf)                    size: 62559 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/step_data/case_8_solver_0_tau-eps-converted-to.pdf
+ /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_solve
+r_0_tau.eps>
+(epstopdf)             \includegraphics on input line 150.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_solve
+r_0_tau-eps-converted-to.pdf, id=29, 1074.0125pt x 659.46375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_
+solver_0_tau-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_s
+olver_0_tau-eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/step_data/case_8_solver_0_tau-eps-converted-to.pdf used on input line 150.
+(pdftex.def)             Requested size: 211.38832pt x 129.79738pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_8_solver_1_tau.eps>
+(epstopdf)                    date: 2014-06-05 14:44:54
+(epstopdf)                    size: 248605 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/step_data/case_8_solver_1_tau-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:47:12
+(epstopdf)                    size: 62724 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/step_data/case_8_solver_1_tau-eps-converted-to.pdf
+ /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_solve
+r_1_tau.eps>
+(epstopdf)             \includegraphics on input line 153.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_solve
+r_1_tau-eps-converted-to.pdf, id=30, 1074.0125pt x 659.46375pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_
+solver_1_tau-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_8_s
+olver_1_tau-eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/step_data/case_8_solver_1_tau-eps-converted-to.pdf used on input line 153.
+(pdftex.def)             Requested size: 211.38832pt x 129.79738pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_parameters.eps>
+(epstopdf)                    date: 2014-06-03 16:13:56
+(epstopdf)                    size: 307989 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:29:23
+(epstopdf)                    size: 142421 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_2_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_2_parameters.eps>
+(epstopdf)             \includegraphics on input line 164.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_parameters-eps-
+converted-to.pdf, id=31, 1044.90375pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_2_parameters-eps-converted-to.pdf used on input line 164.
+(pdftex.def)             Requested size: 650.43001pt x 403.00572pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_parameters.eps>
+(epstopdf)                    date: 2014-06-03 16:12:35
+(epstopdf)                    size: 232609 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:31:04
+(epstopdf)                    size: 84336 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_3_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_3_parameters.eps>
+(epstopdf)             \includegraphics on input line 171.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_parameters-eps-
+converted-to.pdf, id=32, 1035.87pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_3_parameters-eps-converted-to.pdf used on input line 171.
+(pdftex.def)             Requested size: 650.43001pt x 406.53244pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_parameters.eps>
+(epstopdf)                    date: 2014-06-03 16:10:32
+(epstopdf)                    size: 307989 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:31:05
+(epstopdf)                    size: 142421 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_4_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_4_parameters.eps>
+(epstopdf)             \includegraphics on input line 178.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_parameters-eps-
+converted-to.pdf, id=33, 1044.90375pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_4_parameters-eps-converted-to.pdf used on input line 178.
+(pdftex.def)             Requested size: 650.43001pt x 403.00572pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_parameters.eps>
+(epstopdf)                    date: 2014-06-03 15:54:48
+(epstopdf)                    size: 302871 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:31:05
+(epstopdf)                    size: 151285 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_6_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_6_parameters.eps>
+(epstopdf)             \includegraphics on input line 185.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_parameters-eps-
+converted-to.pdf, id=34, 1032.85875pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_6_parameters-eps-converted-to.pdf used on input line 185.
+(pdftex.def)             Requested size: 650.43001pt x 407.71791pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_parameters.eps>
+(epstopdf)                    date: 2014-06-03 15:57:07
+(epstopdf)                    size: 310327 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:32:46
+(epstopdf)                    size: 152928 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_7_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_7_parameters.eps>
+(epstopdf)             \includegraphics on input line 192.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_parameters-eps-
+converted-to.pdf, id=35, 1032.85875pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_7_parameters-eps-converted-to.pdf used on input line 192.
+(pdftex.def)             Requested size: 650.43001pt x 407.71791pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_parameters.eps>
+(epstopdf)                    date: 2014-06-03 16:03:29
+(epstopdf)                    size: 369517 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_parameters-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:32:47
+(epstopdf)                    size: 166721 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_9_parameters-eps-converted-to.pdf /Users/will
+barnes/Documents/Rice/Research/EBTEL_figures/case_9_parameters.eps>
+(epstopdf)             \includegraphics on input line 199.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_parameters-eps-
+converted-to.pdf, id=36, 1044.90375pt x 647.41875pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_parameters
+-eps-converted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_parameters-
+eps-converted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_9_parameters-eps-converted-to.pdf used on input line 199.
+(pdftex.def)             Requested size: 650.43001pt x 403.00572pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:07:42
+(epstopdf)                    size: 134449 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-06 13:46:09
+(epstopdf)                    size: 12685 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_5_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_5_dem.eps>
+(epstopdf)             \includegraphics on input line 208.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_dem-eps-convert
+ed-to.pdf, id=37, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_5_dem-eps-converted-to.pdf used on input line 208.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_dem.eps>
+(epstopdf)                    date: 2014-06-03 15:54:54
+(epstopdf)                    size: 134501 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-06 13:46:10
+(epstopdf)                    size: 12646 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_6_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_6_dem.eps>
+(epstopdf)             \includegraphics on input line 211.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_dem-eps-convert
+ed-to.pdf, id=38, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_6_dem-eps-converted-to.pdf used on input line 211.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_dem.eps>
+(epstopdf)                    date: 2014-06-03 15:57:13
+(epstopdf)                    size: 135224 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-06 13:46:10
+(epstopdf)                    size: 12891 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_7_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_7_dem.eps>
+(epstopdf)             \includegraphics on input line 214.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_dem-eps-convert
+ed-to.pdf, id=39, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_7_dem-eps-converted-to.pdf used on input line 214.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:05:27
+(epstopdf)                    size: 134831 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-06 13:46:10
+(epstopdf)                    size: 12979 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_8_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_8_dem.eps>
+(epstopdf)             \includegraphics on input line 217.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_dem-eps-convert
+ed-to.pdf, id=40, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_8_dem-eps-converted-to.pdf used on input line 217.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_dem.eps>
+(epstopdf)                    date: 2014-06-03 16:03:34
+(epstopdf)                    size: 134777 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_dem-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-06 13:46:11
+(epstopdf)                    size: 12749 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_9_dem-eps-converted-to.pdf /Users/willbarnes/
+Documents/Rice/Research/EBTEL_figures/case_9_dem.eps>
+(epstopdf)             \includegraphics on input line 220.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_dem-eps-convert
+ed-to.pdf, id=41, 1075.01625pt x 677.53125pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_dem-eps-co
+nverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_dem-eps-con
+verted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_9_dem-eps-converted-to.pdf used on input line 220.
+(pdftex.def)             Requested size: 211.38832pt x 133.22942pt.
+ [3] [4 </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_paramet
+ers-eps-converted-to.pdf>] [5 </Users/willbarnes/Documents/Rice/Research/EBTEL_
+figures/case_5_parameters-eps-converted-to.pdf>] [6 </Users/willbarnes/Document
+s/Rice/Research/EBTEL_figures/case_8_parameters-eps-converted-to.pdf>] [7 </Use
+rs/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_dem-eps-converted-to
+.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_dem-eps-c
+onverted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_
+3_dem-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_fi
+gures/case_4_dem-eps-converted-to.pdf>] [8 </Users/willbarnes/Documents/Rice/Re
+search/EBTEL_figures/step_data/case_1_solver_0_tau-eps-converted-to.pdf> </User
+s/willbarnes/Documents/Rice/Research/EBTEL_figures/step_data/case_1_solver_1_ta
+u-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/step_data/case_8_solver_0_tau-eps-converted-to.pdf> </Users/willbarnes/Docume
+nts/Rice/Research/EBTEL_figures/step_data/case_8_solver_1_tau-eps-converted-to.
+pdf>]
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_diff.eps>
+(epstopdf)                    date: 2014-06-03 17:25:52
+(epstopdf)                    size: 480787 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_1_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 12:16:42
+(epstopdf)                    size: 217477 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_1_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_1_diff.eps>
+(epstopdf)             \includegraphics on input line 237.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_diff-eps-conver
+ted-to.pdf, id=265, 646.415pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_1_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_1_diff-eps-converted-to.pdf used on input line 237.
+(pdftex.def)             Requested size: 140.92793pt x 143.5555pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:13:59
+(epstopdf)                    size: 342921 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_2_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:15
+(epstopdf)                    size: 149749 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_2_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_2_diff.eps>
+(epstopdf)             \includegraphics on input line 240.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_diff-eps-conver
+ted-to.pdf, id=266, 649.42625pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_2_diff-eps-converted-to.pdf used on input line 240.
+(pdftex.def)             Requested size: 140.92793pt x 142.88232pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:12:38
+(epstopdf)                    size: 211562 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_3_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:15
+(epstopdf)                    size: 59804 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_3_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_3_diff.eps>
+(epstopdf)             \includegraphics on input line 243.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_diff-eps-conver
+ted-to.pdf, id=267, 642.4pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_3_diff-eps-converted-to.pdf used on input line 243.
+(pdftex.def)             Requested size: 140.92793pt x 144.4497pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:10:35
+(epstopdf)                    size: 342921 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_4_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:16
+(epstopdf)                    size: 149749 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_4_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_4_diff.eps>
+(epstopdf)             \includegraphics on input line 246.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_diff-eps-conver
+ted-to.pdf, id=268, 649.42625pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_4_diff-eps-converted-to.pdf used on input line 246.
+(pdftex.def)             Requested size: 140.92793pt x 142.88232pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:07:40
+(epstopdf)                    size: 278210 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_5_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:16
+(epstopdf)                    size: 103711 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_5_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_5_diff.eps>
+(epstopdf)             \includegraphics on input line 249.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_diff-eps-conver
+ted-to.pdf, id=269, 642.4pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_5_diff-eps-converted-to.pdf used on input line 249.
+(pdftex.def)             Requested size: 140.92793pt x 144.4497pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_diff.eps>
+(epstopdf)                    date: 2014-06-03 15:54:52
+(epstopdf)                    size: 280581 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_6_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:16
+(epstopdf)                    size: 104761 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_6_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_6_diff.eps>
+(epstopdf)             \includegraphics on input line 252.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_diff-eps-conver
+ted-to.pdf, id=270, 642.4pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_6_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_6_diff-eps-converted-to.pdf used on input line 252.
+(pdftex.def)             Requested size: 140.92793pt x 144.4497pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_diff.eps>
+(epstopdf)                    date: 2014-06-03 15:57:11
+(epstopdf)                    size: 413546 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_7_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:17
+(epstopdf)                    size: 183837 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_7_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_7_diff.eps>
+(epstopdf)             \includegraphics on input line 255.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_diff-eps-conver
+ted-to.pdf, id=271, 649.42625pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_7_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_7_diff-eps-converted-to.pdf used on input line 255.
+(pdftex.def)             Requested size: 140.92793pt x 142.88232pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:05:25
+(epstopdf)                    size: 275122 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_8_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:17
+(epstopdf)                    size: 105557 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_8_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_8_diff.eps>
+(epstopdf)             \includegraphics on input line 258.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_diff-eps-conver
+ted-to.pdf, id=272, 649.42625pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_8_diff-eps-converted-to.pdf used on input line 258.
+(pdftex.def)             Requested size: 140.92793pt x 142.88232pt.
+Package epstopdf Info: Source file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_diff.eps>
+(epstopdf)                    date: 2014-06-03 16:03:32
+(epstopdf)                    size: 346623 bytes
+(epstopdf)             Output file: </Users/willbarnes/Documents/Rice/Research/
+EBTEL_figures/case_9_diff-eps-converted-to.pdf>
+(epstopdf)                    date: 2014-06-05 14:39:18
+(epstopdf)                    size: 147201 bytes
+(epstopdf)             Command: <epstopdf --outfile=/Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_9_diff-eps-converted-to.pdf /Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_9_diff.eps>
+(epstopdf)             \includegraphics on input line 261.
+Package epstopdf Info: Output file is already uptodate.
+
+</Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_diff-eps-conver
+ted-to.pdf, id=273, 642.4pt x 658.46pt>
+File: /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_diff-eps-c
+onverted-to.pdf Graphic file (type pdf)
+
+<use /Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_diff-eps-co
+nverted-to.pdf>
+Package pdftex.def Info: /Users/willbarnes/Documents/Rice/Research/EBTEL_figure
+s/case_9_diff-eps-converted-to.pdf used on input line 261.
+(pdftex.def)             Requested size: 140.92793pt x 144.4497pt.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `bp') on input line 277.
+
+
+Underfull \hbox (badness 4144) in paragraph at lines 293--293
+[]\OT1/cmr/m/n/10 This op-tion spec-i-fies whether to use the Rosner-Tucker-
+ []
+
+
+Overfull \hbox (11.91144pt too wide) in paragraph at lines 281--307
+ [] 
+ []
+
+
+LaTeX Warning: Float too large for page by 2.9285pt on input line 308.
+
+(./ebtelCreport.bbl [9] [10 </Users/willbarnes/Documents/Rice/Research/EBTEL_fi
+gures/case_2_parameters-eps-converted-to.pdf>] [11 </Users/willbarnes/Documents
+/Rice/Research/EBTEL_figures/case_3_parameters-eps-converted-to.pdf>] [12 </Use
+rs/willbarnes/Documents/Rice/Research/EBTEL_figures/case_4_parameters-eps-conve
+rted-to.pdf>] [13 </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case
+_6_parameters-eps-converted-to.pdf>] [14 </Users/willbarnes/Documents/Rice/Rese
+arch/EBTEL_figures/case_7_parameters-eps-converted-to.pdf>] [15 </Users/willbar
+nes/Documents/Rice/Research/EBTEL_figures/case_9_parameters-eps-converted-to.pd
+f>] [16 </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_5_dem-eps
+-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/cas
+e_6_dem-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_
+figures/case_7_dem-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Rese
+arch/EBTEL_figures/case_8_dem-eps-converted-to.pdf> </Users/willbarnes/Document
+s/Rice/Research/EBTEL_figures/case_9_dem-eps-converted-to.pdf>] [17 </Users/wil
+lbarnes/Documents/Rice/Research/EBTEL_figures/case_1_diff-eps-converted-to.pdf>
+ </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_2_diff-eps-conve
+rted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_3_di
+ff-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figur
+es/case_4_diff-eps-converted-to.pdf> </Users/willbarnes/Documents/Rice/Research
+/EBTEL_figures/case_5_diff-eps-converted-to.pdf> </Users/willbarnes/Documents/R
+ice/Research/EBTEL_figures/case_6_diff-eps-converted-to.pdf> </Users/willbarnes
+/Documents/Rice/Research/EBTEL_figures/case_7_diff-eps-converted-to.pdf> </User
+s/willbarnes/Documents/Rice/Research/EBTEL_figures/case_8_diff-eps-converted-to
+.pdf> </Users/willbarnes/Documents/Rice/Research/EBTEL_figures/case_9_diff-eps-
+converted-to.pdf>] [18]) [19] (./ebtelCreport.aux) ) 
+Here is how much of TeX's memory you used:
+ 4686 strings out of 494227
+ 71707 string characters out of 6157704
+ 144245 words of memory out of 5000000
+ 7833 multiletter control sequences out of 15000+600000
+ 11045 words of font info for 47 fonts, out of 8000000 for 9000
+ 430 hyphenation exceptions out of 8191
+ 42i,16n,32p,1269b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
+</opt/local/share/texmf-tex
+live/fonts/type1/public/amsfonts/cm/cmbx10.pfb></opt/local/share/texmf-texlive/
+fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/local/share/texmf-texlive/fonts
+/type1/public/amsfonts/cm/cmex10.pfb></opt/local/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmmi10.pfb></opt/local/share/texmf-texlive/fonts/type1/pub
+lic/amsfonts/cm/cmmi7.pfb></opt/local/share/texmf-texlive/fonts/type1/public/am
+sfonts/cm/cmr10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts
+/cm/cmr6.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr
+7.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+/opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></opt/
+local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></opt/local/
+share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></opt/local/share
+/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on ebtelCreport.pdf (19 pages, 2886313 bytes).
+PDF statistics:
+ 681 PDF objects out of 1000 (max. 8388607)
+ 479 compressed objects within 5 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 156 words of extra memory for PDF output out of 10000 (max. 10000000)
+

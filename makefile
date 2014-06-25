@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -g -std=c99 -lm
+CFLAGS=-Wall -g -lm -std=c99
 
 all: ebtel
 

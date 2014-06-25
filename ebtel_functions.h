@@ -54,6 +54,7 @@ struct Option {
 struct ebtel_params_st {
 		double *heat;
 		double *time;
+		double *tau;	//DEBUG--save timestep
 		double *temp;
 		double *ndens;
 		double *press;
@@ -160,5 +161,8 @@ double * ebtel_calc_ic(double[], double, double, struct Option);
 
 //Declare prototype for ebtel_colon_operator of type double *
 double * ebtel_colon_operator(double, double, double);
+
+//Declare prototype for ebtel_weighted_avg_val of type double
+double ebtel_weighted_avg_val(double[], int, double[]);
 
 #endif

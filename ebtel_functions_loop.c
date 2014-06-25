@@ -63,6 +63,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	int flag_dem_tr;
 	int j_min;
 	int j_max;
+	int i_max;
 	
 	//Pointers
 	double *kptr;
@@ -157,6 +158,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->cond = malloc(sizeof(double[ntot]));
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
 	param_setter->rad = malloc(sizeof(double[ntot]));
+	
+	//DEBUG--reserve memory for time step member
+	param_setter->tau = malloc(sizeof(double[ntot]));
 	
 	if(opt.usage == 4 || opt.usage == 1)
 	{
@@ -285,6 +289,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->heat[0] = ebtel_heating(time,opt);
 	param_setter->time[0] = time;
 	
+	//DEBUG--save the timestep
+	param_setter->tau[0] = opt.tau;
+	
 	//Print out the coefficients that we are starting the model with
 	printf("********************************************************************\n");
 	printf("Model Parameters\n");
@@ -410,6 +417,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		param_setter->ndens[i+1] = n;
 		t = *(state_ptr + 2);
 		param_setter->temp[i+1] = t;
+		
+		//DEBUG--save the timestep
+		param_setter->tau[i+1] = tau;
 		
 		//Free memory used by the state pointer. Free the adapt structure if we are using the adapt method.
 		if(opt.solver==2)
@@ -566,8 +576,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	//End of loop
 	
 	//Need to set final values for transition region and coronal radiative losses
-	//Note that here, i is no longer an index but the number of iterations taken to reach the total time.
-	//When the non-adaptive solver is used, i=ntot.
+	//When the non-adaptive solver is used, i_max=ntot.
+	i_max = i;
 	
 	//DEBUG--print the number of iterations 
 	printf("The length of the loop parameters will be i = %d\n",i);
@@ -577,21 +587,28 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 		for(j = 0; j < index_dem; j++)
 		{
 			//Set the last entry that was left empty by the loop on t
-			dem_tr[i-1][j] = dem_tr[i-2][j];
-			dem_cor[i-1][j] = dem_cor[i-2][j];
+			dem_tr[i_max-1][j] = dem_tr[i_max-2][j];
+			dem_cor[i_max-1][j] = dem_cor[i_max-2][j];
 			
 			//Create a single dimensional array from a doubly indexed array
-			for(k = 0; k<i; k++)
+			for(k = 0; k<i_max; k++)
 			{
 				dem_cor_minus[k] = dem_cor[k][j];
 				dem_tr_minus[k] = dem_tr[k][j];
 				dem_tot_minus[k] = dem_tr[k][j] + dem_cor[k][j];
 			}
 			
-			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}. We will return these arrays 
-			param_setter->dem_cor_log10mean[j] = log10(ebtel_avg_val(dem_cor_minus,i));
-			param_setter->dem_tr_log10mean[j] = log10(ebtel_avg_val(dem_tr_minus,i));
-			param_setter->dem_tot_log10mean[j] = log10(ebtel_avg_val(dem_tot_minus,i));
+			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}. We will return these arrays
+			/* 
+			param_setter->dem_cor_log10mean[j] = log10(ebtel_avg_val(dem_cor_minus,i_max));
+			param_setter->dem_tr_log10mean[j] = log10(ebtel_avg_val(dem_tr_minus,i_max));
+			param_setter->dem_tot_log10mean[j] = log10(ebtel_avg_val(dem_tot_minus,i_max));
+			*/
+			
+			//DEBUG--testing weighted average
+			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,i_max,param_setter->tau));
+			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,i_max,param_setter->tau));
+			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,i_max,param_setter->tau));
 		}
 	}
 	

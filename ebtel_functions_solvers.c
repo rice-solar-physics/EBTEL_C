@@ -116,7 +116,7 @@ option that can be chosen in ebtel_main.
  	
  	//Compute the first function f1
  	f1 = ebtel_rk_derivs(s,t,0,par,opt);
- 	//Make the temporary state vector
+	//Make the temporary state vector
  	for(i=0; i<n; i++)
  	{
  		f_temp = *(f1 + i);
@@ -125,7 +125,7 @@ option that can be chosen in ebtel_main.
  	
  	//Compute the second function f2
  	f2 = ebtel_rk_derivs(s_temp,t_half,1,par,opt);
- 	//Rebuild the temporary state vector
+	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
  		f_temp = *(f2 + i);
@@ -134,7 +134,7 @@ option that can be chosen in ebtel_main.
  	
  	//Compute the third function f3
  	f3 = ebtel_rk_derivs(s_temp,t_half,1,par,opt);
- 	//Rebuild the temporary state vector
+	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
  		f_temp = *(f3 + i);
@@ -143,7 +143,7 @@ option that can be chosen in ebtel_main.
  	
  	//Compute the fourth function f4
  	f4 = ebtel_rk_derivs(s_temp,t_full,2,par,opt);
- 	//Rebuild the temporary state vector
+	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
  		f_temp = *(f4 + i);
@@ -167,7 +167,7 @@ option that can be chosen in ebtel_main.
  	
  }
  
-   /**********************************************************************************
+ /**********************************************************************************
  
  Function name: ebtel_rk_adapt
  
@@ -188,7 +188,7 @@ option that can be chosen in ebtel_main.
  Return
 	rka_params--structure containing updated time, state, and timestep
 	
- *********************************************************************************/
+*********************************************************************************/
  
  struct ebtel_rka_st *ebtel_rk_adapt(double s[], int n, double t, double tau, double err, struct rk_params par, struct Option opt)
  {
@@ -200,7 +200,7 @@ option that can be chosen in ebtel_main.
 	
  	//Double
  	double safe1 = 0.9;
- 	double safe2 = 4.0;
+ 	double safe2 = 4.;
  	double scale;
  	double x_diff;
  	double error_ratio;
@@ -265,26 +265,29 @@ option that can be chosen in ebtel_main.
  		//Update the time vector
  		time = t_save + tau;
  		
+		error_ratio = 0.;
  		//Compute estimated truncation error
-		error_ratio = 0.0;
 		for(j=0;j<n;j++)
  		{
  			scale = err*(fabs(s_small_2[j]) + fabs(s_big[j]))/2.0;
 			x_diff = s_small_2[j] - s_big[j];
  			//Return the maximum value of the error ratio
 			error_ratio = ebtel_max_val(error_ratio,fabs(x_diff)/(scale + epsilon));
+			//DEBUG--print error ratio
+			//printf("error_ratio = %f\n",error_ratio);
 		}
 		
  		//Estimate new tau value (including safety factors)
  		old_tau = tau;
  		tau = safe1*old_tau*pow(error_ratio,-1./5.);
- 		tau = ebtel_max_val(tau,old_tau/safe2);
- 		tau = ebtel_min_val(tau,safe2*old_tau);
- 		
+ 		tau = ebtel_max_val(tau,old_tau/safe2);	
+		
  		//If error is acceptable, set our structure values and return the structure
- 		if(error_ratio < 1)
+ 		if(error_ratio < 1)// && error_ratio != 0)
  		{
  			//Set the structure fields
+			tau = ebtel_min_val(tau,safe2*old_tau);
+			
  			rka_params->tau = tau;
  			for(j=0;j<n;j++)
  			{
@@ -301,7 +304,7 @@ option that can be chosen in ebtel_main.
 			
 			//DEBUG
 			//Print the timestep
-			printf("tau = %le\n",tau);
+			printf("tau = %le after %d iterations.\n",tau,i);
 			
  			//Return the structure
  			return rka_params;
@@ -317,20 +320,15 @@ option that can be chosen in ebtel_main.
  	}
  	
  	//If we've finished the loop without meeting the error requirement, then return an error
- 	printf("Error: Adaptive Runge-Kutta routine failed. Using small step and old tau.\n");
+ 	printf("Error: Adaptive Runge-Kutta routine failed after %d iterations. Exiting the program\n",i);
  	
 	//DEBUG
 	//Want to know when we failed
 	printf("At %d iteration with tau = %le at t = %le\n",i,tau,time);
 	printf("error_ratio = %le\n",error_ratio);
 	
-	//Set the structure fields to zero.
-	rka_params->tau = 0;
-	for(j=0;j<n;j++)
-	{
-		rka_params->state[j] = 0;
-	}
-	return rka_params;
+	//Exit if the routine fails
+	exit(0);
  	
  }
  
@@ -359,6 +357,7 @@ option that can be chosen in ebtel_main.
  
  double * ebtel_rk_derivs(double s[], double t, int tau_opt, struct rk_params par, struct Option opt)
  {
+	
  	//Declare variables
  	double p;
  	double n;
@@ -446,6 +445,23 @@ option that can be chosen in ebtel_main.
 	derivs[0] = dpdt;
 	derivs[1] = dndt;
 	derivs[2] = dTdt;
+	
+	 
+	 
+	 /*
+ 	//Declare variables
+ 	double x;
+ 	double dxdt;
+ 	double *derivs = malloc(sizeof(double[1]));
+	
+ 	//Unravel the state vector
+ 	x = s[0];
+	
+ 	//Compute the derivative
+ 	dxdt = 2*pow(t,1.);
+	
+ 	derivs[0] = dxdt;
+	 */
 	
 	//Return the pointer
 	return derivs;

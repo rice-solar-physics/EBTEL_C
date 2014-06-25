@@ -136,14 +136,13 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 	}
 	
 	//Open the file that we are going to write the data to 
-	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt.usage,opt.heating_shape,opt.solver);
+	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt.usage,opt.heating_shape,opt.solver);	
 	out_file = fopen(filename_out,"wt");
 	
 	//Tell the user where the results were printed
 	printf("The results were printed to the file %s\n",filename_out);
 	
-	//The members of the structure params_final have now been set so we need to unpack them and set our arrays so that we can
-	//easily save our data.
+	//The members of the structure params_final have now been set so we need to unpack them and set our arrays so that we can easily save our data.
 	for(i = 0; i<n; i++)
 	{	
 		//If we used usage = 4, then we need to save f_ratio and rad_ratio as well.
@@ -160,7 +159,7 @@ void ebtel_file_writer(int loop_length, int n, struct Option opt, struct ebtel_p
 		}
 		
 		//Print the data to the file filename using tab delimited entries
-		fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i));
+		fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),rad_ratio[i],f_ratio[i],*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i),*(params_final->tau + i));
 		
 	}
 	
@@ -308,6 +307,51 @@ double * ebtel_colon_operator(double a, double b, double d)
  	return mean;
  }
  
+ /**********************************************************************************
+ 
+ Function name: ebtel_weighted_avg_val
+ 
+ Function description: This function accepts an array and calculates its weighted 
+ average. 
+ 
+ Input
+	double numbers []	Array of double values
+	int length			Integer value, length of array numbers
+ 	double weight []	Array of weights for each entry in array numbers 
+ 						(Length must be the same as numbers[])
+ 
+ Return
+	double mean			Double value returned by the function.
+ 
+ *********************************************************************************/
+ 
+ double ebtel_weighted_avg_val(double numbers[], int length, double weight[])
+ {
+  	//Declare some variables
+  	int i;
+  	double mean = 0.;
+	double rel_weight;
+  	double sum = 0.;
+ 	
+  	//Calculate the sum of the weights
+  	for (i = 0; i<length; i++)
+  	{
+  		sum = sum + weight[i];	
+  	}
+	
+	//Construct the average by calculating the respective weights and multiplying
+	//each entry in numbers[] and then summing
+	for(i=0;i<length;i++)
+	{
+		rel_weight = weight[i]/sum;
+		mean = mean + rel_weight*numbers[i];
+	}
+	
+	//Return the weighted mean
+	return mean;
+ }
+ 
+ 
 /**********************************************************************************
  
  Function name: ebtel_max_val
@@ -399,6 +443,11 @@ double * ebtel_colon_operator(double a, double b, double d)
  	//Free the memory of each of the structure members as well as the structure itself
  	free(par_struct->time);
  	par_struct->time = NULL;
+	
+	//DEBUG--save timestep
+	free(par_struct->tau);
+	par_struct->tau = NULL;
+	
  	free(par_struct->heat);
  	par_struct->heat = NULL;
  	free(par_struct->temp);

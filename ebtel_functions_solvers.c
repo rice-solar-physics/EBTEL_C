@@ -200,7 +200,8 @@ option that can be chosen in ebtel_main.
 	
  	//Double
  	double safe1 = 0.9;
- 	double safe2 = 4.;
+ 	double safe2 = 1.1;
+	double safe3 = 4;
  	double scale;
  	double x_diff;
  	double error_ratio;
@@ -266,15 +267,13 @@ option that can be chosen in ebtel_main.
  		time = t_save + tau;
  		
 		error_ratio = 0.;
- 		//Compute estimated truncation error
+		//Compute estimated truncation error
 		for(j=0;j<n;j++)
  		{
  			scale = err*(fabs(s_small_2[j]) + fabs(s_big[j]))/2.0;
 			x_diff = s_small_2[j] - s_big[j];
  			//Return the maximum value of the error ratio
 			error_ratio = ebtel_max_val(error_ratio,fabs(x_diff)/(scale + epsilon));
-			//DEBUG--print error ratio
-			//printf("error_ratio = %f\n",error_ratio);
 		}
 		
  		//Estimate new tau value (including safety factors)
@@ -286,7 +285,7 @@ option that can be chosen in ebtel_main.
  		if(error_ratio < 1)// && error_ratio != 0)
  		{
  			//Set the structure fields
-			tau = ebtel_min_val(tau,safe2*old_tau);
+			tau = ebtel_min_val(tau,safe3*old_tau);
 			
  			rka_params->tau = tau;
  			for(j=0;j<n;j++)
@@ -321,11 +320,6 @@ option that can be chosen in ebtel_main.
  	
  	//If we've finished the loop without meeting the error requirement, then return an error
  	printf("Error: Adaptive Runge-Kutta routine failed after %d iterations. Exiting the program\n",i);
- 	
-	//DEBUG
-	//Want to know when we failed
-	printf("At %d iteration with tau = %le at t = %le\n",i,tau,time);
-	printf("error_ratio = %le\n",error_ratio);
 	
 	//Exit if the routine fails
 	exit(0);
@@ -445,23 +439,6 @@ option that can be chosen in ebtel_main.
 	derivs[0] = dpdt;
 	derivs[1] = dndt;
 	derivs[2] = dTdt;
-	
-	 
-	 
-	 /*
- 	//Declare variables
- 	double x;
- 	double dxdt;
- 	double *derivs = malloc(sizeof(double[1]));
-	
- 	//Unravel the state vector
- 	x = s[0];
-	
- 	//Compute the derivative
- 	dxdt = 2*pow(t,1.);
-	
- 	derivs[0] = dxdt;
-	 */
 	
 	//Return the pointer
 	return derivs;

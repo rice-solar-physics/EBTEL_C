@@ -137,8 +137,9 @@ int main (void)
 									Initial Parameters
 	************************************************************************************/
 	
-	//Set total number of steps using the timestep and total time
-	n = ceil(total_time/t_scale);
+	//Set total number of steps using the initial timestep and total time
+	//When using the adaptive method, this can be increased to avoid segmentation fault runtime error.
+	n = ceil(2*total_time/t_scale);
 	
 	//Define loop half-length and change to appropriate units
 	L = 1e8*loop_length;	//convert from Mm to cm

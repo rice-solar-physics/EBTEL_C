@@ -444,11 +444,8 @@ double * ebtel_colon_operator(double a, double b, double d)
  	//Free the memory of each of the structure members as well as the structure itself
  	free(par_struct->time);
  	par_struct->time = NULL;
-	
-	//DEBUG--save timestep
 	free(par_struct->tau);
 	par_struct->tau = NULL;
-	
  	free(par_struct->heat);
  	par_struct->heat = NULL;
  	free(par_struct->temp);

@@ -301,10 +301,6 @@ option that can be chosen in ebtel_main.
  			free(x_big);
  			x_big = NULL;
 			
-			//DEBUG
-			//Print the timestep
-			printf("tau = %le after %d iterations.\n",tau,i);
-			
  			//Return the structure
  			return rka_params;
  		}

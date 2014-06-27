@@ -90,7 +90,7 @@ int main (void)
 	//Global definitions (declarations in ebtel_functions.h)
 	//KAPPA_0 = 1e-6;
 	KAPPA_0 = 8.12e-7;
-	PI = M_PI;
+	PI = 3.14159265359;
 	TWO_SEVENTHS = 2./7.;
 	SEVEN_HALVES = 3.5;
 	TWO_THIRDS = 2./3.;

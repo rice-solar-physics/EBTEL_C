@@ -4,7 +4,7 @@ CFLAGS=-Wall -g -std=c99
 all: ebtel
 
 ebtel: ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_main.o 
-	$(CC) $(CFLAGS) ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_main.o -lm -o ebtel
+	$(CC) $(CFLAGS) ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_main.o -o ebtel -lm
 
 ebtel_functions_loop.o: ebtel_functions_loop.c
 	$(CC) -c  $(CFLAGS) ebtel_functions_loop.c 

@@ -12,6 +12,5 @@ colon_test
 ebtel
 #Ignore object files
 *.o
-#Ignore MATLAB plotting routines
-plot_ebtel.m
-plot_ebtel.m~
+#Ignore MATLAB files
+*.m

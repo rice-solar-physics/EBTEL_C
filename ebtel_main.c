@@ -157,6 +157,7 @@ int main (void)
 	************************************************************************************/
 	
 	//Print a header to the screen that gives the user input information
+	//(If you're doing a large parameter sweep, this line should be commented out.)
 	ebtel_print_header(n, heating_shape, loop_length, total_time, opt);
 	
 	//Make the call to the ebtel_loop_solver function. This function sets the members of the structure params_final. Each member 
@@ -182,7 +183,7 @@ int main (void)
 	//Time elapsed
 	printf("The process took %f milliseconds to run\n",time_elapsed);
 	
-	//Exit with no errors
+	//Exit with no errors 
 	return 0;
 	
 }

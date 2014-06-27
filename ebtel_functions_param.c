@@ -202,7 +202,6 @@ FUNCTION_DESCRIPTION: This function calculates the initial temperature using the
 conditions for the hydrodynamic equations. 
 
 INPUTS:
-	heat--heating array
 	kpar--temperature bins used to calculate the radiative loss function
 	r3--ratio of TR and coronal radiative losses (coefficient c1 from Papers I,II)
 	loop_length--loop half-length (Mm)

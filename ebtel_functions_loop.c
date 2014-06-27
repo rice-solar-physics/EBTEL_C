@@ -24,8 +24,6 @@ INPUTS:
 	ntot--total number of steps to be taken in the time integration
 	loop_length--half-length of the coronal loop (cm) (top of chrmosphere to apex)
 	total_time--total time over which the simulation will run (s)
-   	ttime--time array
-   	heat--heating rate array (erg cm^-3 s^-1)
    	opt--keyword structure: (set to ON (1) or OFF (0))
         dynamic--set to use dynamical r1 and r2
         dem_old--set to use old technique of computing DEM(T) in the TR
@@ -763,7 +761,6 @@ INPUTS:
 	L--loop half length
 	sc--scale height at temperature T_i
 	rad_dem--radiative loss in the transition region
-	c_a--array holding coefficients root_c2, c3, c4
 	f_a--array holding f,f_eq,cf
 	option--option to either use old (1) or new method (0)
 	
@@ -835,15 +832,10 @@ square, or Gaussian pulse.
 
 INPUTS:
 	time--time array for our model
-	tau--timestep (s)
-	h_nano--maximum nanoflare heating (erg cm^-3 s^-1)
-	t_pulse_half--half the duration of the heating pulse
-	t_start--time at which the heating function is turned on (s)
-	n--total number of entries in heating array
-	heating_shape--indicates which heating profile will be used
+	opt--structure that provides all necessary input parameters
 	
 OUTPUTS:
-	heat--heating array
+	heat--heating at time time
 
 ***********************************************************************************/
 
@@ -870,6 +862,7 @@ double ebtel_heating(double time, struct Option opt)
 	//1--triangular pulse (recommended, used in Paper I,II)
 	//2--square pulse 
 	//3--Gaussian pulse
+	//Additional heating functions should be added here.
 	
 	if(opt.heating_shape == 1)
 	{

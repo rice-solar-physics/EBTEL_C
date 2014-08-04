@@ -32,7 +32,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-void ebtel_print_header(int n, int heating_shape, int loop_length, int total_time, struct Option opt)
+void ebtel_print_header(int n, int heating_shape, int loop_length, int total_time, struct Option *opt)
 {
 	//Print a header and tell the user what options are being used to begin the model
 	printf("************************************************************************************\n");
@@ -47,9 +47,9 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	printf("------\n");
 	printf("Number of steps: %d\n",n);
 	printf("Total time: %d s\n",total_time);
-	printf("Time step: %f s\n",opt.tau);
+	printf("Time step: %f s\n",opt->tau);
 	printf("Loop half-length: %d Mm\n",loop_length);
-	printf("Usage option(see documentation): %d\n",opt.usage);
+	printf("Usage option(see documentation): %d\n",opt->usage);
 	if(heating_shape==1)
 	{printf("Heating: Triangular heating pulse\n");
 	}
@@ -59,43 +59,43 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	else
 	{printf("Heating: Gaussian heating pulse\n");
 	}
-	if(opt.solver==1)
+	if(opt->solver==1)
 	{printf("Solving equations using fourth order Runge-Kutta routine\n");
 	}
-	else if(opt.solver==2)
+	else if(opt->solver==2)
 	{printf("Solving equations using adaptive fourth order Runge-Kutta routine\n");
 	}
 	else 
 	{printf("Solving equations using Euler method\n");
 	}
-	if(opt.rtv==1)
+	if(opt->rtv==1)
 	{printf("Using Rosner-Tucker-Vaiana Loss Function\n");
 	}
 	else
 	{printf("Using Raymond-Klimchuk Loss Function\n");
 	}
-	if(opt.dynamic==1)
+	if(opt->dynamic==1)
 	{printf("Using dynamic heat flux calculation\n");
 	}
 	else
 	{printf("Using classical heat flux calculation\n");
 	}
-	if(opt.usage==1 || opt.usage==4)
+	if(opt->usage==1 || opt->usage==4)
 	{
-		if(opt.dem_old==1)
+		if(opt->dem_old==1)
 		{printf("Using old method to calculate DEM in the TR\n");
 		}
 		else
 		{printf("Using new method to calculate DEM in the TR\n");
 		}
 	}
-	if(opt.mode==0)
+	if(opt->mode==0)
 	{printf("Using static equilibrium to calculate initial conditions\n");
 	}
-	else if(opt.mode==1)
-	{printf("Forcing initial conditions with T_0 = %f MK and n_0 = %f*10^8 cm^-3\n",opt.T0/pow(10,6),opt.n0/pow(10,8));
+	else if(opt->mode==1)
+	{printf("Forcing initial conditions with T_0 = %f MK and n_0 = %f*10^8 cm^-3\n",opt->T0/pow(10,6),opt->n0/pow(10,8));
 	}
-	else if(opt.mode==2)
+	else if(opt->mode==2)
 	{printf("Using scaling laws to calculate initial conditions\n");
 	}
 	printf("\n");
@@ -119,7 +119,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_st *params_final)
+void ebtel_file_writer(int loop_length, struct Option *opt, struct ebtel_params_st *params_final)
 {
 	//Declare variables
 	int i;
@@ -137,7 +137,7 @@ void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_s
 	}
 	
 	//Open the file that we are going to write the data to 
-	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt.usage,opt.heating_shape,opt.solver);	
+	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt->usage,opt->heating_shape,opt->solver);	
 	out_file = fopen(filename_out,"wt");
 	
 	//Tell the user where the results were printed
@@ -148,7 +148,7 @@ void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_s
 	{	
 		//If we used usage = 4, then we need to save f_ratio and rad_ratio as well.
 		//We set them to zero otherwise just as a placeholder.
-		if(opt.usage == 4)
+		if(opt->usage == 4)
 		{
 			rad_ratio[i] = *(params_final->rad_ratio + i);
 			f_ratio[i] = *(params_final->f_ratio + i);
@@ -168,10 +168,10 @@ void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_s
 	fclose(out_file);
 	
 	//If we chose to calculate the TR DEM, we need to write this data to a separate file.
-	if(opt.usage==1 || opt.usage==4)
+	if(opt->usage==1 || opt->usage==4)
 	{
 		//Make the DEM data filename
-		sprintf(filename_out_dem,"data/ebteldemdatL%du%dh%ds%d.txt",loop_length,opt.usage,opt.heating_shape,opt.solver);
+		sprintf(filename_out_dem,"data/ebteldemdatL%du%dh%ds%d.txt",loop_length,opt->usage,opt->heating_shape,opt->solver);
 		
 		//Tell the user where the DEM data was printed to
 		printf("The DEM results were printed to the file %s\n",filename_out_dem);
@@ -179,7 +179,7 @@ void ebtel_file_writer(int loop_length, struct Option opt, struct ebtel_params_s
 		//Open the DEM data file
 		out_file = fopen(filename_out_dem,"wt");
 		
-		for(i=0; i<opt.index_dem; i++)
+		for(i=0; i<opt->index_dem; i++)
 		{	
 			//Now write this data to a file. 
 			fprintf(out_file,"%e\t%e\t%e\t%e\n",*(params_final->logtdem + i), *(params_final->dem_tr_log10mean + i), \

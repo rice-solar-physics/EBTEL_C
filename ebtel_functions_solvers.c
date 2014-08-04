@@ -33,7 +33,7 @@ option that can be chosen in ebtel_main.
 	
  *********************************************************************************/
  
- double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option opt)
+ double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option *opt)
  {
  	//Declare variables
  	double p;
@@ -53,11 +53,11 @@ option that can be chosen in ebtel_main.
 	pv = 0.4*(par.f_eq - par.f - par.flux_nt);
  
 	//Advance n in time
-	dn = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L)*tau;
+	dn = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt->energy_nt/par.L)*tau;
 	n = n + dn;
 	
 	//Advance p in time
-	dp = TWO_THIRDS*(par.q1 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L)*tau;
+	dp = TWO_THIRDS*(par.q1 + (1. + 1./par.r3)*par.f_eq/par.L - (1. -  1.5*K_B*T/opt->energy_nt)*par.flux_nt/par.L)*tau;
 	p = p + dp;
 	
 	//Calculate T
@@ -94,7 +94,7 @@ option that can be chosen in ebtel_main.
 	
  *********************************************************************************/
  
- double * ebtel_rk(double s[], int n, double t, double tau, struct rk_params par,struct Option opt)
+ double * ebtel_rk(double s[], int n, double t, double tau, struct rk_params par,struct Option *opt)
  {
  	//Declare variables
  	double half_tau;
@@ -190,7 +190,7 @@ option that can be chosen in ebtel_main.
 	
 *********************************************************************************/
  
- struct ebtel_rka_st *ebtel_rk_adapt(double s[], int n, double t, double tau, double err, struct rk_params par, struct Option opt)
+ struct ebtel_rka_st *ebtel_rk_adapt(double s[], int n, double t, double tau, double err, struct rk_params par, struct Option *opt)
  {
  	/**Declare variables**/
  	//Int
@@ -345,7 +345,7 @@ option that can be chosen in ebtel_main.
 	
  *********************************************************************************/
  
- double * ebtel_rk_derivs(double s[], double t, int tau_opt, struct rk_params par, struct Option opt)
+ double * ebtel_rk_derivs(double s[], double t, int tau_opt, struct rk_params par, struct Option *opt)
  {
 	
  	//Declare variables
@@ -373,7 +373,7 @@ option that can be chosen in ebtel_main.
  	T = s[2];
  	
  	//Make the kpar array
- 	if(opt.rtv==0)
+ 	if(opt->rtv==0)
  	{
  		nk = 7;
  	}
@@ -388,14 +388,14 @@ option that can be chosen in ebtel_main.
  	}
  	
  	//Compute the radiative loss function 
- 	rad = ebtel_rad_loss(T,kpar,opt.rtv);
+ 	rad = ebtel_rad_loss(T,kpar,opt->rtv);
  	
  	//Compute the coefficient r3
  	r3 = ebtel_calc_c1(T,n,par.L,rad);
  	
  	//Compute heat flux. Can use one of two methods:
  	//(1)classical or (0)dynamic heat flux
-	if(opt.dynamic==0)
+	if(opt->dynamic==0)
 	{
 		f = par.c1*pow(T/par.r2,3.5)/par.L;
 	}
@@ -427,8 +427,8 @@ option that can be chosen in ebtel_main.
 	pv = 0.4*(f_eq - f - par.flux_nt);
 	
 	//Now compute the derivatives of each of the quantities in our state vector
-	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt.energy_nt)*par.flux_nt/par.L);
-	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt.energy_nt/par.L);
+	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt->energy_nt)*par.flux_nt/par.L);
+	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt->energy_nt/par.L);
 	dTdt = T*(1./p*dpdt - 1./n*dndt);
 	
 	//Set the derivative state vector

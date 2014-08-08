@@ -45,7 +45,6 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	printf("************************************************************************************\n\n");
 	printf("INPUTS\n");
 	printf("------\n");
-	printf("Number of steps: %d\n",n);
 	printf("Total time: %d s\n",total_time);
 	printf("Time step: %f s\n",opt->tau);
 	printf("Loop half-length: %d Mm\n",loop_length);

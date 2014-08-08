@@ -193,4 +193,7 @@ double * ebtel_bubble_sort(double[],int);
 //Declare prototype for ebtel_heating_profiles of type double
 double ebtel_heating_profile(double,double,double,double,struct Option *);
 
+//Declare prototype for ebtel_heating_config of type void
+void ebtel_heating_config(struct Option *);
+
 #endif

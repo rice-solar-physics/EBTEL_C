@@ -11,3 +11,5 @@ ebtel
 *.o
 #Ignore MATLAB files
 *.m
+#Ignore heating config files
+hydrad_warren*.txt

@@ -53,10 +53,10 @@ double ebtel_heating(double t, struct Option *opt)
 	for(i=0;i<opt->num_events;i++)
 	{
 		//Check if we are inside the heating pulse interval
-		if(t >= *(opt->t_start_array + i) && t <= (*(opt->t_start_array + i) + t_pulse) )
+		if(t >= *(opt->t_start_array + i) && t <= (*(opt->t_end_array + i) ) )
 		{
 			//If so, call the heating profile function to generate the correct pulse
-			heat = ebtel_heating_profile(t,*(opt->t_start_array + i),*(opt->amp + i),opt);
+			heat = ebtel_heating_profile(t,*(opt->t_start_array + i),*(opt->t_end_array + i),*(opt->amp + i),opt);
 			heat = heat + h_back;
 		}
 	}
@@ -84,12 +84,11 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double ebtel_heating_profile(double t, double t_start, double h_nano, struct Option *opt)
+double ebtel_heating_profile(double t, double t_start, double t_end, double h_nano, struct Option *opt)
 {
 	//Variable declarations and definitions
-	double t_pulse = 2*opt->t_pulse_half;
+	double t_pulse = t_end - t_start;
 	double t_mid = t_start + t_pulse/2.;
-	double t_end = t_start + t_pulse;
 	double heat;
 	
 	//Choose which heating model to use

@@ -122,12 +122,20 @@ int main (void)
 	double limit = 1.;
 	
 	FILE *in_file;
-	double *sort_ptr;
+	FILE *in_file_start;
+	FILE *in_file_amp;
+	FILE *in_file_end;
+	double *sort_ptr1;
+	double *sort_ptr2;
 	
 	//Char
 	char filename_in[64];
 	char t_start_switch[64];
 	char amp_switch[64];
+	char t_end_switch[64];
+	char start_file[64];
+	char end_file[64];
+	char amp_file[64];
 	
 	/**********************************
 	Read in data from parameter file
@@ -179,7 +187,7 @@ int main (void)
 		printf("Error! Could not open heating parameters file.\n");
 		return 1;
 	}
-	fscanf(in_file,"%d\n%le\n%le\n%d\n%le\n%le\n%s\n%s\n",&num_events,&mean_t_start,&std_t_start,&alpha,&amp_0,&amp_1,t_start_switch,amp_switch);
+	fscanf(in_file,"%d\n%le\n%le\n%d\n%le\n%le\n%s\n%s\n%s\n%s\n%s\n%s\n",&num_events,&mean_t_start,&std_t_start,&alpha,&amp_0,&amp_1,t_start_switch,amp_switch,t_end_switch,start_file,amp_file,end_file);
 	fclose(in_file);
 
 	//Set the number of heating events in the input structure
@@ -188,10 +196,12 @@ int main (void)
 	//Declare amplitude and start time arrays
 	double amp[num_events];
 	double t_start_array[num_events];
+	double t_end_array[num_events];
 
 	//Reserve memory for amplitude and start time arrays in opt structure
 	opt->t_start_array = malloc(sizeof(double[num_events]));
 	opt->amp = malloc(sizeof(double[num_events]));
+	opt->t_end_array = malloc(sizeof(double[num_events]));
 
 	//Seed the random number generator
 	srand(time(NULL));
@@ -229,13 +239,37 @@ int main (void)
 			free(bm_st);
 			bm_st = NULL;
 		}
+		else if(strcmp(t_start_switch,"file") == 0)
+		{
+			//Open file on the first iteration
+			if(i==0)
+			{
+				//DEBUG--print the file name
+				printf("Heating start time file: %s\n",start_file);
+				in_file_start = fopen(start_file,"rt");
+				if(in_file_start==NULL)
+				{
+					printf("Error! Could not open heating start time file.\n");
+					return 1;
+				}
+			}
+			
+			//Read in start times from file
+			fscanf(in_file_start,"%le\n",&t_start_array[i]);
+				
+			//Close file on last iteration 
+			if(i==(num_events-1))
+			{
+				fclose(in_file_start);
+			}
+		}
 		else
 		{
-			printf("Invalid heating start time option. Choose either uniform or normally distributed\n");
+			printf("Invalid heating start time option. Choose either uniform, file or normally distributed\n");
 			exit(0);
 		}
 	
-		//Use uniform amplitudes or amplitudes given by power law distribution
+		//Use uniform amplitudes, amplitudes given by power law distribution, or read them in from a file
 		if(strcmp(amp_switch,"uniform") == 0)
 		{
 			amp[i] = h_nano;
@@ -245,24 +279,94 @@ int main (void)
 			//Compute the amplitude according to a power-law distribution
 			amp[i] = ebtel_power_law(amp_0,amp_1,x1,alpha);
 		}
+		else if(strcmp(amp_switch,"file") == 0)
+		{
+			//Open file on the first iteration
+			if(i==0)
+			{
+				in_file_amp = fopen(amp_file,"rt");
+				if(in_file_amp==NULL)
+				{
+					printf("Error! Could not open heating amplitude file.\n");
+					return 1;
+				}
+			}
+			
+			//Read in start times from file
+			fscanf(in_file_amp,"%le\n",&amp[i]);
+				
+			//Close file on last iteration 
+			if(i==(num_events-1))
+			{
+				fclose(in_file_amp);
+			}
+		}
 		else
 		{
-			printf("Invalid heating amplitude option. Choose either uniform or power-law distribution\n");
+			printf("Invalid heating amplitude option. Choose either uniform, file or power-law distribution\n");
+			exit(0);
+		}
+		
+		//Use uniform pulse times (as defined by configuration file) or read in pulse times from separate file
+		if(strcmp(t_end_switch,"uniform") == 0)
+		{
+			//Set array of pulse times from configuration file
+			t_end_array[i] = 2*t_pulse_half + t_start_array[i];
+		}
+		else if(strcmp(t_end_switch,"file") == 0)
+		{
+			//Open file on the first iteration
+			if(i==0)
+			{
+				in_file_end = fopen(end_file,"rt");
+				if(in_file_end==NULL)
+				{
+					printf("Error! Could not open heating end time file.\n");
+					return 1;
+				}
+			}
+			
+			//Read in start times from file
+			fscanf(in_file_end,"%le\n",&t_end_array[i]);
+				
+			//Close file on last iteration 
+			if(i==(num_events-1))
+			{
+				fclose(in_file_end);
+			}
+		}
+		else
+		{
+			printf("Invalid heating pulse option. Choose either uniform or file option\n");
 			exit(0);
 		}
 
 	}
 
-	//Sort start times in ascending order and set pointers in opt structure
-	sort_ptr = ebtel_bubble_sort(t_start_array,num_events);
+	//If the start times are random, Sort start and end times in ascending order and set pointers in opt structure
+	if(strcmp(t_start_switch,"random") == 0)
+	{
+		sort_ptr1 = ebtel_bubble_sort(t_start_array,num_events);
+		sort_ptr2 = ebtel_bubble_sort(t_end_array,num_events);	
+		for(i=0;i<num_events;i++)
+		{
+			t_start_array[i] = *(sort_ptr1 + i);
+			t_end_array[i] = *(sort_ptr2 + i);			
+		}
+		free(sort_ptr1);
+		sort_ptr1=NULL;
+		free(sort_ptr2);
+		sort_ptr2=NULL;
+	}
+	
+	//Save the start time, amplitude, and pulse arrays to the opt structure
 	for(i=0; i<num_events; i++)
 	{
-		opt->t_start_array[i] = *(sort_ptr + i);
+		opt->t_start_array[i] = t_start_array[i];
+		opt->t_end_array[i] = t_end_array[i];
 		opt->amp[i] = amp[i];
 	}
 
-	free(sort_ptr);
-	sort_ptr=NULL;		
 	
 	/************************************************************************************
 									Start the Model
@@ -290,8 +394,10 @@ int main (void)
 	//Free the t_start and amp arrays
 	free(opt->t_start_array);
 	free(opt->amp);
+	free(opt->t_end_array);
 	opt->t_start_array = NULL;
 	opt->amp = NULL;
+	opt->t_end_array = NULL;
 	//Free the memory used by opt input structure
 	free(opt);
 	

@@ -458,7 +458,7 @@ double ebtel_power_law(double x0, double x1, double y, double alpha)
 	//Calculate first term
 	term1 = pow(x1,(alpha + 1.)) - pow(x0,(alpha + 1.));
 	term2 = pow(x0,(alpha + 1.));
-	x = pow((term1*y + term2),(1/(alpha + 1)));
+	x = pow((term1*y + term2),(1./(alpha + 1.)));
 	
 	//Return the result
 	return x;

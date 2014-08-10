@@ -401,25 +401,20 @@ double * ebtel_colon_operator(double a, double b, double d)
  *********************************************************************************/
  
  double ebtel_min_val(double num_1, double num_2)
- {
- 	//Declare min value
- 	double min_val;
- 	
+ {	
  	if(num_1 < num_2)
  	{
- 		min_val = num_1;
+ 		return num_1;
  	}
  	else if(num_2 < num_1)
  	{
- 		min_val = num_2;
+ 		return num_2;
  	}
  	else					//Consider the case where the two are equal. Doesn't matter which we return
  	{
- 		min_val = num_1;
+ 		return num_2;
  	}
- 	
- 	return min_val;
- }
+}
  
  /**********************************************************************************
  

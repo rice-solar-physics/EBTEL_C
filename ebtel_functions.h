@@ -50,6 +50,7 @@ struct Option {
 	double T0;
 	double n0;
 	double h_nano;
+	double h_back;
 	double t_pulse_half;
 	double t_start;
 	double tau;

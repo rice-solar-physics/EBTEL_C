@@ -9,6 +9,10 @@ For more information regarding the EBTEL model see:
 + <a href="http://adsabs.harvard.edu/abs/2012ApJ...752..161C">Cargill et al. 2012A, ApJ, 752:161</a>
 + <a href="http://adsabs.harvard.edu/abs/2012ApJ...758....5C">Cargill et al. 2012B, ApJ, 758:5</a>
 
+##Model Details
+
+##Updates in EBTEL-C
+
 ##Compiling
 If the user has a utility installed, the included makefile can be run simply by typing
 `make`

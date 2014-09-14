@@ -26,10 +26,48 @@ It should be noted that extensive testing has been carried out to ensure that EB
 ##Downloading and Compiling
 The best way to use obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally on your machine, to create a working copy type `git clone https://github.com/rice-solar-physics/EBTEL_repo`. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside the directory of your working directory.
 
-If the user has a utility installed, the included makefile can be run simply by typing
+If the user has a make utility (e.g. cmake) installed, the included makefile can be run simply by typing
 `make`
 at the command line. This creates the object files and links them into the executable 'ebtel' which can be run by typing
 `./ebtel`
 at the command line. The object files and executable can be cleaned up using the 'clean' option included in the makefile
 `make clean`
 
+##Configuring Input Parameters
+There are two input files that drive the EBTEL-C code: one that configures the initial conditions as well as options like which solver or radiative loss function to use and another one that configures options relating to the heating function.
+
+Structure of `ebtel_parameters.txt`:
+
+1. total time (in seconds)
+2. time step (in seconds)--for the Euler method, this is true for every step; for the adaptive method, this is only the initial time step.
+3. heating shape--(1) square heating pulse, (2) triangular heating pulse, (3) Gaussian heating pulse
+4. loop half-length (in Mm)--loop length measured from the base of the transition region to the loop apex
+5. usage--(1) include DEM calculation, (2) leave out DEM calculation, (3) include non-thermal electron heating, (4)compute radiation ratio and DEM calculation. Note that options (1) and (4) result in ~25% increase in computation time.
+6. radiative loss option--(0)use Raymond-Klimchuk loss function, (1) use Rosner-Tucker-Vaiana loss function
+7. DEM option--(0) use new DEM calculation, (1) use old DEM calculation
+8. flux option--(0) use classical heat flux calculation, (1) include flux limiting in heat flux calculation
+9. solver--(0) use Euler solver, (1)use 4th-order Runge-Kutta solver, (2) use adaptive method coupled to 4th-order Runge-Kutta solver.
+10. input mode--(0) initial conditions calculation using static equilibrium, (1) initial conditions read in from input file, (2) initial conditions calculated using scaling laws.
+11. heating amplitude (erg cm^-3 s^-1)--maximum value of heating function.
+12. pulse half-time (in seconds)--duration of heating event divided by two.
+13. start time (in seconds)--time at which heating event begins
+14. DEM index--index that defines temperature range over which the DEM is computed.
+15. error--value (default 1e-6) that defines the allowed error tolerance in the adaptive time step routine.
+16. T0 (in K)--temperature at time _t=0_s
+17. n0 (in cm^-3)--number density at time _t=0_s
+
+Structure of `ebtel_heating_parameters.txt`:
+
+1. N--number of heating events
+2. hback (in ergs cm^-3 s^-1)--value of background heating 
+3. start time mean (in seconds)--mean value of normally distributed start times
+4. start time standard deviation (in seconds)--standard deviation of normally distributed start times
+5. alpha--power law index for event amplitude distribution
+6. amp0 (in ergs cm^-3 s^-1)--lower bound on amplitude power law distribution
+7. amp1 (in ergs cm^-3 s^-1)--upper bound on amplitude power law distribution
+8. start time option--(uniform): gives N heating events starting at the given start time separated by 2*pulse-half-time; (random): selects N start times from a normal distribution with the given mean and standard deviation. The actual number of events is given by the number of start times that fall within [0,total time]; (file): read in start times from given file.
+9. amplitude option--uniform: gives N heating events with uniform amplitude as specified by the parameter file; random: selects N heating amplitudes from a power law distribution with index alpha; file: read in amplitudes from given file.
+10. end time option--(uniform): computes end time by adding 2*pulse half time to each start time giving uniform width to each event; (file): reads in the end times from given file.
+11. start file--if file option is selected for start time option, then the start times are read in using this filename
+12. amp file--if file option is selected for amplitude option, the amplitudes are read in using this filename
+13. end file--if file option is selected for end time option, the end times are read in using this filename

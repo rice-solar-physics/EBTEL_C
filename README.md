@@ -23,6 +23,8 @@ Additionally, EBTEL-C comes with a more flexible heating function that allows th
 
 It should be noted that extensive testing has been carried out to ensure that EBTEL-C solutions match those of the EBTEL-IDL solutions such that no additional error is introduced in the translation.
 
+![Example EBTEL-C run showing resulting temperature and density profiles from an impulsive heating event](ebtel_c_example.eps)
+
 ##Downloading and Compiling
 The best way to use obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally on your machine, to create a working copy type `git clone https://github.com/rice-solar-physics/EBTEL_repo`. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside the directory of your working directory.
 

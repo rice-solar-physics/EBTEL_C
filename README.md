@@ -26,7 +26,7 @@ It should be noted that extensive testing has been carried out to ensure that EB
 ![Example EBTEL-C run showing resulting temperature and density profiles from an impulsive heating event](ebtel_c_example.png)
 
 ##Downloading and Compiling
-The best way to use obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally on your machine, to create a working copy type `git clone https://github.com/rice-solar-physics/EBTEL_repo`. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside the directory of your working directory.
+The best way to use obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally on your machine, to create a working copy type `git clone https://github.com/rice-solar-physics/EBTEL_repo`. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside of your working directory.
 
 If the user has a make utility (e.g. cmake) installed, the included makefile can be run simply by typing
 `make`

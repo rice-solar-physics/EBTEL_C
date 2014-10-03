@@ -42,7 +42,7 @@ Structure of `ebtel_parameters.txt`:
 
 1. total time (in seconds)
 2. time step (in seconds)--for the Euler method, this is true for every step; for the adaptive method, this is only the initial time step.
-3. heating shape--(1) square heating pulse, (2) triangular heating pulse, (3) Gaussian heating pulse
+3. heating shape--(1) triangular heating pulse, (2) square heating pulse, (3) Gaussian heating pulse
 4. loop half-length (in Mm)--loop length measured from the base of the transition region to the loop apex
 5. usage--(1) include DEM calculation, (2) leave out DEM calculation, (3) include non-thermal electron heating, (4)compute radiation ratio and DEM calculation. Note that options (1) and (4) result in ~25% increase in computation time.
 6. radiative loss option--(0)use Raymond-Klimchuk loss function, (1) use Rosner-Tucker-Vaiana loss function

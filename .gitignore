@@ -13,3 +13,6 @@ ebtel
 *.m
 #Ignore heating config files
 hydrad_warren*.txt
+#Ignore parameter files
+ebtel_parameters.txt
+ebtel_heating_parameters.txt

@@ -270,6 +270,7 @@ double ebtel_heating(double t, struct Option *opt)
 	//Declare variables
 	int i;
 	double heat;
+	double heat_temp;
 		
 	//Set the heating as the background heating
 	heat = opt->h_back;
@@ -282,7 +283,8 @@ double ebtel_heating(double t, struct Option *opt)
 		if(t >= *(opt->t_start_array + i) && t <= (*(opt->t_end_array + i) ) )
 		{
 			//If so, call the heating profile function to generate the correct pulse
-			heat = heat + ebtel_heating_profile(t,*(opt->t_start_array + i),*(opt->t_end_array + i),*(opt->amp + i),opt);;
+			heat_temp = ebtel_heating_profile(t,*(opt->t_start_array + i),*(opt->t_end_array + i),*(opt->amp + i),opt);
+			heat = heat + heat_temp;
 		}
 	}
 	

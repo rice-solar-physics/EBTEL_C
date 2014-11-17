@@ -151,8 +151,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, double 
 	param_setter->cond = malloc(sizeof(double[ntot]));
 	param_setter->rad_cor = malloc(sizeof(double[ntot]));
 	param_setter->rad = malloc(sizeof(double[ntot]));
-	
-	//DEBUG--reserve memory for time step member
 	param_setter->tau = malloc(sizeof(double[ntot]));
 	
 	if(opt->usage == 4 || opt->usage == 1)

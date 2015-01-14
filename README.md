@@ -75,4 +75,4 @@ Structure of `ebtel_heating_parameters.txt`:
 13. end file--if file option is selected for end time option, the end times are read in using this filename
 
 ##Reporting Bugs and Issues
-If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will dot t dot barnes at rice dot edu`.
+If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will (dot) t (dot) barnes (at) rice (dot) edu`.

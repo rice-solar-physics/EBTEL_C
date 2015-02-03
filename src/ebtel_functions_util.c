@@ -32,7 +32,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-void ebtel_print_header(int n, int heating_shape, int loop_length, int total_time, struct Option *opt)
+void ebtel_print_header(int n, struct Option *opt)
 {
 	//Print a header and tell the user what options are being used to begin the model
 	printf("************************************************************************************\n");
@@ -45,59 +45,194 @@ void ebtel_print_header(int n, int heating_shape, int loop_length, int total_tim
 	printf("************************************************************************************\n\n");
 	printf("INPUTS\n");
 	printf("------\n");
-	printf("Total time: %d s\n",total_time);
+	printf("Total time: %d s\n",opt->total_time);
 	printf("Time step: %f s\n",opt->tau);
-	printf("Loop half-length: %d Mm\n",loop_length);
-	printf("Usage option(see documentation): %d\n",opt->usage);
-	if(heating_shape==1)
+	printf("Loop half-length: %d Mm\n",opt->loop_length);
+	printf("Usage option(see documentation): %s\n",opt->usage_option);
+	if(strcmp(opt->heating_shape,"triangle")==0)
 	{printf("Heating: Triangular heating pulse\n");
 	}
-	else if(heating_shape==2)
+	else if(strcmp(opt->heating_shape,"square")==0)
 	{printf("Heating: Square heating pulse\n");
 	}
 	else
 	{printf("Heating: Gaussian heating pulse\n");
 	}
-	if(opt->solver==1)
+	if(strcmp(opt->solver,"rk4")==0)
 	{printf("Solving equations using fourth order Runge-Kutta routine\n");
 	}
-	else if(opt->solver==2)
+	else if(strcmp(opt->solver,"rka4")==0)
 	{printf("Solving equations using adaptive fourth order Runge-Kutta routine\n");
 	}
 	else 
 	{printf("Solving equations using Euler method\n");
 	}
-	if(opt->rtv==1)
+	if(strcmp(opt->rad_option,"rtv")==0)
 	{printf("Using Rosner-Tucker-Vaiana Loss Function\n");
 	}
 	else
 	{printf("Using Raymond-Klimchuk Loss Function\n");
 	}
-	if(opt->dynamic==1)
+	if(strcmp(opt->heat_flux_option,"dynamic")==0)
 	{printf("Using dynamic heat flux calculation\n");
 	}
 	else
 	{printf("Using classical heat flux calculation\n");
 	}
-	if(opt->usage==1 || opt->usage==4)
+	if(strcmp(opt->usage_option,"tr")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
-		if(opt->dem_old==1)
+		if(strcmp(opt->dem_option,"old")==0)
 		{printf("Using old method to calculate DEM in the TR\n");
 		}
 		else
 		{printf("Using new method to calculate DEM in the TR\n");
 		}
 	}
-	if(opt->mode==0)
+	if(strcmp(opt->ic_mode,"st_eq")==0)
 	{printf("Using static equilibrium to calculate initial conditions\n");
 	}
-	else if(opt->mode==1)
+	else if(strcmp(opt->ic_mode,"force")==0)
 	{printf("Forcing initial conditions with T_0 = %f MK and n_0 = %f*10^8 cm^-3\n",opt->T0/pow(10,6),opt->n0/pow(10,8));
 	}
-	else if(opt->mode==2)
+	else 
 	{printf("Using scaling laws to calculate initial conditions\n");
 	}
 	printf("\n");
+}
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_input_setter
+
+FUNCTION_DESCRIPTION: This function reads the relevant inputs from an XML config file 
+and sets them to a structure. The xmllib2 library is used. The necessary compiler flags 
+are set in the makefile or can be configured manually.
+
+
+INPUTS:
+		char filename--name of xml file that holds input configuration
+OUTPUTS:
+		struct Option opt--pointer to structure that holds input configuration
+	
+***********************************************************************************/
+
+struct Option *ebtel_input_setter(char *filename)
+{
+	//Declare doc and root pointers
+	xmlDocPtr doc;
+	xmlNodePtr root;
+	//Create the document tree
+	doc = xmlParseFile(filename); 
+	//Point root at first child of the tree
+	root = doc->children;
+	
+	//Declare the structure that will be returned
+	struct Option *opt = malloc(sizeof(struct Option));
+	assert(opt != NULL);
+	
+	//Set the value of each structure field from the xml file
+	//Double
+	opt->total_time = atof(ebtel_xml_reader(root,"total_time",NULL));
+	opt->tau = atof(ebtel_xml_reader(root,"tau",NULL));
+	opt->h_nano = atof(ebtel_xml_reader(root,"h_nano",NULL));
+	opt->t_pulse_half = atof(ebtel_xml_reader(root,"t_pulse_half",NULL));
+	opt->t_start = atof(ebtel_xml_reader(root,"t_start",NULL));
+	opt->rka_error = atof(ebtel_xml_reader(root,"rka_error",NULL));
+	opt->T0 = atof(ebtel_xml_reader(root,"T0",NULL));
+	opt->n0 = atof(ebtel_xml_reader(root,"n0",NULL));
+	opt->h_back = atof(ebtel_xml_reader(root,"h_back",NULL));
+	opt->mean_t_start = atof(ebtel_xml_reader(root,"mean_t_start",NULL));
+	opt->std_t_start = atof(ebtel_xml_reader(root,"std_t_start",NULL));
+	opt->amp0 = atof(ebtel_xml_reader(root,"amp0",NULL));
+	opt->amp1 = atof(ebtel_xml_reader(root,"amp1",NULL));
+	//Int
+	opt->loop_length = atoi(ebtel_xml_reader(root,"loop_length",NULL));
+	opt->index_dem = atoi(ebtel_xml_reader(root,"index_dem",NULL));
+	opt->num_events = atoi(ebtel_xml_reader(root,"num_events",NULL));
+	opt->alpha = atoi(ebtel_xml_reader(root,"alpha",NULL));
+	//Char
+	opt->heating_shape = ebtel_xml_reader(root,"heating_shape",NULL);
+	opt->usage_option = ebtel_xml_reader(root,"usage_option",NULL);
+	opt->rad_option = ebtel_xml_reader(root,"rad_option",NULL);
+	opt->dem_option = ebtel_xml_reader(root,"dem_option",NULL);
+	opt->heat_flux_option = ebtel_xml_reader(root,"heat_flux_option",NULL);
+	opt->solver = ebtel_xml_reader(root,"solver",NULL);
+	opt->ic_mode = ebtel_xml_reader(root,"ic_mode",NULL);
+	opt->t_start_switch = ebtel_xml_reader(root,"t_start_switch",NULL);
+	opt->amp_switch = ebtel_xml_reader(root,"amp_switch",NULL);
+	opt->t_end_switch = ebtel_xml_reader(root,"t_end_switch",NULL);
+	opt->start_file = ebtel_xml_reader(root,"start_file",NULL);
+	opt->amp_file = ebtel_xml_reader(root,"amp_file",NULL);
+	opt->end_file = ebtel_xml_reader(root,"end_file",NULL);
+	
+	//Free the document tree
+	xmlFreeDoc(doc);
+	
+	//Return the structure
+	return opt;	
+}
+
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_xml_reader
+
+FUNCTION_DESCRIPTION: This function reads the relevant inputs from an XML config file 
+recursively and is capable of processing XML files of arbitrary depth. When calling the
+function, nodeValue should be initialized with NULL and root with the doc->children where
+doc is the XML file document tree.
+
+INPUTS:
+		xmlNodePtr root -- root node to start the read
+		char *nodeName -- name of the node we are searching for
+		char *nodeValue -- value to retrieve (default: NULL)
+OUTPUTS:
+		char *nodeValue -- value to retrieve
+	
+***********************************************************************************/
+
+char *ebtel_xml_reader(xmlNodePtr root, char *nodeName, char *nodeValue)
+{
+	//Declare new node instance
+	xmlNodePtr cur;
+	//Point it to the child of the root passed to the function
+	cur = root->children;
+	
+	//Begin loop
+	//Only break when the list is over or we have found the value
+	while(cur != NULL && nodeValue == NULL)
+	{
+		//Check if the current node has children
+		//If not, cur is a value so we check it
+		if(cur->children == NULL)
+		{
+			//Check the parent of the node
+			if(!xmlIsBlankNode(cur) && strcmp((char*)root->name,nodeName)==0)
+			{
+				//Get the value of the node
+				nodeValue = xmlNodeGetContent(cur);
+				//Return the value
+				return nodeValue;
+			}
+		}
+		
+		//If the current node has children, descend a level deeper to check values 
+		else
+		{
+			//Call recursively
+			nodeValue = ebtel_xml_reader(cur,nodeName,nodeValue);
+			//Break the loop if we have found the value
+			if(nodeValue != NULL)
+			{
+				break;
+			}
+		}
+		//Move to the next node
+		cur = cur->next;
+	}
+	
+	//Return the value
+	return nodeValue;
 }
 
 /***********************************************************************************
@@ -118,7 +253,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-void ebtel_file_writer(int loop_length, struct Option *opt, struct ebtel_params_st *params_final)
+void ebtel_file_writer(struct Option *opt, struct ebtel_params_st *params_final)
 {
 	//Declare variables
 	int i;
@@ -136,7 +271,7 @@ void ebtel_file_writer(int loop_length, struct Option *opt, struct ebtel_params_
 	}
 	
 	//Open the file that we are going to write the data to 
-	sprintf(filename_out,"data/ebteldatL%du%dh%ds%d.txt",loop_length,opt->usage,opt->heating_shape,opt->solver);	
+	sprintf(filename_out,"data/ebteldatL%d_%s_%s_%s.txt",opt->loop_length,opt->usage_option,opt->heating_shape,opt->solver);	
 	out_file = fopen(filename_out,"wt");
 	
 	//Tell the user where the results were printed
@@ -147,7 +282,7 @@ void ebtel_file_writer(int loop_length, struct Option *opt, struct ebtel_params_
 	{	
 		//If we used usage = 4, then we need to save f_ratio and rad_ratio as well.
 		//We set them to zero otherwise just as a placeholder.
-		if(opt->usage == 4)
+		if(strcmp(opt->usage_option,"rad_ratio") == 0)
 		{
 			rad_ratio[i] = *(params_final->rad_ratio + i);
 			f_ratio[i] = *(params_final->f_ratio + i);
@@ -167,10 +302,10 @@ void ebtel_file_writer(int loop_length, struct Option *opt, struct ebtel_params_
 	fclose(out_file);
 	
 	//If we chose to calculate the TR DEM, we need to write this data to a separate file.
-	if(opt->usage==1 || opt->usage==4)
+	if(strcmp(opt->usage_option,"tr")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
 		//Make the DEM data filename
-		sprintf(filename_out_dem,"data/ebteldemdatL%du%dh%ds%d.txt",loop_length,opt->usage,opt->heating_shape,opt->solver);
+		sprintf(filename_out_dem,"data/ebteldemdatL%d_%s_%s_%s.txt",opt->loop_length,opt->usage_option,opt->heating_shape,opt->solver);
 		
 		//Tell the user where the DEM data was printed to
 		printf("The DEM results were printed to the file %s\n",filename_out_dem);
@@ -279,11 +414,11 @@ double * ebtel_colon_operator(double a, double b, double d)
  value. 
  
  Input
-	double numbers []	Array of double values
-	int length			Integer value, length of array numbers
+	double numbers []--Array of double values
+	int length--Integer value, length of array numbers
  
  Return
-	double mean			Double value returned by the function.
+	double mean--Double value returned by the function.
  
  *********************************************************************************/
  
@@ -315,13 +450,13 @@ double * ebtel_colon_operator(double a, double b, double d)
  average. 
  
  Input
-	double numbers []	Array of double values
-	int length			Integer value, length of array numbers
- 	double weight []	Array of weights for each entry in array numbers 
+	double numbers []--Array of double values
+	int length--Integer value, length of array numbers
+ 	double weight []--Array of weights for each entry in array numbers 
  						(Length must be the same as numbers[])
  
  Return
-	double mean			Double value returned by the function.
+	double mean--Double value returned by the function.
  
  *********************************************************************************/
  
@@ -360,11 +495,11 @@ double * ebtel_colon_operator(double a, double b, double d)
  those two numbers.
  
  Input
-	double num_1		first number to compare
-	double num_2		second number to compare	
+	double num_1--first number to compare
+	double num_2--second number to compare	
  
  Return
-	double max_val		maximum of num_1 and num_2
+	double max_val--maximum of num_1 and num_2
  
  *********************************************************************************/
  
@@ -392,11 +527,11 @@ double * ebtel_colon_operator(double a, double b, double d)
  these two numbers.
  
  Input
-	double num_1		first number to compare
-	double num_2		second number to compare	
+	double num_1--first number to compare
+	double num_2--second number to compare	
  
  Return
-	double min_val		minimum of num_1 and num_2
+	double min_val--minimum of num_1 and num_2
  
  *********************************************************************************/
  
@@ -424,13 +559,13 @@ double * ebtel_colon_operator(double a, double b, double d)
  _solver function in order to return the param structure
  
  Input
-	struct ebtel_params_st *par_struct		pointer to structure memory that will be freed	
+	struct ebtel_params_st *par_struct--pointer to structure memory that will be freed	
  
  Return
 	none
  
  *********************************************************************************/
- void ebtel_free_mem(struct ebtel_params_st *par_struct)
+ void ebtel_free_mem(struct ebtel_params_st *par_struct, struct Option *opt)
  {
  	//First check that the pointer is valid
  	assert(par_struct != NULL);
@@ -458,26 +593,211 @@ double * ebtel_colon_operator(double a, double b, double d)
 	par_struct->papex = NULL;
 	free(par_struct->coeff_1);
 	par_struct->coeff_1 = NULL;
-	free(par_struct->logtdem);
-	par_struct->logtdem = NULL;
-	free(par_struct->f_ratio);
-	par_struct->f_ratio = NULL;
-	free(par_struct->rad_ratio);
-	par_struct->rad_ratio = NULL;
 	free(par_struct->cond);
 	par_struct->cond = NULL;
 	free(par_struct->rad_cor);
 	par_struct->rad_cor = NULL;
 	free(par_struct->rad);
 	par_struct->rad = NULL;
-	free(par_struct->dem_tr_log10mean);
-	par_struct->dem_tr_log10mean = NULL;
-	free(par_struct->dem_cor_log10mean);
-	par_struct->dem_cor_log10mean = NULL; 
-	free(par_struct->dem_tot_log10mean);
-	par_struct->dem_tot_log10mean = NULL;
-	
+	//Free memory based on usage_option
+	if(strcmp(opt->usage_option,"tr")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
+	{
+		if(strcmp(opt->usage_option,"rad_ratio")==0)
+		{
+			free(par_struct->f_ratio);
+			par_struct->f_ratio = NULL;
+			free(par_struct->rad_ratio);
+			par_struct->rad_ratio = NULL;
+		}
+		
+		free(par_struct->logtdem);
+		par_struct->logtdem = NULL;
+		free(par_struct->dem_tr_log10mean);
+		par_struct->dem_tr_log10mean = NULL;
+		free(par_struct->dem_cor_log10mean);
+		par_struct->dem_cor_log10mean = NULL; 
+		free(par_struct->dem_tot_log10mean);
+		par_struct->dem_tot_log10mean = NULL;
+	}
+
 	//Free memory reserved for the structure
 	free(par_struct);
+	
+	//Free the t_start and amp arrays
+	free(opt->t_start_array);
+	opt->t_start_array = NULL;
+	free(opt->amp);
+	opt->amp = NULL;
+	free(opt->t_end_array);
+	opt->t_end_array = NULL;
+	
+	//Free the memory used by opt input structure
+	free(opt);
  }
+ 
+ /***********************************************************************************
+
+ FUNCTION NAME: ebtel_box_muller
+
+ FUNCTION_DESCRIPTION: This function is an implementation of the Box-Muller algorithm
+ to achieve a normal distribution from a random distribution. A description of the 
+ algorithm can be found in 'Numerical Recipes' by Press though this implementation is 
+ not equivalent. The function returns a structure holding two resulting values as well
+ as a flag telling whether an old value is available for use.
+
+ INPUTS:
+ 	x1--uniformly distributed random number
+ 	x2--uniformly distributed random number
+ 	save--leftover value
+ 	flag--flag to indicate leftovers
+	
+ OUTPUTS:
+ 	bm_st--structure holding normally distributed values and updated flag
+
+ ***********************************************************************************/
+
+ struct box_muller_st *ebtel_box_muller(double x1,double x2,double save,int flag)
+ {
+ 	//Declare variables
+ 	struct box_muller_st *bm_st = malloc(sizeof(struct box_muller_st));
+ 	double z1,z2;
+	
+ 	//Check if the flag has been raised. If not, compute two values
+ 	if(flag==1)
+ 	{
+ 		bm_st->z = save;
+ 		bm_st->z_save = 0.;
+ 		bm_st->flag = 0;
+ 	}
+ 	else
+ 	{
+ 		z1 = sqrt(-2.*log(x1))*cos(2.*PI*x2);
+ 		z2 = sqrt(-2.*log(x1))*sin(2.*PI*x2);
+ 		bm_st->z = z1;
+ 		bm_st->z_save = z2;
+ 		bm_st->flag = 1;
+ 	}
+	
+ 	//Return the structure
+ 	return bm_st;
+ }
+
+ /***********************************************************************************
+
+ FUNCTION NAME: ebtel_power_law
+
+ FUNCTION_DESCRIPTION: This function takes in uniformly distributed random number
+ and produces a power-law distribution over range [x0,x1] with index alpha.
+
+ INPUTS:
+ 	x0--lower limit to power-law distribution
+ 	x1--upper limit to power-law distribution
+ 	y--uniformly distributed random number
+ 	alpha--power-law index
+	
+ OUTPUTS:
+ 	x--random number that follows power law distribution
+
+ ***********************************************************************************/
+
+ double ebtel_power_law(double x0, double x1, double y, double alpha)
+ {
+ 	//Declare variables
+ 	double x;
+ 	double term1,term2;
+	
+ 	//Calculate first term
+ 	term1 = pow(x1,(alpha + 1.)) - pow(x0,(alpha + 1.));
+ 	term2 = pow(x0,(alpha + 1.));
+ 	x = pow((term1*y + term2),(1./(alpha + 1.)));
+	
+ 	//Return the result
+ 	return x;
+ }
+
+ /***********************************************************************************
+
+ FUNCTION NAME: ebtel_bubble_sort
+
+ FUNCTION_DESCRIPTION: This function is an implementation of the well-known bubble-
+ sort algorithm and sorts the array in ascending order.
+
+ INPUTS:
+ 	array--array of numbers to be sorted
+ 	array_length--length of the array to be sorted
+	
+ OUTPUTS:
+ 	sorted_array--pointer to sorted array
+ ***********************************************************************************/
+
+ double * ebtel_bubble_sort(double array[],int array_length)
+ {
+ 	//Declare variables
+ 	int switch_flag;
+ 	int i;
+ 	double tmp;
+ 	double *sorted_array = malloc(sizeof(double[array_length]));
+	
+ 	//Begin first loop that won't end until sorting is done
+ 	do{
+ 		//Reset the flag
+ 		switch_flag = 0;
+		
+ 		//Loop over array
+ 		for(i=0; i<(array_length-1); i++)
+ 		{
+ 			if(array[i] > array[i+1])
+ 			{
+ 				//Swap the values
+ 				tmp = array[i+1];
+ 				array[i+1] = array[i];
+ 				array[i] = tmp;
+				
+ 				//Raise the flag
+ 				switch_flag = 1;
+				
+ 				//Break out of the inner loop
+ 				break;
+ 			}
+ 		}
+		
+ 	}while(switch_flag == 1);
+	
+ 	//Make a pointer to the new array
+ 	for(i = 0; i<array_length; i++)
+ 	{
+ 		sorted_array[i] = array[i];
+ 	}
+	
+ 	//Return sorted array
+ 	return sorted_array;
+ }
+ 
+ /***********************************************************************************
+
+ FUNCTION NAME: ebtel_rand_limit
+
+ FUNCTION_DESCRIPTION: This function gives a uniformly distributed random number from
+ zero to limit where limit is specified by the input argument. 
+
+ INPUTS:
+ 	limit--maximum of uniform distribution
+	
+ OUTPUTS:
+ 	retval--resulting random number
+
+ ***********************************************************************************/
+
+ double ebtel_rand_limit(double limit)
+ {
+ 	double divisor = RAND_MAX/limit;
+ 	double retval;
+	
+ 	do{
+ 		retval = rand()/divisor;
+ 	}while(retval > limit);
+	
+ 	return retval;
+ }
+ 
  

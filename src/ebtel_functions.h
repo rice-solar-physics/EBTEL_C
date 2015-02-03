@@ -22,6 +22,8 @@ DESCRIPTION: This file gives the function prototypes for functions in defined in
 #include <float.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 //Declare global variables
 double K_B;
@@ -37,15 +39,11 @@ double C4;
 
 //Declare structures
 struct Option {
-	int dynamic;
-	int dem_old;
-	int rtv;
-	int usage;
-	int solver;
-	int mode;
-	int heating_shape;
+	int total_time;
 	int index_dem;
 	int num_events;
+	int loop_length;
+	int alpha;
 	double energy_nt;
 	double T0;
 	double n0;
@@ -53,11 +51,28 @@ struct Option {
 	double h_back;
 	double t_pulse_half;
 	double t_start;
+	double mean_t_start;
+	double std_t_start;
+	double amp0;
+	double amp1;
 	double tau;
-	double error;
+	double rka_error;
 	double *amp;
 	double *t_start_array;
 	double *t_end_array;
+	char *heat_flux_option; //previously dynamic
+	char *dem_option; //previously dem_old
+	char *rad_option; //previously rtv
+	char *usage_option; //previously usage
+	char *solver;
+	char *ic_mode; //previously mode
+	char *heating_shape;
+	char *start_file;
+	char *end_file;
+	char *amp_file;
+	char *t_start_switch;
+	char *t_end_switch;
+	char *amp_switch;
 };
 struct ebtel_params_st {
 		int i_max;
@@ -108,13 +123,13 @@ struct box_muller_st{
 };
 
 //Declare prototype for ebtel_loop_solver of type struct *
-struct ebtel_params_st *ebtel_loop_solver( int, double, double, struct Option *);
+struct ebtel_params_st *ebtel_loop_solver( int, double, struct Option *);
 
 //Declare prototype for ebtel_kpar_set of type void
-double * ebtel_kpar_set( int);
+double * ebtel_kpar_set(char *);
 
 //Declare prototype for ebtel_rad_loss of type double
-double ebtel_rad_loss( double, double[], int);
+double ebtel_rad_loss( double, double[], char *);
 
 //Declare prototype for ebtel_calc_c1 of type double
 double ebtel_calc_c1(double, double, double, double);
@@ -132,7 +147,7 @@ double ebtel_calc_lambda(double);
 double * ebtel_linspace( int, int, int);
 
 //Declare prototype for ebtel_calc_tr_dem of type double
-double ebtel_calc_tr_dem( double, double, double, double, double, double, double, double[], int );
+double ebtel_calc_tr_dem( double, double, double, double, double, double, double, double[], char *);
 
 //Declare prototype for ebtel_avg_val of type double
 double ebtel_avg_val(double[], int );
@@ -141,7 +156,7 @@ double ebtel_avg_val(double[], int );
 double ebtel_max_val(double, double);
 
 //Declare prototype for ebtel_mem_free of type void
-void ebtel_free_mem(struct ebtel_params_st *);
+void ebtel_free_mem(struct ebtel_params_st *, struct Option *);
 
 //Declare prototype for ebtel_rk of type double
 double * ebtel_rk(double[], int, double, double, struct rk_params, struct Option *);
@@ -153,16 +168,16 @@ double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option 
 double ebtel_heating(double, struct Option *);
 
 //Declare prototype for ebtel_print_header of type void
-void ebtel_print_header(int, int, int, int, struct Option *);
+void ebtel_print_header(int, struct Option *);
 
 //Declare prototype for ebtel_euler of type double
 double * ebtel_euler(double[], double, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_data_writer of type void
-void ebtel_file_writer(int, struct Option *, struct ebtel_params_st *);
+void ebtel_file_writer(struct Option *, struct ebtel_params_st *);
 
 //Declare prototype for ebtel_rk_adapt of type struct ebtel_rka_st
-struct ebtel_rka_st *ebtel_rk_adapt(double[], int, double, double, double, struct rk_params, struct Option *);
+struct ebtel_rka_st *ebtel_rk_adapt(double[], int, double, double, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_min_val of type double
 double ebtel_min_val(double, double);
@@ -195,9 +210,15 @@ double * ebtel_bubble_sort(double[],int);
 double ebtel_heating_profile(double,double,double,double,struct Option *);
 
 //Declare prototype for ebtel_heating_config of type void
-void ebtel_heating_config(struct Option *);
+void ebtel_heating_config(struct Option *, char *);
 
 //Declare prototype for ebtel_count_events of type int
 int ebtel_count_events(struct ebtel_params_st *, struct Option *);
+
+//Declare prototype for ebtel_input_setter of type struct Option
+struct Option *ebtel_input_setter(char *);
+
+//Declare prototype for ebtel_xml_reader of type char *
+char *ebtel_xml_reader(xmlNodePtr,char *, char *);
 
 #endif

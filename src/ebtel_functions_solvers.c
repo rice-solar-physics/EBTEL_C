@@ -76,7 +76,7 @@ option that can be chosen in ebtel_main.
  
  Function name: ebtel_rk
  
- Function description: This function implements a Runge-Kutta routine in EBTEL. It will
+ Function description: This function implements a fourth-order Runge-Kutta routine in EBTEL. It will
  call the ebtel_rk_derivs function to compute derivatives of the necessary functions.
  This implementation is based on a routine written in MATLAB by A. L. Garcia (see 
  Numerical Methods for Physics, Prentice Hall, 1994).
@@ -190,7 +190,7 @@ option that can be chosen in ebtel_main.
 	
 *********************************************************************************/
  
- struct ebtel_rka_st *ebtel_rk_adapt(double s[], int n, double t, double tau, double err, struct rk_params par, struct Option *opt)
+ struct ebtel_rka_st *ebtel_rk_adapt(double s[], int n, double t, double tau, struct rk_params par, struct Option *opt)
  {
  	/**Declare variables**/
  	//Int
@@ -209,6 +209,7 @@ option that can be chosen in ebtel_main.
  	double time;
  	double half_tau;
  	double old_tau;
+	double err = opt->rka_error;
  	double epsilon = 1.0e-16;
  	
 	//Pointers
@@ -373,7 +374,7 @@ option that can be chosen in ebtel_main.
  	T = s[2];
  	
  	//Make the kpar array
- 	if(opt->rtv==0)
+ 	if(strcmp(opt->rad_option,"rk")==0)
  	{
  		nk = 7;
  	}
@@ -388,14 +389,14 @@ option that can be chosen in ebtel_main.
  	}
  	
  	//Compute the radiative loss function 
- 	rad = ebtel_rad_loss(T,kpar,opt->rtv);
+ 	rad = ebtel_rad_loss(T,kpar,opt->rad_option);
  	
  	//Compute the coefficient r3
  	r3 = ebtel_calc_c1(T,n,par.L,rad);
  	
  	//Compute heat flux. Can use one of two methods:
  	//(1)classical or (0)dynamic heat flux
-	if(opt->dynamic==0)
+	if(strcmp(opt->heat_flux_option,"dynamic")==0)
 	{
 		f = par.c1*pow(T/par.r2,3.5)/par.L;
 	}

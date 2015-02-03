@@ -1,8 +1,5 @@
 #Ignore data folder
 /data/*
-/test_data/*
-#Ignore tex report
-/report/*
 #Ignore analysis folder
 /analysis
 #Ignore executables
@@ -11,8 +8,6 @@ ebtel
 *.o
 #Ignore MATLAB files
 *.m
-#Ignore heating config files
-hydrad_warren*.txt
-#Ignore parameter files
-ebtel_parameters.txt
-ebtel_heating_parameters.txt
+#Ignore all config files
+/config/*
+!/config/ebtel_config.xml

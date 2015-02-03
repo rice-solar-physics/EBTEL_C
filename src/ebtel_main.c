@@ -57,18 +57,18 @@ MISCELLANEOUS COMMENTS:
 USAGE:
 (set in usage field of opt parameter structure. See input list above.
 (1)--include transition region DEM
-     additional outputs: dem_tr, dem_cor, logtdem
+     additional outputs: dem_tr, dem_cor, logtdem (recommended)
 (2)--exclude transition region DEM (faster)
 (3)--include nonthermal electron energy flux
      additional inputs: flux_nt, energy_nt
-(4)--compute rad_ratio (25% more computing time)
+(4)--compute rad_ratio (requires longer compute time)
      additional outputs: dem_tr, dem_cor, logtdem, f_ratio, rad_ratio 
 
 ************************************************************************************/
 
 #include "ebtel_functions.h"
 
-int main (void)
+int main (int argc, char *argv[])
 {	
 	//Use clock to time the entire EBTEL program
 	clock_t time_start;
@@ -84,8 +84,8 @@ int main (void)
 	
 	/******Variable Declarations******/
 	//Struct
-	struct ebtel_params_st *params_final;		//Declare instance of structure ebtel_params_st
-	struct Option *opt = malloc(sizeof(struct Option));
+	struct ebtel_params_st *params_final;
+	struct Option *opt;							
 	
 	//Global definitions (declarations in ebtel_functions.h)
 	//KAPPA_0 = 1e-6;
@@ -99,39 +99,35 @@ int main (void)
 	ebtel_calc_abundance();
 	
 	//Int
-	int n;
-	int heating_shape;
-	int loop_length;
-	
-	//Double
-	double total_time;
-	double t_scale;
+	int i,n;
+	int quiet_flag = 0;
 	double L;
-	double h_nano;
-	double t_pulse_half;
-	double t_start;
-	
-	FILE *in_file;
-	
-	//Char
 	char filename_in[64];
 	
 	/**********************************
-	Read in data from parameter file
+	Read configuration file
 	**********************************/
-	
-	//Read in parameters from file
-	sprintf(filename_in,"ebtel_parameters.txt");
-	in_file = fopen(filename_in,"rt");
-	if(in_file == NULL)
+
+	//Read in parameters from file using xmllib library
+	//Set default filename
+	sprintf(filename_in,"config/ebtel_config.xml");
+	//Check if a filename was specified at command line
+	for(i = 0; i<argc; i++)
 	{
-		printf("Error! Could not open file.\n");
-		return 1;
+		//Read in filename
+		if(strcmp(argv[i],"quiet")!=0 && i>0)
+		{
+			sprintf(filename_in,"%s",argv[i]);
+		}
+		else if(strcmp(argv[i],"quiet")==0)
+		{
+			//Raise the quiet flag
+			quiet_flag = 1;
+		}
 	}
+	//Pass filename to struct setter to read inputs into opt structure
+	opt = ebtel_input_setter(filename_in);
 	
-	fscanf(in_file,"%le\n%le\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%le\n%le\n%le\n%d\n%le\n%le%le\n",&total_time,&t_scale,&heating_shape,&loop_length,&opt->usage,&opt->rtv,&opt->dem_old,&opt->dynamic,&opt->solver,&opt->mode,&h_nano,&t_pulse_half,&t_start,&opt->index_dem,&opt->error,&opt->T0,&opt->n0);
-	
-	fclose(in_file);
 	
 	/************************************************************************************
 									Initial Parameters
@@ -139,17 +135,12 @@ int main (void)
 	
 	//Set total number of steps using the initial timestep and total time
 	//When using the adaptive method, this can be increased to avoid segmentation fault runtime error.
-	n = ceil(2*total_time/t_scale);
+	n = ceil(2*opt->total_time/opt->tau);
 	
 	//Define loop half-length and change to appropriate units
-	L = 1e8*loop_length;	//convert from Mm to cm
+	L = 1e8*opt->loop_length;	//convert from Mm to cm
 	
-	//Set members of the Option opt structure
-	opt->heating_shape = heating_shape;
-	opt->t_pulse_half = t_pulse_half;
-	opt->t_start = t_start;
-	opt->tau = t_scale;
-	opt->h_nano = h_nano;
+	//Set non-thermal electron energy structure option
 	opt->energy_nt = 8.01e-8;	//50 keV in ergs
 	
 	/************************************************************************************
@@ -160,26 +151,29 @@ int main (void)
 	//from above parameters, through normally distributed start times and amplitudes following
 	//a power-law distribution or by reading in all three parameters from specified input
 	//files.
-	ebtel_heating_config(opt);
+	ebtel_heating_config(opt,filename_in);
 	
 	/************************************************************************************
 									Start the Model
 	************************************************************************************/
 	
 	//Print a header to the screen that gives the user input information
-	//(If you're doing a large parameter sweep, this line should be commented out.)
-	ebtel_print_header(n, heating_shape, loop_length, total_time, opt);
+	//(If you're doing a large parameter sweep, use the 'quiet' command line option.)
+	if(quiet_flag == 0)
+	{
+		ebtel_print_header(n, opt);
+	}
 	
 	//Make the call to the ebtel_loop_solver function. This function sets the members of the structure params_final. Each member 
 	//is a pointer to an array
-	params_final = ebtel_loop_solver(n, L, total_time, opt);
+	params_final = ebtel_loop_solver(n, L, opt);
 	
 	/************************************************************************************
 									Save the Data
 	************************************************************************************/
 	
 	//Write the contents of params_final to a file. See output for filename.
-	ebtel_file_writer(loop_length, opt, params_final);
+	ebtel_file_writer(opt, params_final);
 	
 	//Count the number of events and print it to the screen
 	int num_q_events = ebtel_count_events(params_final,opt);
@@ -187,24 +181,15 @@ int main (void)
 	
 	/****************Done writing data to file. Free up memory reserved by pointers.******************/
 	
-	//Free up memory used by the structure params_final
-	ebtel_free_mem(params_final);
-	//Free the t_start and amp arrays
-	free(opt->t_start_array);
-	free(opt->amp);
-	free(opt->t_end_array);
-	opt->t_start_array = NULL;
-	opt->amp = NULL;
-	opt->t_end_array = NULL;
-	//Free the memory used by opt input structure
-	free(opt);
+	//Free up memory used by the structures params_final and opt 
+	ebtel_free_mem(params_final,opt);
 	
 	//Stop the timer
 	time_diff = clock() - time_start;
 	time_elapsed = time_diff*1000/CLOCKS_PER_SEC;
 	
 	//Time elapsed
-	printf("The process took %f milliseconds to run\n",time_elapsed);
+	printf("The process took %f milliseconds to run.\n",time_elapsed);
 	
 	//Exit with no errors 
 	return 0;

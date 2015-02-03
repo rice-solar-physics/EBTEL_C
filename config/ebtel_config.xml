@@ -28,7 +28,7 @@
 		<amp1>0.01</amp1>
 		<t_start_switch>file</t_start_switch> <!-- uniform, normal, or file -->
 		<amp_switch>file</amp_switch> <!-- uniform, power_law, or file -->
-		<t_end_switch>uniform</t_end_switch> <!-- uniform or file -->
+		<t_end_switch>file</t_end_switch> <!-- uniform or file -->
 	<!-- heating input files (only need these if using the 'file' option for the above switches)-->
 		<start_time_array>
 			<start_time_array0>683.9</start_time_array0>
@@ -81,28 +81,28 @@
 			<amp_array22>0.0110935168</amp_array22>
 		</amp_array>
 		<end_time_array>
-			884.0
-			1830.2
-			2347.4
-			2900.3
-			3339.9
-			4195.6
-			4903.0
-			5560.5
-			6229.0
-			7814.6
-			9229.1
-			10415.9
-			10966.4
-			15030.4
-			15628.8
-			16465.6
-			16986.9
-			17658.7
-			18802.0
-			19534.1
-			23281.4
-			24722.6
-			25248.5
+			<end_time_array0>884.0</end_time_array0>
+			<end_time_array1>1830.2</end_time_array1>
+			<end_time_array2>2347.4</end_time_array2>
+			<end_time_array3>2900.3</end_time_array3>
+			<end_time_array4>3339.9</end_time_array4>
+			<end_time_array5>4195.6</end_time_array5>
+			<end_time_array6>4903.0</end_time_array6>
+			<end_time_array7>5560.5</end_time_array7>
+			<end_time_array8>6229.0</end_time_array8>
+			<end_time_array9>7814.6</end_time_array9>
+			<end_time_array10>9229.1</end_time_array10>
+			<end_time_array11>10415.9</end_time_array11>
+			<end_time_array12>10966.4</end_time_array12>
+			<end_time_array13>15030.4</end_time_array13>
+			<end_time_array14>15628.8</end_time_array14>
+			<end_time_array15>16465.6</end_time_array15>
+			<end_time_array16>16986.9</end_time_array16>
+			<end_time_array17>17658.7</end_time_array17>
+			<end_time_array18>18802.0</end_time_array18>
+			<end_time_array19>19534.1</end_time_array19>
+			<end_time_array20>23281.4</end_time_array20>
+			<end_time_array21>24722.6</end_time_array21>
+			<end_time_array22>25248.5</end_time_array22>
 		</end_time_array>
 </input>

@@ -12,10 +12,10 @@
 		<ic_mode>force</ic_mode> <!-- st_eq, force, or scaling -->
 		<rka_error>1.e-6</rka_error>
 		<index_dem>451</index_dem>
-		<T0>1.e+6</T0>
-		<n0>1.e+8</n0>
+		<T0>7.36e+5</T0>
+		<n0>1.927e+8</n0>
 	<!-- heating parameters -->
-		<heating_shape>triangle</heating_shape> <!-- triangle, square, or gaussian -->
+		<heating_shape>square</heating_shape> <!-- triangle, square, or gaussian -->
 		<num_events>23</num_events>
 		<t_start>10.0</t_start>
 		<t_pulse_half>50</t_pulse_half>

@@ -114,7 +114,7 @@ INPUTS:
 OUTPUTS:
 		struct Option opt--pointer to structure that holds input configuration
 	
-***********************************************************************************/
+***********************************************************************************/  
 
 struct Option *ebtel_input_setter(char *filename)
 {
@@ -123,6 +123,12 @@ struct Option *ebtel_input_setter(char *filename)
 	xmlNodePtr root;
 	//Create the document tree
 	doc = xmlParseFile(filename); 
+	//Check if the document can be parsed
+	if(doc == NULL)
+	{
+		printf("%s cannot be parsed or does not exist. Please specify another file.\n",filename);
+		exit(0);
+	}
 	//Point root at first child of the tree
 	root = doc->children;
 	

@@ -10,4 +10,3 @@ ebtel
 *.m
 #Ignore all config files
 /config/*
-!/config/ebtel_config.xml

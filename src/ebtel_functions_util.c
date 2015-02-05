@@ -114,7 +114,7 @@ INPUTS:
 OUTPUTS:
 		struct Option opt--pointer to structure that holds input configuration
 	
-***********************************************************************************/  
+***********************************************************************************/
 
 struct Option *ebtel_input_setter(char *filename)
 {

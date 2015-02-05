@@ -15,7 +15,7 @@ ebtel_functions_param.o: ebtel_functions_param.c
 	$(CC) -c  $(CFLAGS) $(IFLAGS) ebtel_functions_param.c
 
 ebtel_functions_util.o: ebtel_functions_util.c
-	$(CC) -c $(CFLAGS) $(IFLAGS) ebtel_functions_util.c
+	$(CC) -c $(CFLAGS) -w $(IFLAGS) ebtel_functions_util.c
 
 ebtel_functions_solvers.o: ebtel_functions_solvers.c
 	$(CC) -c  $(CFLAGS) $(IFLAGS) ebtel_functions_solvers.c

@@ -8,5 +8,7 @@ ebtel
 *.o
 #Ignore MATLAB files
 *.m
+#Ignore pyc files
+*.pyc
 #Ignore all config files
 /config/*

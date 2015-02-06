@@ -118,13 +118,14 @@ def run_ebtel(exec_directory,config_directory,**kwargs):
     
     #Check if we want to run a single file or a whole directory
     if 'config_file' in kwargs:
+        print "I see that you have specified a configuration file: ",config_directory+kwargs['config_file']
         #Get full output when running a single config file
-        output = subprocess.check_output([exec_directory+'ebtel',config_directory+kwargs['config_file']],shell=True)
+        output = subprocess.check_output([exec_directory+'ebtel',config_directory+kwargs['config_file']])
     else:
         for name in os.listdir(config_directory):
             if os.path.isfile(config_directory+name):
                 #Only get exit code when running many configurations
-                output = subprocess.call(['./ebtel',name],shell=True)
+                output = subprocess.call([exec_directory+'ebtel',config_directory+name])
     
     #Print the output of the subprocess call
     print output

@@ -249,10 +249,10 @@ double ebtel_heating_profile(double t, double t_start, double t_end, double h_na
 	double heat;
 	
 	//Choose which heating model to use
-	//1--triangular pulse (recommended, used in Paper I,II)
+	//1--triangular pulse
 	//2--square pulse 
 	//3--Gaussian pulse
-	//Additional heating functions should be added here.
+	//If you insist on hardcoding a heating function, it should be added here.
 	
 	if(strcmp(opt->heating_shape,"triangle") == 0)
 	{

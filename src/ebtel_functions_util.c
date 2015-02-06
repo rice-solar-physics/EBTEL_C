@@ -55,8 +55,11 @@ void ebtel_print_header(int n, struct Option *opt)
 	else if(strcmp(opt->heating_shape,"square")==0)
 	{printf("Heating: Square heating pulse\n");
 	}
-	else
+	else if(strcmp(opt->heating_shape,"gaussian")==0)
 	{printf("Heating: Gaussian heating pulse\n");
+	}
+	else
+	{printf("Invalid heating option\n");
 	}
 	if(strcmp(opt->solver,"rk4")==0)
 	{printf("Solving equations using fourth order Runge-Kutta routine\n");
@@ -64,28 +67,40 @@ void ebtel_print_header(int n, struct Option *opt)
 	else if(strcmp(opt->solver,"rka4")==0)
 	{printf("Solving equations using adaptive fourth order Runge-Kutta routine\n");
 	}
-	else 
+	else if(strcmp(opt->solver,"euler")==0)
 	{printf("Solving equations using Euler method\n");
+	}
+	else
+	{printf("Invalid solver option\n");
 	}
 	if(strcmp(opt->rad_option,"rtv")==0)
 	{printf("Using Rosner-Tucker-Vaiana Loss Function\n");
 	}
-	else
+	else if(strcmp(opt->rad_option,"rk")==0)
 	{printf("Using Raymond-Klimchuk Loss Function\n");
+	}
+	else
+	{printf("Invalid radiative loss option\n");
 	}
 	if(strcmp(opt->heat_flux_option,"dynamic")==0)
 	{printf("Using dynamic heat flux calculation\n");
 	}
-	else
+	else if(strcmp(opt->heat_flux_option,"classical")==0)
 	{printf("Using classical heat flux calculation\n");
+	}
+	else
+	{printf("Invalid heat flux option\n");
 	}
 	if(strcmp(opt->usage_option,"tr")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
 		if(strcmp(opt->dem_option,"old")==0)
 		{printf("Using old method to calculate DEM in the TR\n");
 		}
-		else
+		else if(strcmp(opt->dem_option,"new")==0)
 		{printf("Using new method to calculate DEM in the TR\n");
+		}
+		else
+		{printf("Invalid DEM calculation option\n");
 		}
 	}
 	if(strcmp(opt->ic_mode,"st_eq")==0)
@@ -94,8 +109,11 @@ void ebtel_print_header(int n, struct Option *opt)
 	else if(strcmp(opt->ic_mode,"force")==0)
 	{printf("Forcing initial conditions with T_0 = %f MK and n_0 = %f*10^8 cm^-3\n",opt->T0/pow(10,6),opt->n0/pow(10,8));
 	}
-	else 
+	else if(strcmp(opt->ic_mode,"scaling")==0)
 	{printf("Using scaling laws to calculate initial conditions\n");
+	}
+	else
+	{printf("Invalid initial conditions option\n");
 	}
 	printf("\n");
 }

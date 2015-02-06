@@ -182,8 +182,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	{
 		kpar[i] = *(kptr + i);
 	}
-	//Calculate radiative loss function.
-	rad = ebtel_rad_loss(1e+6,kpar,opt->rad_option);
 	
 	//Set up thermal conduction parameters
 	c1 = -TWO_SEVENTHS*KAPPA_0;

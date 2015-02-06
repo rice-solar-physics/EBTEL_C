@@ -110,7 +110,7 @@ int main (int argc, char *argv[])
 
 	//Read in parameters from file using xmllib library
 	//Set default filename
-	sprintf(filename_in,"config/ebtel_config.xml");
+	sprintf(filename_in,"../config/ebtel_config.xml");
 	//Check if a filename was specified at command line
 	for(i = 0; i<argc; i++)
 	{

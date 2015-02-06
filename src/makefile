@@ -6,7 +6,7 @@ IFLAGS=-I /opt/local/include/libxml2
 all: ebtel
 
 ebtel: ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_functions_heating.o ebtel_main.o 
-	$(CC) $(CFLAGS) ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_functions_heating.o ebtel_main.o -o ../ebtel $(LFLAGS)
+	$(CC) $(CFLAGS) ebtel_functions_loop.o ebtel_functions_param.o ebtel_functions_util.o ebtel_functions_solvers.o ebtel_functions_heating.o ebtel_main.o -o ../bin/ebtel $(LFLAGS)
 
 ebtel_functions_loop.o: ebtel_functions_loop.c
 	$(CC) -c  $(CFLAGS) $(IFLAGS) ebtel_functions_loop.c 
@@ -27,4 +27,4 @@ ebtel_main.o: ebtel_main.c
 	$(CC) -c $(CFLAGS) $(IFLAGS) ebtel_main.c
 
 clean: 
-	rm *.o ../ebtel
+	rm *.o ../bin/ebtel

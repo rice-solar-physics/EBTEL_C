@@ -47,7 +47,7 @@ To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also
 + `./ebtel ../config/new_ebtel_config_file.xml`  
 
 ##Configuring Input Parameters
-There are two input files that drive the EBTEL-C code: one that configures the initial conditions as well as options like which solver or radiative loss function to use and another one that configures options relating to the heating function.
+As stated above, EBTEL-C uses an XML configuration file system as opposed to a traditional text file input configuration. XML files allow for increased readability because the context of each parameter (the so-called "node name") is included in the input configuration. Additionally, the order of the input parameters in the configuration file is arbitrary since XML uses keywords rather than the order of the values to associate specific values with specific tags. A sample configuration file is provided in `config/ebtel_config.xml`. 
 
 Structure of `ebtel_parameters.txt`:
 

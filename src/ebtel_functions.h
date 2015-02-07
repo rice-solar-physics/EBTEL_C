@@ -43,8 +43,8 @@ struct Option {
 	int total_time;
 	int index_dem;
 	int num_events;
-	int loop_length;
 	int alpha;
+	double loop_length;
 	double energy_nt;
 	double T0;
 	double n0;

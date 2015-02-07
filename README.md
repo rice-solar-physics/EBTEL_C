@@ -17,7 +17,7 @@ Using a time-dependent heating function, EBTEL computes the plasma response of t
 EBTEL also calculates the differential emission measure as a function of temperature (_DEM(T)_) for the transition region and the corona. Details regarding the specific equations can be found in the above publications.
 
 ##Updates in EBTEL-C
-The EBTEL-C code offers several advantages over the original IDL code. Perhaps the biggest advantage is the time needed to compute a single run. A typical EBTEL-C run (_~20,000_ s) takes approximately 0.5 seconds as opposed to the _~10_ s that a an EBTEL-IDL run would need (Though it should be noted that this is still efficient compared to a _1D_ hydrodynamic simulation). This drastic increase is speed is due mostly to addition of an adaptive fourth-order Runge-Kutta routine to solve the EBTEL equations. The amount by which the step-size is allowed to vary can be adjusted to allow for greater accuracy or greater speed, whichever is more necessary for the user. 
+The EBTEL-C code offers several advantages over the original IDL code. Perhaps the biggest advantage is the time needed to compute a single run. A typical EBTEL-C run (_~20,000_ s) takes approximately 0.5 seconds as opposed to the _~10_ s that a an EBTEL-IDL run would need (Though it should be noted that this is still efficient compared to a _1D_ hydrodynamic simulation). This drastic increase in speed is due mostly to addition of an adaptive fourth-order Runge-Kutta routine to solve the EBTEL equations. The amount by which the step-size is allowed to vary can be adjusted to allow for greater accuracy or greater speed, whichever is more necessary for the user. 
 
 Additionally, EBTEL-C comes with a more flexible heating function that allows the user to use a variable number of uniform or randomly-occuring heating events or provide an input-file that specifies the heating profile. 
 
@@ -25,15 +25,26 @@ It should be noted that extensive testing has been carried out to ensure that EB
 
 ![Example EBTEL-C run showing resulting temperature and density profiles from an impulsive heating event](ebtelC_example.png)
 
-##Downloading and Compiling
-The best way to use obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally on your machine, to create a working copy type `git clone https://github.com/rice-solar-physics/EBTEL_repo`. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside of your working directory.
+##Dependencies
+EBTEL-C uses an XML configuration file system to minimize errors that result from poorly formatted input files and allow for easier input readability. EBTEL-C uses the XML C parser toolkit `libxml2` which provides a number of useful functions and datatypes for parsing structured XML files. The toolkit, which is essentially a collection of header files, can be obtained <a href="http://xmlsoft.org/downloads.html">here.</a> Additionally, Mac users can obtain the library using the MacPorts package manager by using `sudo port install libxml2`. Linux users can obtain the library via the built-in Aptitude package manager.
 
-If the user has a make utility (e.g. cmake) installed, the included makefile can be run simply by typing
-`make`
-at the command line. This creates the object files and links them into the executable 'ebtel' which can be run by typing
-`./ebtel`
-at the command line. The object files and executable can be cleaned up using the 'clean' option included in the makefile
-`make clean`
+<b>NOTE:</b> If you use the build procedure described below to compile EBTEL-C, you must first change the include location of the `libxml2` library in `src/makefile`. At the top of the file, the variable `IFLAGS` specifies the location of your local copy of the `libxml2` directory containing all of the necessary header files. For example, if the `libxml2` directory is in `/opt/local/include`, then the line in your makefile would be:
+
++ IFLAGS=-I /opt/local/include/libxml2
+
+You of course may also choose to compile EBTEL-C by hand or write your own `makefile`.
+
+##Downloading and Compiling
+Linux and Mac users should be able to compile and run EBTEL-C in the terminal. Windows users should compile and run the code in the Cygwin environment (<a href="https://www.cygwin.com/">available here</a>). The best way to obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally, create a working copy by typing `git clone https://github.com/rice-solar-physics/EBTEL_C.git` at the command line. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside of your working directory. You can also simply download a compressed file containing all of the source code if you do not wish to bother with the version control.
+
+To compile EBTEL-C, switch to the `build` directory and run `./build`. This uses a makefile in `src` to compile the source code and place an executable called `ebtel` in the `bin` directory. Additionally, running './clean' in `build` removes the executable and all of the object files created at compile time.
+
+To run EBTEL-C, simply run './ebtel' <b>in the `bin` directory.</b> EBTEL-C also accepts two optional command line arguments: (1) `quiet` which silences the header printed by default and (2) a custom config filename. If no filename is specified, the default filename `../config/ebtel_config.xml` will be used. Custom filename paths should all be relative to the EBTEL-C root directory. The order of the two arguments can be arbitrary. All of the following are valid calls of the EBTEL-C executable:
+
++ `./ebtel`
++ `./ebtel quiet`
++ `./ebtel quiet ../config/new_ebtel_config_file.xml`
++ `./ebtel ../config/new_ebtel_config_file.xml`  
 
 ##Configuring Input Parameters
 There are two input files that drive the EBTEL-C code: one that configures the initial conditions as well as options like which solver or radiative loss function to use and another one that configures options relating to the heating function.

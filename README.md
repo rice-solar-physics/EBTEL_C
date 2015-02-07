@@ -28,7 +28,7 @@ It should be noted that extensive testing has been carried out to ensure that EB
 ##Dependencies
 EBTEL-C uses an XML configuration file system to minimize errors that result from poorly formatted input files and allow for easier input readability. EBTEL-C uses the XML C parser toolkit `libxml2` which provides a number of useful functions and datatypes for parsing structured XML files. The toolkit, which is essentially a collection of header files, can be obtained <a href="http://xmlsoft.org/downloads.html">here.</a> Additionally, Mac users can obtain the library using the MacPorts package manager by using `sudo port install libxml2`. Linux users can obtain the library via the built-in Aptitude package manager.
 
-<span style="background-color:red">NOTE: If you use the build procedure described below to compile EBTEL-C, you must first change the include location of the `libxml2` library in `src/makefile`.</span> At the top of the file, the variable `IFLAGS` specifies the location of your local copy of the `libxml2` directory containing all of the necessary header files. For example, if the `libxml2` directory is in `/opt/local/include`, then the line in your makefile would be:
+<span style="background-color:red;">NOTE: If you use the build procedure described below to compile EBTEL-C, you must first change the include location of the `libxml2` library in `src/makefile`.</span> At the top of the file, the variable `IFLAGS` specifies the location of your local copy of the `libxml2` directory containing all of the necessary header files. For example, if the `libxml2` directory is in `/opt/local/include`, then the line in your makefile would be:
 
 + `IFLAGS=-I /opt/local/include/libxml2`
 

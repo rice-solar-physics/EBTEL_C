@@ -335,3 +335,78 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 	return return_array;
 }
 
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_calc_thermal_conduction
+
+FUNCTION_DESCRIPTION: This function calculates the thermal conduction, commonly denoted
+F_c. It uses the classical Spitzer-Harm approximation and, when specified, uses a flux limit
+approximation to prevent run-away cooling in situations where the density is not sufficient
+to support such a flux.
+
+INPUTS:
+	T--temperature (K)
+	n--density (cm^-3)
+	L--loop half-length (cm)
+	rad--radiative loss
+	r3--the c1 ebtel parameter (ratio of TR to coronal losses)
+	
+OUTPUTS:
+	flux_ptr--pointer to array that holds heat flux and equilibrium heat flux
+
+***********************************************************************************/
+
+double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad, double r3, char *heat_flux_option)
+{
+	
+	//Declare variables
+	double c1;
+	double c_sat;
+	double sat_limit;
+	double f_cl;
+	double f_sat;
+	double f;
+	double f_eq;
+	double r2 = ebtel_calc_c2();
+	double *flux_ptr = malloc(sizeof(double[2]));
+	
+	//Set up thermal conduction parameters (NEED TO CHANGE FOR e- AND ion)
+	c1 = -TWO_SEVENTHS*KAPPA_0;
+	c_sat = -1.5*pow(K_B,1.5)/pow(M_EL,0.5);
+	//sat_limit = 0.1667;
+	sat_limit = 1;	//HYDRAD value
+	
+	//Set up thermal conduction at the base
+	f_cl = c1*pow(T/r2,SEVEN_HALVES)/L;	//Classical heat flux calculation
+	
+	//Decide on whether to use classical or dynamic heat flux
+	if(strcmp(heat_flux_option,"classical")==0)
+	{
+		f = f_cl
+	}
+	else if(strcmp(heat_flux_option,"dynamic")==0)
+	{
+		//Compute flux limit
+		f_sat = sat_limit*c_sat*n*pow(T,1.5);
+		
+		//Compute final flux value		
+		f= -f_cl*f_sat/pow((pow(f_cl,2.) + pow(f_sat,2)),0.5);		
+	}
+	else
+	{
+		printf("Invalid heat flux option.\n");
+		exit(0);
+	}
+	
+	//Calculate equilibrium thermal conduction at base (-R_tr in Paper I)
+	f_eq = -r3*pow(n,2.)*rad*L;
+	
+	//Set the flux array
+	flux_ptr[0] = f;
+	flux_ptr[1] = f_eq;
+	
+	//Return the array
+	return flux_ptr;
+	
+}
+

@@ -51,6 +51,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	
 	//Pointers
 	double *kptr;
+	double *flux_ptr;
 	double *state_ptr;
 	double *log_tdem_ptr;
 	double *ic_ptr;
@@ -62,16 +63,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	double r3;
 	double r4;
 	double rad;
-	double c1;
-	double c_sat;
 	double sc;
-	double f_cl;
 	double f;
-	double f_sat;
-	double sat_limit;
+	double f_eq;
 	double r12;
 	double r12_tr;
-	double f_eq;
 	double pv;
 	double cf;
 	double t_max;
@@ -182,12 +178,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	{
 		kpar[i] = *(kptr + i);
 	}
-	
-	//Set up thermal conduction parameters
-	c1 = -TWO_SEVENTHS*KAPPA_0;
-	c_sat = -1.5*pow(K_B,1.5)/pow(9.1e-28,0.5);
-	//sat_limit = 0.1667;
-	sat_limit = 1;	//HYDRAD value
 	
 	/***********************************************************************************
 						Set up DEM in Transition Region
@@ -306,21 +296,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		{
 			par.flux_nt = 0.;
 		}
-		
-		//Set up thermal conduction at the base
-		f_cl = c1*pow(t/r2,SEVEN_HALVES)/loop_length;	//Classical heat flux calculation
-
-		//Decide on whether to use classical or dynamic heat flux
-		if(strcmp(opt->heat_flux_option,"classical")==0)
-		{
-			f = f_cl;
-		}
-		else
-		{
-			f_sat = sat_limit*c_sat*n*pow(t,1.5);
-			f = -f_cl*f_sat/pow((pow(f_cl,2.) + pow(f_sat,2)),0.5);
-		}
-		par.f = f;
 
 		//Calculate radiative loss
 		rad = ebtel_rad_loss(t,kpar,opt->rad_option);
@@ -335,9 +310,16 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		r12 = r1/r2;
 		r12_tr = r1_tr/r2;
 
-		//Calculate equilibrium thermal conduction at base (-R_tr in Paper I)
-		f_eq = -r3*pow(n,2)*rad*loop_length;
-		par.f_eq = f_eq;
+		//Calculate thermal conduction
+		flux_ptr = ebtel_calc_thermal_conduction(t, n, loop_length, rad, r3, opt->heat_flux_option);
+		f = *(flux_ptr + 0);
+		f_eq = *(flux_ptr + 1);
+		free(flux_ptr);
+		flux_ptr = NULL;
+		
+		//Set thermal conduction and equilibrium heat flux in the par structure
+		par.f = f;
+		par.f_eq = f_eq
 		
 		//Calculate pv quantity to be used in velocity calculation (enthalpy flux)
 		pv = 0.4*(f_eq - f - par.flux_nt);
@@ -440,7 +422,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 				//Check to see whether we are in the TR. If so, calculate dem_TR. Note: r12_tr*t[i] = T_0
 				if( tdem[j] < r12_tr*t )
 				{
-					//Make call to function that calculates DEM for TR using method specified by opt.dem_old.
+					//Make call to function that calculates DEM for TR
 					dem_tr[i][j] = ebtel_calc_tr_dem(tdem[j],n,v,p,loop_length,sc,rad_dem[j],f_array,opt->dem_option);
 					
 					//Check whether the dem is less than zero and set the flag if the condition holds
@@ -451,14 +433,19 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 						break;
 					}
 					
-					//Check whether it is classical or dynamic to set the f_ratio value
-					if(strcmp(opt->heat_flux_option,"classical") == 0)
+					if(strcmp(opt->usage_option,"rad_ratio")==0)
 					{
-						f_ratio = f/f_eq;
-					}
-					else
-					{
-						f_ratio = f_cl/f_sat;
+						//Check whether it is classical or dynamic to set the f_ratio value
+						if(strcmp(opt->heat_flux_option,"classical") == 0)
+						{
+							//Ratio of classical flux to equilibrium flux
+							f_ratio = f/f_eq;
+						}
+						else
+						{	
+							//Ratio of classical flux to saturated flux
+							f_ratio = (-TWO_SEVENTHS*KAPPA_0*pow(t/r2,SEVEN_HALVES)/loop_length)/f_sat;
+						}
 					}
 				}
 			}

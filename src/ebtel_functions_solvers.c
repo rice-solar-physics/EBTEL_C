@@ -355,8 +355,6 @@ option that can be chosen in ebtel_main.
  	double T;
  	double rad;
  	double r3;
- 	double f_cl;
- 	double f_sat;
  	double f;
  	double f_eq;
  	double q;
@@ -364,6 +362,7 @@ option that can be chosen in ebtel_main.
  	double dpdt;
  	double dndt;
  	double dTdt;
+	double *flux_ptr;
  	double *derivs = malloc(sizeof(double[3]));
  	int nk;
  	int i;
@@ -394,21 +393,12 @@ option that can be chosen in ebtel_main.
  	//Compute the coefficient r3
  	r3 = ebtel_calc_c1(T,n,par.L,rad);
  	
- 	//Compute heat flux. Can use one of two methods:
- 	//(1)classical or (0)dynamic heat flux
-	if(strcmp(opt->heat_flux_option,"dynamic")==0)
-	{
-		f = par.c1*pow(T/par.r2,3.5)/par.L;
-	}
-	else
-	{
-		f_cl = par.c1*pow(T/par.r2,3.5)/par.L;
-		f_sat = par.sat_limit*par.c_sat*n*pow(T,1.5);
-		f = -f_cl*f_sat/pow((pow(f_cl,2) + pow(f_sat,2)),0.5);
-	}
-	
-	//Compute equilibrium heat flux
-	f_eq = -r3*pow(n,2)*rad*par.L;
+ 	//Compute heat flux.
+	flux_ptr = ebtel_calc_thermal_conduction(T,n,par.L,rad,r3,opt->heat_flux_option);
+	f = *(flux_ptr + 0);
+	f_eq = *(flux_ptr + 1);
+	free(flux_ptr);
+	flux_ptr = NULL;
 	
 	//Set the heating depending on the time input. For tau_half, we average between the i and i+1 heating
 	if(tau_opt==0)

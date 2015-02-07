@@ -78,7 +78,7 @@ def plot_ebtel(data_directory,data_file,**kwargs):
     fs = 18
     #Plot the heating
     axes[0].plot(time,heat)
-    axes[0].set_ylabel(r'$q$ (erg cm$^{-3}$ s$^{-1}$)',fontsize=fs)
+    axes[0].set_ylabel(r'$h$ (erg cm$^{-3}$ s$^{-1}$)',fontsize=fs)
     axes[0].set_title(r'EBTEL Plasma Parameters',fontsize=fs)
     axes[0].set_xlim([time[0],time[-1]])
     #Plot the temperatures

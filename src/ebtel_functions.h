@@ -29,6 +29,7 @@ DESCRIPTION: This file gives the function prototypes for functions in defined in
 double K_B;
 double KAPPA_0;
 double M_P;
+double M_EL;
 double PI;
 double TWO_SEVENTHS;
 double SEVEN_HALVES;
@@ -130,6 +131,9 @@ double * ebtel_kpar_set(char *);
 
 //Declare prototype for ebtel_rad_loss of type double
 double ebtel_rad_loss( double, double[], char *);
+
+//Declare prototype for ebtel_calc_thermal_conduction of type double *
+double * ebtel_calc_thermal_conduction(double, double, double, double, double, char *);
 
 //Declare prototype for ebtel_calc_c1 of type double
 double ebtel_calc_c1(double, double, double, double);

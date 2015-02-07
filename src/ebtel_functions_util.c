@@ -295,7 +295,7 @@ void ebtel_file_writer(struct Option *opt, struct ebtel_params_st *params_final)
 	}
 	
 	//Open the file that we are going to write the data to 
-	sprintf(filename_out,"../data/ebteldatL%d_%s_%s_%s.txt",opt->loop_length,opt->usage_option,opt->heating_shape,opt->solver);	
+	sprintf(filename_out,"../data/ebteldatL%.*f_%s_%s_%s.txt",1,opt->loop_length,opt->usage_option,opt->heating_shape,opt->solver);	
 	out_file = fopen(filename_out,"wt");
 	
 	//The members of the structure params_final have now been set so we need to unpack them and set our arrays so that we can easily save our data.

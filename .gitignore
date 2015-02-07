@@ -12,3 +12,5 @@ ebtel
 *.pyc
 #Ignore all config files
 /config/*
+#Ignore starter file (keep sample)
+/bin/ebtel_starter.py

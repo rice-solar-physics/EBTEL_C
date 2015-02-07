@@ -374,7 +374,7 @@ double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad,
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(M_EL,0.5);
 	//sat_limit = 0.1667;
-	sat_limit = 1;	//HYDRAD value
+	sat_limit = 1.;	//HYDRAD value
 	
 	//Set up thermal conduction at the base
 	f_cl = c1*pow(T/r2,SEVEN_HALVES)/L;	//Classical heat flux calculation
@@ -382,7 +382,7 @@ double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad,
 	//Decide on whether to use classical or dynamic heat flux
 	if(strcmp(heat_flux_option,"classical")==0)
 	{
-		f = f_cl
+		f = f_cl;
 	}
 	else if(strcmp(heat_flux_option,"dynamic")==0)
 	{

@@ -106,9 +106,6 @@ struct rk_params {
 		double r3;
 		double q1;
 		double q2;
-		double sat_limit;
-		double c_sat;
-		double c1;
 		double flux_nt;
 		double f;
 		double f_eq;

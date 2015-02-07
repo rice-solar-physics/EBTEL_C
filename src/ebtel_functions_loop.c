@@ -262,9 +262,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	par.kpar = kptr;
 	par.r12 = r1/r2;
 	par.r2 = r2;
-	par.sat_limit = sat_limit;
-	par.c_sat = c_sat;
-	par.c1 = c1;
 	
 	//Set the initial timestep from opt structure.
 	//This will be static if we are not using our adaptive solver
@@ -319,7 +316,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		
 		//Set thermal conduction and equilibrium heat flux in the par structure
 		par.f = f;
-		par.f_eq = f_eq
+		par.f_eq = f_eq;
 		
 		//Calculate pv quantity to be used in velocity calculation (enthalpy flux)
 		pv = 0.4*(f_eq - f - par.flux_nt);
@@ -444,7 +441,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 						else
 						{	
 							//Ratio of classical flux to saturated flux
-							f_ratio = (-TWO_SEVENTHS*KAPPA_0*pow(t/r2,SEVEN_HALVES)/loop_length)/f_sat;
+							f_ratio = (-TWO_SEVENTHS*KAPPA_0*pow(t/r2,SEVEN_HALVES)/loop_length)/(1.0*-1.5*pow(K_B,1.5)/pow(M_EL,0.5)*n*pow(t,1.5));
 						}
 					}
 				}

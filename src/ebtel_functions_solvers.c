@@ -393,7 +393,7 @@ option that can be chosen in ebtel_main.
  	//Compute the coefficient r3
  	r3 = ebtel_calc_c1(T,n,par.L,rad);
  	
- 	//Compute heat flux.
+ 	//Compute heat flux
 	flux_ptr = ebtel_calc_thermal_conduction(T,n,par.L,rad,r3,opt->heat_flux_option);
 	f = *(flux_ptr + 0);
 	f_eq = *(flux_ptr + 1);

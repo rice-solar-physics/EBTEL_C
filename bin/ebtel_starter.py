@@ -12,7 +12,7 @@ heat_ext = root+'analysis/data/'
 
 #Create dictionary with desired parameters
 #Switches
-run_dictionary = {'usage_option':'no_tr','rad_option':'rk','dem_option':'new','heat_flux_option':'classical','solver':'euler','ic_mode':'force'}
+run_dictionary = {'usage_option':'no_tr','rad_option':'rk','dem_option':'new','heat_flux_option':'dynamic','solver':'rka4','ic_mode':'force'}
 #General input
 run_dictionary['total_time'] = 10000
 run_dictionary['tau'] = 1.0
@@ -28,8 +28,8 @@ run_dictionary['t_end_switch'] = 'uniform'
 run_dictionary['amp_switch'] = 'uniform'
 run_dictionary['num_events'] = 1
 run_dictionary['t_start'] = 0.0
-run_dictionary['t_pulse_half'] = 250.0
-run_dictionary['h_nano'] = 5.0e-3
+run_dictionary['t_pulse_half'] = 250
+run_dictionary['h_nano'] = 5.0e-4
 run_dictionary['h_back'] = 2.4e-8
 run_dictionary['mean_t_start'] = 5000
 run_dictionary['std_t_start'] = 2000

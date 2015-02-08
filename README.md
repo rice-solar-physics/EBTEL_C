@@ -39,7 +39,7 @@ Linux and Mac users should be able to compile and run EBTEL-C in the terminal. W
 
 To compile EBTEL-C, switch to the `build` directory and run `./build`. This uses a makefile in `src` to compile the source code and place an executable called `ebtel` in the `bin` directory. Additionally, running './clean' in `build` removes the executable and all of the object files created at compile time.
 
-To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also accepts two optional command line arguments: (1) `quiet` which silences the header printed by default and (2) a custom configuration filename. If no filename is specified, the default filename `../config/ebtel_config.xml` will be used. Custom filename paths should all be relative to the EBTEL-C root directory. The order of the two arguments can be arbitrary. All of the following are valid calls of the EBTEL-C executable:
+To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also accepts two optional command line arguments: (1) `quiet` which silences the header printed by default and (2) a custom configuration filename. If no filename is specified, the default filename `../config/ebtel_config.xml` will be used. Custom filename paths should all be relative to the EBTEL-C root directory. The order of the two arguments is arbitrary. All of the following are valid calls of the EBTEL-C executable:
 
 + `./ebtel`
 + `./ebtel quiet`

@@ -61,12 +61,12 @@ struct Option {
 	double *amp;
 	double *t_start_array;
 	double *t_end_array;
-	char *heat_flux_option; //previously dynamic
-	char *dem_option; //previously dem_old
-	char *rad_option; //previously rtv
-	char *usage_option; //previously usage
+	char *heat_flux_option;
+	char *dem_option; 
+	char *rad_option; 
+	char *usage_option; 
 	char *solver;
-	char *ic_mode; //previously mode
+	char *ic_mode; 
 	char *heating_shape;
 	char *start_file;
 	char *end_file;
@@ -89,11 +89,11 @@ struct ebtel_params_st {
 		double *papex;
 		double *coeff_1;
 		double *logtdem;
-		double *f_ratio;
-		double *rad_ratio;
 		double *cond;
 		double *rad_cor;
 		double *rad;
+		double *f_ratio;
+		double *rad_ratio;
 		double *dem_tr_log10mean;
 		double *dem_cor_log10mean; 
 		double *dem_tot_log10mean;

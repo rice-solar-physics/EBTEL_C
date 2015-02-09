@@ -6,10 +6,6 @@ AUTHOR Will Barnes
 
 DATE: created: 7 March 2014
 
-DESCRIPTION: This file contains all of the functions used to calculate important parameters
-(c1,c2,c3,lambda) in EBTEL. All functions are described below. For additional details, 
-see ebtel_main.c.
-
 ***********************************************************************************/
 
 //Include appropriate header file
@@ -19,12 +15,15 @@ see ebtel_main.c.
 
 FUNCTION NAME: ebtel_calc_c1
 
-FUNCTION_DESCRIPTION: This function calculates the ratio between radiative losses from the transition region and the corona The correspondence between the EBTEL code and Klimchuk et al.(2008) is c1=r3. Adapted from the function pro cacl_c1 in the original IDL EBTEL code. 
+FUNCTION_DESCRIPTION: This function calculates the ratio between radiative losses 
+from the transition region and the corona The correspondence between the EBTEL code 
+and Klimchuk et al.(2008) is c1=r3. Adapted from the function pro cacl_c1 in the original
+IDL EBTEL code. 
 
 INPUTS:
 	temp--temperature (K)
 	den--electron number density (cm^-3).
-	llength--loop half length (cm).
+	loop_length--loop half length (cm).
 	rad--radiative loss function
 	
 OUTPUTS:
@@ -32,7 +31,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double  ebtel_calc_c1( double temp, double den, double llength, double rad )
+double  ebtel_calc_c1( double temp, double den, double loop_length, double rad )
 {
 
 	//Declare variables
@@ -57,8 +56,8 @@ double  ebtel_calc_c1( double temp, double den, double llength, double rad )
 	r2 = ebtel_calc_c2();
 	
 	//Adjust values for gravity
-	r3_eqm_g = r3_eqm_0*exp(4*sin(PI/l_fact_eq)*llength/(PI*sc));
-	r3_radn_g = r3_rad_0*exp(4*sin(PI/l_fact_rad)*llength/(PI*sc));
+	r3_eqm_g = r3_eqm_0*exp(4*sin(PI/l_fact_eq)*loop_length/(PI*sc));
+	r3_radn_g = r3_rad_0*exp(4*sin(PI/l_fact_rad)*loop_length/(PI*sc));
 	
 	//Adjust for loss function
 	int lossOff = 1;	//Use this to turn off (0) the loss function argument
@@ -74,7 +73,7 @@ double  ebtel_calc_c1( double temp, double den, double llength, double rad )
 	}
 	
 	//Calculate over/under density
-	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(SEVEN_HALVES*r3_eqm*rad*pow(llength,2));
+	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(SEVEN_HALVES*r3_eqm*rad*pow(loop_length,2));
 	noneq2 = pow(den,2)/n_eq_2;
 	
 	//Use different values of r3 based on value of noneq2
@@ -98,12 +97,14 @@ double  ebtel_calc_c1( double temp, double den, double llength, double rad )
 
 FUNCTION NAME: ebtel_calc_c2
 
-FUNCTION_DESCRIPTION: This function calculates the parameter c2 which is the ratio of average temperature to apex temperature. Adapted from the function pro calc_c2 in the original IDL EBTEL code.
+FUNCTION_DESCRIPTION: This function calculates the parameter c2 which is the ratio of
+average temperature to apex temperature. Adapted from the function pro calc_c2 in the
+original IDL EBTEL code.
 
 INPUTS:
 	
 OUTPUTS:
-	c2--ratio of tbar to ta
+	c2--ratio of spatially averaged temperature to apex temperature
 
 ***********************************************************************************/
 
@@ -121,12 +122,14 @@ double ebtel_calc_c2( void )
 
 FUNCTION NAME: ebtel_calc_c3
 
-FUNCTION_DESCRIPTION: This function calculates the parameter c3 which is the ratio of base temperature to apex temperature. Adapted from the function pro calc_c3 in the original IDL EBTEL code.
+FUNCTION_DESCRIPTION: This function calculates the parameter c3 which is the ratio of 
+base temperature to apex temperature. Adapted from the function pro calc_c3 in the 
+original IDL EBTEL code.
 
 INPUTS:
 	
 OUTPUTS:
-	c3--ratio of t0 to ta
+	c3--ratio of base temperature to apex temperature
 
 ***********************************************************************************/
 
@@ -145,7 +148,8 @@ double ebtel_calc_c3(void)
 
 FUNCTION NAME: ebtel_calc_lambda
 
-FUNCTION_DESCRIPTION: This function calculates the scale height for a given temperature. Adapted from the function pro calc_lambda in the original IDL EBTEL code.
+FUNCTION_DESCRIPTION: This function calculates the scale height for a given temperature.
+Adapted from the function pro calc_lambda in the original IDL EBTEL code.
 
 INPUTS:
 	temp--temperature (K)
@@ -168,7 +172,8 @@ double ebtel_calc_lambda( double temp )
 
 FUNCTION NAME: ebtel_calc_abundance
 
-FUNCTION_DESCRIPTION: This function calculates the effective Boltzmann constant and ion mass given some He/H abundance.
+FUNCTION_DESCRIPTION: This function calculates the effective Boltzmann constant and 
+ion mass given some He/H abundance.
 
 INPUTS:
 	
@@ -347,16 +352,17 @@ to support such a flux.
 INPUTS:
 	T--temperature (K)
 	n--density (cm^-3)
-	L--loop half-length (cm)
+	loop_length--loop half-length (cm)
 	rad--radiative loss
 	r3--the c1 ebtel parameter (ratio of TR to coronal losses)
+	heat_flux_option--choose to use 'classical' or 'dynamic' heat flux calculation
 	
 OUTPUTS:
 	flux_ptr--pointer to array that holds heat flux and equilibrium heat flux
 
 ***********************************************************************************/
 
-double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad, double r3, char *heat_flux_option)
+double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, double rad, double r3, char *heat_flux_option)
 {
 	
 	//Declare variables
@@ -377,7 +383,7 @@ double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad,
 	sat_limit = 1.;	//HYDRAD value
 	
 	//Set up thermal conduction at the base
-	f_cl = c1*pow(T/r2,SEVEN_HALVES)/L;	//Classical heat flux calculation
+	f_cl = c1*pow(T/r2,SEVEN_HALVES)/loop_length;	//Classical heat flux calculation
 	
 	//Decide on whether to use classical or dynamic heat flux
 	if(strcmp(heat_flux_option,"classical")==0)
@@ -399,7 +405,7 @@ double * ebtel_calc_thermal_conduction(double T, double n, double L, double rad,
 	}
 	
 	//Calculate equilibrium thermal conduction at base (-R_tr in Paper I)
-	f_eq = -r3*pow(n,2.)*rad*L;
+	f_eq = -r3*pow(n,2.)*rad*loop_length;
 	
 	//Set the flux array
 	flux_ptr[0] = f;

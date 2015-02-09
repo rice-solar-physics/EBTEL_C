@@ -6,9 +6,6 @@ AUTHOR Will Barnes
 
 DATE: created: 7 March 2014
 
-DESCRIPTION: This file contains all of the major functions used in the EBTEL model.
-Additional functions can be found in ebtel_functions_util.c and ebtel_functions_param.c.
-Full function descriptions can be found below. See ebtel_main.c for additional details.
 ***********************************************************************************/
 
 //Include appropriate header file
@@ -26,11 +23,11 @@ differential emission measure of the transition region and corona can also be ca
 INPUTS:
 	ntot--total number of steps to be taken in the time integration
 	loop_length--half-length of the coronal loop (cm) (top of chrmosphere to apex)
-	total_time--total time over which the simulation will run (s)
    	opt--keyword structure; see ebtel_functions.h for a complete list of all structure members
 
 OUTPUTS:
    	param_setter--pointer structure of arrays for all loop parameters; see ebtel_functions.h for a complete list of all structure members
+
 ***********************************************************************************/
 
 struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct Option *opt)
@@ -136,7 +133,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	param_setter->rad = malloc(sizeof(double[ntot]));
 	param_setter->tau = malloc(sizeof(double[ntot]));
 	
-	if(strcmp(opt->usage_option,"rad_ratio") == 0 || strcmp(opt->usage_option,"tr") == 0)
+	if(strcmp(opt->usage_option,"rad_ratio") == 0 || strcmp(opt->usage_option,"dem") == 0)
 	{
 		if(strcmp(opt->usage_option,"rad_ratio") == 0)
 		{	
@@ -182,7 +179,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	/***********************************************************************************
 						Set up DEM in Transition Region
 	***********************************************************************************/
-	if (strcmp(opt->usage_option,"tr") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
+	if (strcmp(opt->usage_option,"dem") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
 	{	
 		//Define temperature arrays for plotting and calculating DEM
 		log_tdem_ptr = ebtel_linspace(0,opt->index_dem-1,opt->index_dem);		//set the linspace pointer using the ebtel_linspace function
@@ -284,7 +281,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		param_setter->heat[i+1] = par.q2;
 		param_setter->time[i+1] = time;
 		
-		//Set up non-thermal electron flux for usage option 3
+		//Set up non-thermal electron flux if the nt_ebeam option was selected
+		//Extensive testing for this option has not been carried out with EBTEL-C
 		if(strcmp(opt->usage_option,"nt_ebeam")==0)
 		{
 			par.flux_nt = loop_length*par.q2;
@@ -388,7 +386,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		
 		/*****Differential Emission Measure Calculation*****/
 		//Check usage variable to determine whether we are calculating TR DEM
-		if(strcmp(opt->usage_option,"tr") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
+		if(strcmp(opt->usage_option,"dem") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
 		{	
 			//Transition region
 			if(r12_tr*t > tdem[opt->index_dem-1])
@@ -525,7 +523,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	
 	//Format DEM data to be printed to file.
 	//Take weighted time average for each T_DEM
-	if(strcmp(opt->usage_option,"tr") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
+	if(strcmp(opt->usage_option,"dem") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
 	{
 		for(j = 0; j < opt->index_dem; j++)
 		{
@@ -551,7 +549,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	//Free up memory used by ebtel_kpar_set and ebtel_linspace functions
 	free(kptr);
 	kptr = NULL;
-	if(strcmp(opt->usage_option,"tr")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
+	if(strcmp(opt->usage_option,"dem")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
 		free(log_tdem_ptr);
 		log_tdem_ptr = NULL;
@@ -576,10 +574,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 
 FUNCTION NAME: ebtel_kpar_set
 
-FUNCTION DESCRIPTION: This function sets the kpar array to be used later in calculations of the radiative loss function. These are essentially the temperature bins used in calculating the radiative loss function. Either the RK or RTV method is used.
+FUNCTION DESCRIPTION: This function sets the kpar array to be used later in calculations
+of the radiative loss function. These are essentially the temperature bins used in 
+calculating the radiative loss function. Either the RK or RTV method is used.
 
 INPUTS:
-	rtv_opt--use either the RK or RTV method 
+	rad_option--use either the Raymond-Klimchuk or Rosner-Tucker-Vaina method 
 OUTPUTS:
 	*kpar--pointer for the kpar array
 
@@ -626,7 +626,7 @@ FUNCTION_DESCRIPTION: This function calculates the radiative loss function using
 INPUTS:
 	temp--temperature (K)
 	kpar--holds the kpar structure if it has been previously set; placeholder otherwise.
-	rtv_opt--option to use the RTV method (1) or the RK method (1).
+	rad_option--option to use the Rosner-Tucker-Vaiana (rtv) or the Raymond-Klimchuk (rk) method.
 	
 OUTPUTS:
 	rad--radiative loss function
@@ -667,7 +667,7 @@ double ebtel_rad_loss( double temp, double kpar[], char *rad_option)
         	rad = 0.0;
         }
 	}
-	else
+	else if(strcmp(rad_option,"rtv") == 0)
 	{
 		//RTV loss function
 		if (temp > kpar[5]){ 
@@ -692,6 +692,11 @@ double ebtel_rad_loss( double temp, double kpar[], char *rad_option)
         	rad = 0.0;
         }
 	}
+	else
+	{
+		printf("Invalid radiative loss function option.\n");
+		exit(0);
+	}
 	
 	return rad;
 }
@@ -713,7 +718,7 @@ INPUTS:
 	sc--scale height at temperature T_i
 	rad_dem--radiative loss in the transition region
 	f_a--array holding f,f_eq,cf
-	option--option to either use old (1) or new method (0)
+	option--option to either use old or new method for calculating the TR DEM
 	
 OUTPUTS:
 	dem_tr--differential emission measure in the transition region
@@ -747,7 +752,7 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 		dtds = ebtel_max_val(dtds1,dtds2);
 		dem_tr = 2.0*p2kt2/dtds;		//factor of 2 for both legs of the loop
 	}
-	else
+	else if(strcmp(option,"old")==0)
 	{
 		/*********Old Method*********/
 		//Declare variables
@@ -767,6 +772,11 @@ double ebtel_calc_tr_dem(double tdem, double n, double v, double p, double L, do
 
 		//Calculate DEM for the transition region
 		dem_tr = 2.*(f_a[0]*dem_ev + f_a[2]*dem_eq - f_a[1]*dem_con)/(f_a[0] + f_a[2] - f_a[1]); //factor of 2 for both legs
+	}
+	else
+	{
+		printf("Invalid TR DEM calculation option\n");
+		exit(0);
 	}
 	
 	return dem_tr;

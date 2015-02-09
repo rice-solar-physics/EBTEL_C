@@ -6,10 +6,6 @@ AUTHOR Will Barnes
 
 DATE: created: 19 April 2014
 
-DESCRIPTION: This file contains functions used for the Euler and fourth-order Runge-Kutta
-solvers implemented in EBTEL. An additional routine is included for the adaptive step 
-option that can be chosen in ebtel_main.
-
 ***********************************************************************************/
 
 //Include appropriate header file
@@ -17,18 +13,18 @@ option that can be chosen in ebtel_main.
 
  /**********************************************************************************
  
- Function name: ebtel_euler
+ FUNCTION NAME: ebtel_euler
  
- Function description: This function implements a Euler in EBTEL. It uses a simple 
+ FUNCTION DESCRIPTION: This function implements a Euler in EBTEL. It uses a simple 
  Euler stepper method to solve our simplified hydrostatic equations.
   
- Input
+ INPUTS:
 	s--vector that stores the current state of the system
 	tau--timestep
 	par--structure that holds necessary parameters
 	opt--structure that holds necessary input parameters
  
- Return
+ OUTPUTS:
  	s_out--updated state vector
 	
  *********************************************************************************/
@@ -74,14 +70,14 @@ option that can be chosen in ebtel_main.
  
   /**********************************************************************************
  
- Function name: ebtel_rk
+ FUNCTION NAME: ebtel_rk
  
- Function description: This function implements a fourth-order Runge-Kutta routine in EBTEL. It will
+ FUNCTION DESCRIPTION: This function implements a fourth-order Runge-Kutta routine in EBTEL. It will
  call the ebtel_rk_derivs function to compute derivatives of the necessary functions.
  This implementation is based on a routine written in MATLAB by A. L. Garcia (see 
  Numerical Methods for Physics, Prentice Hall, 1994).
   
- Input
+ INPUTS:
 	s--vector that stores the current state of the system
 	n--number of variables in vector s
 	t--current time
@@ -89,7 +85,7 @@ option that can be chosen in ebtel_main.
 	par--structure that holds necessary parameters
 	opt--structure that contains necessary input parameters	
  
- Return
+ OUTPUTS:
  	s_out--updated state vector
 	
  *********************************************************************************/
@@ -169,14 +165,14 @@ option that can be chosen in ebtel_main.
  
  /**********************************************************************************
  
- Function name: ebtel_rk_adapt
+ FUNCTION NAME: ebtel_rk_adapt
  
- Function description: This function implements an adaptive step size for the Runge-Kutta
+ FUNCTION DESCRIPTION: This function implements an adaptive step size for the Runge-Kutta
  routine used in EBTEL. It returns a structure pointer containing the current time, timestep,
  and state vector. It calls the ebtel_rk function. This implementation is based on a routine
  written in MATLAB by A. L. Garcia (see Numerical Methods for Physics, Prentice Hall, 1994). 
   
- Input
+ INPUTS:
  	s--state vector
  	n--size of s
  	t--current time
@@ -185,7 +181,7 @@ option that can be chosen in ebtel_main.
  	par--structure used in computing derivatives
  	opt--structure containing input options
 		
- Return
+ OUTPUTS:
 	rka_params--structure containing updated time, state, and timestep
 	
 *********************************************************************************/
@@ -325,13 +321,13 @@ option that can be chosen in ebtel_main.
  
 /**********************************************************************************
  
- Function name: ebtel_rk_derivs
+ FUNCTION NAME: ebtel_rk_derivs
  
- Function description: This function solves the derivatives for the EBTEL model. More
+ FUNCTION DESCRIPTION: This function solves the derivatives for the EBTEL model. More
  specifically, it computes dpdt, dndt, dTdt at some given time t and returns these 
  derivatives to the ebtel_rk function so that the RK routine can be executed.
   
- Input
+ INPUTS:
 	s--vector that stores the current state of the system
 	t--current time
 	tau_opt--tells what kind of time step is being used to appropriately compute heating
@@ -341,7 +337,7 @@ option that can be chosen in ebtel_main.
 	par--structure that holds necessary parameters
  	opt--structre that holds input parameters
  
- Return
+ OUTPUTS:
  	derivs--updated derivative state vector
 	
  *********************************************************************************/
@@ -374,12 +370,10 @@ option that can be chosen in ebtel_main.
  	
  	//Make the kpar array
  	if(strcmp(opt->rad_option,"rk")==0)
- 	{
- 		nk = 7;
+ 	{nk = 7;
  	}
  	else
- 	{
- 		nk = 6;
+ 	{nk = 6;
  	}
  	double kpar[nk];
  	for(i=0; i<nk; i++)

@@ -23,6 +23,7 @@ of the heating events as specified by the user.
 
 INPUTS:
 	opt--pointer to option structure
+
 OUTPUTS:
 
 ***********************************************************************************/

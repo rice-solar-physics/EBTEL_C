@@ -6,16 +6,12 @@ AUTHOR Will Barnes
 
 DATE: created: 7 March 2014
 
-DESCRIPTION: This file makes the function call to the primary function in ebtel_functions.c.
-It first defines some basic parameters of the EBTEL model including the input parameters as well
-as the constants used throughout. Following the necessary function call, it saves the data.
-
 -------------------------------------------------------------------------------------
 EBTEL (Enthalpy Based Thermal Evolution of Loops) computes 0-D
 hydrodynamic equations.  This software was originally developed by Klimchuk et al,. (2008) and
 later improved upon by Cargill et al., (2012a,b). It solves the set of hydrostatic equations by 
 averaging over the loop half-length and then integrating in time. Additional details are available
-in the two references given above.
+in the references given above.
 
 Note on variable correspondence with Klimchuk et al. (2008)
    r1 = c_3
@@ -55,13 +51,13 @@ MISCELLANEOUS COMMENTS:
       region, where t is the average coronal temperature.
 
 USAGE:
-(set in usage field of opt parameter structure. See input list above.
-(1)--include transition region DEM
+(set in usage field of opt parameter structure. See input list above.)
+dem--include transition region DEM
      additional outputs: dem_tr, dem_cor, logtdem (recommended)
-(2)--exclude transition region DEM (faster)
-(3)--include nonthermal electron energy flux
+no_dem--exclude transition region DEM (faster)
+nt_ebeam--include nonthermal electron energy flux
      additional inputs: flux_nt, energy_nt
-(4)--compute rad_ratio (requires longer compute time)
+rad_ratio--compute rad_ratio (requires longer compute time)
      additional outputs: dem_tr, dem_cor, logtdem, f_ratio, rad_ratio 
 
 ************************************************************************************/

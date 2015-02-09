@@ -55,7 +55,7 @@ As stated above, EBTEL-C uses an XML configuration file system as opposed to a t
   + loop_length (Mm) -- loop half-length; measured from the base of the transition region to the loop apex
   + usage_option -- `dem` include DEM calculation, `no_dem` leave out DEM calculation, `nt_ebeam` include non-thermal electron heating term in pressure equation (this option has NOT been extensively tested with EBTEL-C), `rad_ratio` compute radiation and heat flux ratios and perform DEM calculation. Note that the first and fourth options require longer compute times. If you are only interested in the temperature and density profiles, the second option (`no_dem`) is the recommended choice.
   + rad_option -- choose how to calculate the radiative loss function: `rk` use Raymond-Klimchuk loss function or `rtv` use Rosner-Tucker-Vaiana loss function
-  + dem_option -- method for calculating transition region DEM; use either the `new` or `old` methodl; see <a href="http://adsabs.harvard.edu/abs/2008ApJ...682.1351K">Klimchuk et al. (2008)</a> for details on the differences between these two options
+  + dem_option -- method for calculating transition region DEM; use either the `new` or `old` method; see <a href="http://adsabs.harvard.edu/abs/2008ApJ...682.1351K">Klimchuk et al. (2008)</a> for details on the differences between these two options
   + heat_flux_option -- EBTEL uses the Spitzer-Harm formula to calculate the heat flux; a flux limiter can be applied by using the `dynamic` option; to calculate the heat flux without the flux limit, use the `classical` option.
   + solver -- three different solvers are available in EBTEL-C: `euler` Euler solver, `rk4` 4th-order Runge-Kutta solver, `rka4` adaptive method coupled to 4th-order Runge-Kutta solver.
   + ic_mode -- choose how to calculate the initial conditions: `st_eq` static equilibrium calculation, `force` initial conditions read in from input file, `scaling` scaling laws calculation.
@@ -70,13 +70,13 @@ As stated above, EBTEL-C uses an XML configuration file system as opposed to a t
   + t_pulse_half (s) -- duration of heating event divided by two; for a triangular pulse, this is the time between the start of the event and when the heating amplitude reaches its maximum; for a square pulse, this is just half of the event duration; for a gaussian pulse. this is the sigma parameter.
   + h_back (erg cm^-3 s^-1) -- background heating value
   + t_start_switch -- `uniform`: gives `num_events` heating events beginning at `t_start` separated by 2*`t_pulse_half`; `normal`: selects N start times from a normal distribution with the given mean `mean_t_start` and standard deviation `std_t_start`; `file`: read in start times from values in the `start_time_array` node
-  + mean_t_start (s) -- mean value of normally distributed heating event start times
-  + std_t_start (s) -- standard deviation of normally distributed start times
+    + mean_t_start (s) -- mean value of normally distributed heating event start times
+    + std_t_start (s) -- standard deviation of normally distributed start times
   + amp_switch -- `uniform`: gives `num` heating events with uniform amplitude `h_nano`; `power_law`: selects `num_events` heating amplitudes from a power law distribution with index `alpha` and bounds [`amp0`,`amp1`]; `file`: read in amplitudes from values in the `amp_array` node.
-  + h_nano (erg cm^-3 s^-1) -- maximum heating amplitude.
-  + alpha -- power law index for heating event amplitude distribution
-  + amp0 (erg cm^-3 s^-1) -- lower bound on amplitude power law distribution
-  + amp1 (erg cm^-3 s^-1) -- upper bound on amplitude power law distribution
+    + h_nano (erg cm^-3 s^-1) -- maximum heating amplitude.
+    + alpha -- power law index for heating event amplitude distribution
+    + amp0 (erg cm^-3 s^-1) -- lower bound on amplitude power law distribution
+    + amp1 (erg cm^-3 s^-1) -- upper bound on amplitude power law distribution
   + t_end_switch -- `uniform`: computes end time by adding 2*`t_pulse_half` to each start time giving uniform width to each event; `file`: reads in end times from values in the `end_time_array` node.
 
 ##Reporting Bugs and Issues

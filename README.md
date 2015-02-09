@@ -47,11 +47,11 @@ To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also
 + `./ebtel ../config/new_ebtel_config_file.xml`  
 
 ##Configuring Input Parameters
-As stated above, EBTEL-C uses an XML configuration file system as opposed to a traditional text file input configuration. XML files allow for increased readability because the context of each parameter (the so-called "node name") is included in the input configuration. Additionally, the order of the input parameters in the configuration file is arbitrary since XML uses keywords rather than the order of the values to associate specific values with specific tags. A sample configuration file is provided in `config/ebtel_config.xml`. 
+As stated above, EBTEL-C uses an XML configuration file system as opposed to a traditional text file input configuration. XML files allow for increased readability because the context of each parameter (the so-called "node name") is included in the input configuration. Additionally, the order of the input parameters in the configuration file is arbitrary since XML uses keywords rather than the order of the values to associate specific values with specific tags. A sample configuration file is provided in `config/ebtel_config.xml`. Below is a list of the input parameters set by the input configuration file along with a brief description. 
 
-Structure of `ebtel_parameters.txt`:
++ total_time (s) -- the total amount of time allotted for the simulation
+..* test sub list
 
-1. total time (in seconds)
 2. time step (in seconds)--for the Euler method, this is true for every step; for the adaptive method, this is only the initial time step.
 3. heating shape--(1) triangular heating pulse, (2) square heating pulse, (3) Gaussian heating pulse
 4. loop half-length (in Mm)--loop length measured from the base of the transition region to the loop apex
@@ -68,8 +68,6 @@ Structure of `ebtel_parameters.txt`:
 15. error--value (default 1e-6) that defines the allowed error tolerance in the adaptive time step routine.
 16. T0 (in K)--temperature at time _t=0_s
 17. n0 (in cm^-3)--number density at time _t=0_s
-
-Structure of `ebtel_heating_parameters.txt`:
 
 1. N--number of heating events
 2. hback (in ergs cm^-3 s^-1)--value of background heating 

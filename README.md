@@ -49,39 +49,35 @@ To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also
 ##Configuring Input Parameters
 As stated above, EBTEL-C uses an XML configuration file system as opposed to a traditional text file input configuration. XML files allow for increased readability because the context of each parameter (the so-called "node name") is included in the input configuration. Additionally, the order of the input parameters in the configuration file is arbitrary since XML uses keywords rather than the order of the values to associate specific values with specific tags. A sample configuration file is provided in `config/ebtel_config.xml`. Below is a list of the input parameters set by the input configuration file along with a brief description. 
 
-+ total_time (s) -- the total amount of time allotted for the simulation
-  * test sub list
-
-2. time step (in seconds)--for the Euler method, this is true for every step; for the adaptive method, this is only the initial time step.
-3. heating shape--(1) triangular heating pulse, (2) square heating pulse, (3) Gaussian heating pulse
-4. loop half-length (in Mm)--loop length measured from the base of the transition region to the loop apex
-5. usage--(1) include DEM calculation, (2) leave out DEM calculation, (3) include non-thermal electron heating, (4)compute radiation ratio and DEM calculation. Note that options (1) and (4) result in ~25% increase in computation time.
-6. radiative loss option--(0)use Raymond-Klimchuk loss function, (1) use Rosner-Tucker-Vaiana loss function
-7. DEM option--(0) use new DEM calculation, (1) use old DEM calculation
-8. flux option--(0) use classical heat flux calculation, (1) include flux limiting in heat flux calculation
-9. solver--(0) use Euler solver, (1)use 4th-order Runge-Kutta solver, (2) use adaptive method coupled to 4th-order Runge-Kutta solver.
-10. input mode--(0) initial conditions calculation using static equilibrium, (1) initial conditions read in from input file, (2) initial conditions calculated using scaling laws.
-11. heating amplitude (erg cm^-3 s^-1)--maximum value of heating function.
-12. pulse half-time (in seconds)--duration of heating event divided by two.
-13. start time (in seconds)--time at which heating event begins
-14. DEM index--index that defines temperature range over which the DEM is computed.
-15. error--value (default 1e-6) that defines the allowed error tolerance in the adaptive time step routine.
-16. T0 (in K)--temperature at time _t=0_s
-17. n0 (in cm^-3)--number density at time _t=0_s
-
-1. N--number of heating events
-2. hback (in ergs cm^-3 s^-1)--value of background heating 
-3. start time mean (in seconds)--mean value of normally distributed start times
-4. start time standard deviation (in seconds)--standard deviation of normally distributed start times
-5. alpha--power law index for event amplitude distribution
-6. amp0 (in ergs cm^-3 s^-1)--lower bound on amplitude power law distribution
-7. amp1 (in ergs cm^-3 s^-1)--upper bound on amplitude power law distribution
-8. start time option--(uniform): gives N heating events starting at the given start time separated by 2*pulse-half-time; (random): selects N start times from a normal distribution with the given mean and standard deviation. The actual number of events is given by the number of start times that fall within [0,total time]; (file): read in start times from given file.
-9. amplitude option--uniform: gives N heating events with uniform amplitude as specified by the parameter file; random: selects N heating amplitudes from a power law distribution with index alpha; file: read in amplitudes from given file.
-10. end time option--(uniform): computes end time by adding 2*pulse half time to each start time giving uniform width to each event; (file): reads in the end times from given file.
-11. start file--if file option is selected for start time option, then the start times are read in using this filename
-12. amp file--if file option is selected for amplitude option, the amplitudes are read in using this filename
-13. end file--if file option is selected for end time option, the end times are read in using this filename
++ General input parameters
+  + total_time (s) -- the total amount of time allotted for the simulation
+  + tau (s) -- time step; static for Euler and Runge-Kutta solvers; starting time step for adaptive Runge-Kutta solver
+  + loop_length (Mm) -- loop half-length; measured from the base of the transition region to the loop apex
+  + usage_option -- `dem` include DEM calculation, `no_dem` leave out DEM calculation, `nt_ebeam` include non-thermal electron heating term in pressure equation (this option has NOT been extensively tested with EBTEL-C), `rad_ratio` compute radiation and heat flux ratios and perform DEM calculation. Note that the first and fourth options require longer compute times. If you are only interested in the temperature and density profiles, the second option (`no_dem`) is the recommended choice.
+  + rad_option -- choose how to calculate the radiative loss function: `rk` use Raymond-Klimchuk loss function or `rtv` use Rosner-Tucker-Vaiana loss function
+  + dem_option -- method for calculating transition region DEM; use either the `new` or `old` methodl; see <a href="http://adsabs.harvard.edu/abs/2008ApJ...682.1351K">Klimchuk et al. (2008)</a> for details on the differences between these two options
+  + heat_flux_option -- EBTEL uses the Spitzer-Harm formula to calculate the heat flux; a flux limiter can be applied by using the `dynamic` option; to calculate the heat flux without the flux limit, use the `classical` option.
+  + solver -- three different solvers are available in EBTEL-C: `euler` Euler solver, `rk4` 4th-order Runge-Kutta solver, `rka4` adaptive method coupled to 4th-order Runge-Kutta solver.
+  + ic_mode -- choose how to calculate the initial conditions: `st_eq` static equilibrium calculation, `force` initial conditions read in from input file, `scaling` scaling laws calculation.
+  + rka_error -- value that defines the allowed error tolerance in the adaptive time step routine; 1.0e-6 is the recommended value
+  + index_dem -- index that defines temperature range over which the transition region DEM is computed; 451 is the recommended value.
+  + T0 (K) -- temperature at time _t=0_ s
+  + n0 (cm^-3) -- number density at time _t=0_ s
++ Heating parameters
+  + heating_shape -- shape of the heating pulse; three possible options: `triangle`, `square`, or `gaussian`
+  + num_events -- number of heating events (Note that The actual number of events is given by the number of start times that fall within [0,total time])
+  + t_start (s) -- time at which the first heating event begins
+  + t_pulse_half (s) -- duration of heating event divided by two; for a triangular pulse, this is the time between the start of the event and when the heating amplitude reaches its maximum; for a square pulse, this is just half of the event duration; for a gaussian pulse. this is the sigma parameter.
+  + h_back (erg cm^-3 s^-1) -- background heating value
+  + t_start_switch -- `uniform`: gives `num_events` heating events beginning at `t_start` separated by 2*`t_pulse_half`; `normal`: selects N start times from a normal distribution with the given mean `mean_t_start` and standard deviation `std_t_start`; `file`: read in start times from values in the `start_time_array` node
+  + mean_t_start (s) -- mean value of normally distributed heating event start times
+  + std_t_start (s) -- standard deviation of normally distributed start times
+  + amp_switch -- `uniform`: gives `num` heating events with uniform amplitude `h_nano`; `power_law`: selects `num_events` heating amplitudes from a power law distribution with index `alpha` and bounds [`amp0`,`amp1`]; `file`: read in amplitudes from values in the `amp_array` node.
+  + h_nano (erg cm^-3 s^-1) -- maximum heating amplitude.
+  + alpha -- power law index for heating event amplitude distribution
+  + amp0 (erg cm^-3 s^-1) -- lower bound on amplitude power law distribution
+  + amp1 (erg cm^-3 s^-1) -- upper bound on amplitude power law distribution
+  + t_end_switch -- `uniform`: computes end time by adding 2*`t_pulse_half` to each start time giving uniform width to each event; `file`: reads in end times from values in the `end_time_array` node.
 
 ##Reporting Bugs and Issues
 If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will (dot) t (dot) barnes (at) rice (dot) edu`.

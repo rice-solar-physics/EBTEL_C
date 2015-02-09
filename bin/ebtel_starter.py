@@ -12,25 +12,25 @@ heat_ext = root+'analysis/data/'
 
 #Create dictionary with desired parameters
 #Switches
-run_dictionary = {'usage_option':'no_tr','rad_option':'rk','dem_option':'new','heat_flux_option':'dynamic','solver':'rka4','ic_mode':'force'}
+run_dictionary = {'usage_option':'no_dem','rad_option':'rk','dem_option':'new','heat_flux_option':'dynamic','solver':'rka4','ic_mode':'force'}
 #General input
-run_dictionary['total_time'] = 10000
+run_dictionary['total_time'] = 26000
 run_dictionary['tau'] = 1.0
-run_dictionary['loop_length'] = 96.9
+run_dictionary['loop_length'] = 25.0
 run_dictionary['rka_error'] = 1.0e-6
 run_dictionary['index_dem'] = 451
-run_dictionary['T0'] = 2.39384e+5
-run_dictionary['n0'] = 1.99342e+5
+run_dictionary['T0'] = 1.0e+6
+run_dictionary['n0'] = 1.0e+8
 #Heating parameters
-run_dictionary['heating_shape'] = 'triangle'
-run_dictionary['t_start_switch'] = 'uniform'
-run_dictionary['t_end_switch'] = 'uniform'
-run_dictionary['amp_switch'] = 'uniform'
-run_dictionary['num_events'] = 1
+run_dictionary['heating_shape'] = 'square'
+run_dictionary['t_start_switch'] = 'file'
+run_dictionary['t_end_switch'] = 'file'
+run_dictionary['amp_switch'] = 'file'
+run_dictionary['num_events'] = 23
 run_dictionary['t_start'] = 0.0
 run_dictionary['t_pulse_half'] = 250
-run_dictionary['h_nano'] = 5.0e-4
-run_dictionary['h_back'] = 2.4e-8
+run_dictionary['h_nano'] = 5.0e-3
+run_dictionary['h_back'] = 2.4e-6
 run_dictionary['mean_t_start'] = 5000
 run_dictionary['std_t_start'] = 2000
 run_dictionary['alpha'] = -2
@@ -52,5 +52,5 @@ ew.print_xml_config(run_dictionary,config_file=root+'config/'+config_file)
 ew.run_ebtel(root+'bin/','../config/',config_file=config_file)
 
 #Plot the results
-ew.plot_ebtel(root+'data/',data_file)
+ew.plot_ebtel(root+'data/',data_file,print_fig_filename='/Users/willbarnes/Desktop/ebtel_C_example.eps')
 

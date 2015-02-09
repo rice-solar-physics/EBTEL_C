@@ -96,7 +96,7 @@ def plot_ebtel(data_directory,data_file,**kwargs):
     axes[1].plot(time,temp/10**6,label=r'$T$')
     axes[1].plot(time,temp_apex/10**6,'r--',label=r'$T_a$')
     axes[1].set_ylabel(r'$T$  (MK)',fontsize=fs)
-    axes[1].legend(loc=1,fontsize='small')
+    axes[1].legend(loc=1)
     axes[1].set_xlim([time[0],time[-1]])
     axes[1].locator_params(nbins=5)
     #Plot the densities
@@ -106,7 +106,7 @@ def plot_ebtel(data_directory,data_file,**kwargs):
     axes[2].set_ylabel(r'$n$  ($10^{8}$ cm$^{-3}$)',fontsize=fs)
     axes[2].set_xlim([time[0],time[-1]])
     axes[2].locator_params(nbins=5)
-    axes[2].legend(loc=1,fontsize='small')
+    axes[2].legend(loc=1)
 
     #Check if output filename is specified
     if 'print_fig_filename' in kwargs:

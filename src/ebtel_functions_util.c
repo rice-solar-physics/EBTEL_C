@@ -41,7 +41,7 @@ void ebtel_print_header(int n, struct Option *opt)
 	printf("------\n");
 	printf("Total time: %d s\n",opt->total_time);
 	printf("Time step: %f s\n",opt->tau);
-	printf("Loop half-length: %d Mm\n",opt->loop_length);
+	printf("Loop half-length: %f Mm\n",opt->loop_length);
 	printf("Usage option(see documentation): %s\n",opt->usage_option);
 	printf("Heating pulse shape: %s\n",opt->heating_shape);
 	if(strcmp(opt->solver,"rk4")==0)

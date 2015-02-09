@@ -23,7 +23,7 @@ Additionally, EBTEL-C comes with a more flexible heating function that allows th
 
 It should be noted that extensive testing has been carried out to ensure that EBTEL-C solutions match those of the EBTEL-IDL solutions such that no additional error is introduced in the translation.
 
-![Example EBTEL-C run showing resulting temperature and density profiles from an impulsive heating event](ebtelC_example.png)
+![Example EBTEL-C run showing resulting temperature and density profiles from 23 impulsive heating events](ebtel_C_example.png)
 
 ##Dependencies
 EBTEL-C uses an XML configuration file system to minimize errors that result from poorly formatted input files and allow for easier input readability. EBTEL-C uses the XML C parser toolkit `libxml2` which provides a number of useful functions and datatypes for parsing structured XML files. The toolkit, which is essentially a collection of header files, can be obtained <a href="http://xmlsoft.org/downloads.html">here.</a> Additionally, Mac users can obtain the library using the MacPorts package manager by using `sudo port install libxml2`. Linux users can obtain the library via the built-in Aptitude package manager.
@@ -84,7 +84,19 @@ As stated above, EBTEL-C uses an XML configuration file system as opposed to a t
   + amp_array -- node that contains amplitudes to read in if `amp_switch` is set to `file`
   + end_time_array -- node that contains end times to be read in if `t_end_switch` is set to `file`
   
-Note that when reading in start time, end time, or amplitude arrays from the array nodes, the format for the values should be `<parent_tag#>value</parent_tag#>`. For example, if you wanted to read in the start time for the first heating event as occurring at 100 s, inside of the `start_time_array` node, you should place `<start_time_array0>100</start_time_array0>`. A complete example is provided in `config/ebtel_config.xml`. 
+Note that when reading in start time, end time, or amplitude arrays from the array nodes, the format for the values should be `<parent_tag#>value</parent_tag#>`. For example, if you wanted to read in the start time for the first heating event as occurring at 100 s, inside of the `start_time_array` node, you should place `<start_time_array0>100</start_time_array0>`. A complete example is provided in `config/ebtel_config.xml`.
+
+##Wrappers
+To assist in the printing of configuration files and plotting of results, I have provided a few simple Python routines (located in `bin/`) that print an XML configuration file, run the `ebtel` executable, and then plot the resulting temperature, density, and heating profiles. Note that these routines require both the <a href="http://matplotlib.org/">Matplotlib</a> and <a href="http://www.numpy.org/">Numpy</a> Python libraries.
+
+The `bin/ebtel_wrapper.py` script provides four different functions:
+
++ `plot_ebtel_dem`--plots the coronal, TR, and total DEM versus temperature
++ `plot_ebtel`--plots the temperature, density, and heating profiles for an EBTEL-C run; figures can be shown on-screen or printed to a file
++ `run_ebtel`--runs the `ebtel` executable for a specified configuration file; alternatively, a whole directory of config files can be specified and an EBTEL-C run will be started for each configuration file in the directory
++ `print_xml_config`--prints an XML configuration file for EBTEL-C from a Python dictionary; this is especially useful when one wants to manually specify starting and ending times as well as amplitudes for heating events
+
+Additional documentation can be found in `bin/ebtel_wrapper.py`. The script `bin/ebtel_starter.py` shows an example of how to use these functions to start an EBTEL-C run. All of the Python scripts can also be easily modified to fit the specific needs of the user.
 
 ##Reporting Bugs and Issues
 If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will (dot) t (dot) barnes (at) rice (dot) edu`.

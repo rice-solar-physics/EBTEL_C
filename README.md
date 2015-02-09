@@ -50,7 +50,7 @@ To run EBTEL-C, simply run `./ebtel` <b>in the `bin` directory.</b> EBTEL-C also
 As stated above, EBTEL-C uses an XML configuration file system as opposed to a traditional text file input configuration. XML files allow for increased readability because the context of each parameter (the so-called "node name") is included in the input configuration. Additionally, the order of the input parameters in the configuration file is arbitrary since XML uses keywords rather than the order of the values to associate specific values with specific tags. A sample configuration file is provided in `config/ebtel_config.xml`. Below is a list of the input parameters set by the input configuration file along with a brief description. 
 
 + total_time (s) -- the total amount of time allotted for the simulation
-..* test sub list
+  * test sub list
 
 2. time step (in seconds)--for the Euler method, this is true for every step; for the adaptive method, this is only the initial time step.
 3. heating shape--(1) triangular heating pulse, (2) square heating pulse, (3) Gaussian heating pulse

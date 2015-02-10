@@ -58,13 +58,14 @@ As stated above, EBTEL-C uses an XML configuration file system as opposed to a t
   + usage_option -- `dem` include DEM calculation, `no_dem` leave out DEM calculation, `nt_ebeam` include non-thermal electron heating term in pressure equation (this option has NOT been extensively tested with EBTEL-C), `rad_ratio` compute radiation and heat flux ratios and perform DEM calculation. Note that the first and fourth options require longer compute times. If you are only interested in the temperature and density profiles, the second option (`no_dem`) is the recommended choice.
   + rad_option -- choose how to calculate the radiative loss function: `rk` use Raymond-Klimchuk loss function or `rtv` use Rosner-Tucker-Vaiana loss function
   + dem_option -- method for calculating transition region DEM; use either the `new` or `old` method; see <a href="http://adsabs.harvard.edu/abs/2008ApJ...682.1351K">Klimchuk et al. (2008)</a> for details on the differences between these two options
-  + heat_flux_option -- EBTEL uses the Spitzer-Harm formula to calculate the heat flux; a flux limiter can be applied by using the `dynamic` option; to calculate the heat flux without the flux limit, use the `classical` option.
+  + heat_flux_option -- EBTEL uses the Spitzer-Harm formula to calculate the heat flux; a flux limiter can be applied by using the `limited` option; to calculate the heat flux without the flux limit, use the `classical` option.
   + solver -- three different solvers are available in EBTEL-C: `euler` Euler solver, `rk4` 4th-order Runge-Kutta solver, `rka4` adaptive method coupled to 4th-order Runge-Kutta solver.
   + ic_mode -- choose how to calculate the initial conditions: `st_eq` static equilibrium calculation, `force` initial conditions read in from input file, `scaling` scaling laws calculation.
   + rka_error -- value that defines the allowed error tolerance in the adaptive time step routine; 1.0e-6 is the recommended value
   + index_dem -- index that defines temperature range over which the transition region DEM is computed; 451 is the recommended value.
   + T0 (K) -- temperature at time _t=0_ s
   + n0 (cm^-3) -- number density at time _t=0_ s
+  + sat_limit -- coefficient on saturation value of the heat flux; beta in Eq. 21 of <a href="http://adsabs.harvard.edu/abs/2008ApJ...682.1351K">Klimchuk et al. (2008)</a>
 + Heating parameters
   + heating_shape -- shape of the heating pulse; three possible options: `triangle`, `square`, or `gaussian`
   + num_events -- number of heating events (Note that The actual number of events is given by the number of start times that fall within [0,total time])

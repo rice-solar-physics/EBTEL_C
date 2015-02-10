@@ -7,13 +7,14 @@
 		<usage_option>no_tr</usage_option> <!-- dem (recommended), no_dem, nt_ebeam, or rad_ratio -->
 		<rad_option>rtv</rad_option> <!-- rtv or rk-->
 		<dem_option>new</dem_option> <!-- new or old -->
-		<heat_flux_option>classical</heat_flux_option> <!-- dynamic or classical -->
+		<heat_flux_option>classical</heat_flux_option> <!-- limited or classical -->
 		<solver>rka4</solver> <!-- euler, rk4, or rka4 -->
 		<ic_mode>force</ic_mode> <!-- st_eq, force, or scaling -->
 		<rka_error>1.e-6</rka_error>
 		<index_dem>451</index_dem>
 		<T0>7.36e+5</T0>
 		<n0>1.927e+8</n0>
+		<sat_limit>0.1666667</sat_limit> <!-- Typical EBTEL value is 1/6 -->
 	<!-- heating parameters -->
 		<heating_shape>square</heating_shape> <!-- triangle, square, or gaussian -->
 		<num_events>23</num_events>

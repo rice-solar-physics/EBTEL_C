@@ -126,6 +126,7 @@ struct Option *ebtel_input_setter(char *filename)
 	opt->total_time = atof(ebtel_xml_reader(root,"total_time",NULL));
 	opt->tau = atof(ebtel_xml_reader(root,"tau",NULL));
 	opt->loop_length = atof(ebtel_xml_reader(root,"loop_length",NULL));
+	opt->sat_limit = atof(ebtel_xml_reader(root,"sat_limit",NULL));
 	opt->h_nano = atof(ebtel_xml_reader(root,"h_nano",NULL));
 	opt->t_pulse_half = atof(ebtel_xml_reader(root,"t_pulse_half",NULL));
 	opt->t_start = atof(ebtel_xml_reader(root,"t_start",NULL));

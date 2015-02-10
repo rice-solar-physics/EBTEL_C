@@ -48,6 +48,7 @@ struct Option {
 	double energy_nt;
 	double T0;
 	double n0;
+	double sat_limit;
 	double h_nano;
 	double h_back;
 	double t_pulse_half;
@@ -130,7 +131,7 @@ double * ebtel_kpar_set(char *);
 double ebtel_rad_loss( double, double[], char *);
 
 //Declare prototype for ebtel_calc_thermal_conduction of type double *
-double * ebtel_calc_thermal_conduction(double, double, double, double, double, char *);
+double * ebtel_calc_thermal_conduction(double, double, double, double, double, double, char *);
 
 //Declare prototype for ebtel_calc_c1 of type double
 double ebtel_calc_c1(double, double, double, double);

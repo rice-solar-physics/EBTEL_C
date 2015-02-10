@@ -236,6 +236,19 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	na = n*r2*exp(-2.0*loop_length/(PI*sc)*(1.0-sin(PI/5.0)));
 	pa = 2*K_B*na*ta;
 	
+	//Display initial conditions when using initial conditions from static equilibrium or scaling laws
+	if(strcmp(opt->ic_mode,"st_eq") || strcmp(opt->ic_mode,"scaling"))
+	{
+		printf("************************************************************************************\n");
+		printf("            		Initial Conditions		                       \n");
+		printf("************************************************************************************\n");
+		printf("T(t = 0) = %f K\n",t);
+		printf("n(t = 0) = %f cm^-3\n",n);
+		printf("p(t = 0) = %f dyne cm^-2\n",p);
+		printf("r3(t = 0) = %f\n",r3);
+		printf("\n");
+	}
+		
 	//Set the initial values of our parameter structure
 	param_setter->temp[0] = t;
 	param_setter->ndens[0] = n;
@@ -306,7 +319,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		r12_tr = r1_tr/r2;
 
 		//Calculate thermal conduction
-		flux_ptr = ebtel_calc_thermal_conduction(t, n, loop_length, rad, r3, opt->heat_flux_option);
+		flux_ptr = ebtel_calc_thermal_conduction(t, n, loop_length, rad, r3, opt->sat_limit, opt->heat_flux_option);
 		f = *(flux_ptr + 0);
 		f_eq = *(flux_ptr + 1);
 		free(flux_ptr);
@@ -436,10 +449,15 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 							//Ratio of classical flux to equilibrium flux
 							f_ratio = f/f_eq;
 						}
-						else
+						else if(strcmp(opt->heat_flux_option,"limited")==0)
 						{	
 							//Ratio of classical flux to saturated flux
 							f_ratio = (-TWO_SEVENTHS*KAPPA_0*pow(t/r2,SEVEN_HALVES)/loop_length)/(1.0*-1.5*pow(K_B,1.5)/pow(M_EL,0.5)*n*pow(t,1.5));
+						}
+						else
+						{
+							printf("Invalid heat flux calculation option.\n");
+							exit(0);
 						}
 					}
 				}

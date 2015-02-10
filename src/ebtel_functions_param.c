@@ -264,7 +264,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 			err = tt_new - tt_old;																//difference between t_i, T_i-1
 			err_n = nn - nn_old;	
 			//Break the loop if the error gets below a certain threshold
-			if(fabs(err)<tol && fabs(err_n)<tol)
+			if(fabs(err)<tol)// && fabs(err_n)<tol)
 			{
 				//Set parameters and break loop
 				tt_old = tt_new;
@@ -297,7 +297,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 		return_array[4] = p;
 		return_array[5] = v;
 	}
-	else if(strcmp(opt->ic_mode,"scaling") == 2)
+	else if(strcmp(opt->ic_mode,"scaling") == 0)
 	{
 		//Variable declarations
 		double lambda_0;
@@ -362,13 +362,12 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, double rad, double r3, char *heat_flux_option)
+double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, double rad, double r3, double sat_limit, char *heat_flux_option)
 {
 	
 	//Declare variables
 	double c1;
 	double c_sat;
-	double sat_limit;
 	double f_cl;
 	double f_sat;
 	double f;
@@ -379,8 +378,6 @@ double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, d
 	//Set up thermal conduction parameters (NEED TO CHANGE FOR e- AND ion)
 	c1 = -TWO_SEVENTHS*KAPPA_0;
 	c_sat = -1.5*pow(K_B,1.5)/pow(M_EL,0.5);
-	//sat_limit = 0.1667;
-	sat_limit = 1.;	//HYDRAD value
 	
 	//Set up thermal conduction at the base
 	f_cl = c1*pow(T/r2,SEVEN_HALVES)/loop_length;	//Classical heat flux calculation
@@ -390,10 +387,10 @@ double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, d
 	{
 		f = f_cl;
 	}
-	else if(strcmp(heat_flux_option,"dynamic")==0)
+	else if(strcmp(heat_flux_option,"limited")==0)
 	{
 		//Compute flux limit
-		f_sat = sat_limit*c_sat*n*pow(T,1.5);
+		f_sat = opt->sat_limit*c_sat*n*pow(T,1.5);
 		
 		//Compute final flux value		
 		f= -f_cl*f_sat/pow((pow(f_cl,2.) + pow(f_sat,2)),0.5);		

@@ -69,9 +69,6 @@ struct Option {
 	char *solver;
 	char *ic_mode; 
 	char *heating_shape;
-	char *start_file;
-	char *end_file;
-	char *amp_file;
 	char *t_start_switch;
 	char *t_end_switch;
 	char *amp_switch;

@@ -390,7 +390,7 @@ double * ebtel_calc_thermal_conduction(double T, double n, double loop_length, d
 	else if(strcmp(heat_flux_option,"limited")==0)
 	{
 		//Compute flux limit
-		f_sat = opt->sat_limit*c_sat*n*pow(T,1.5);
+		f_sat = sat_limit*c_sat*n*pow(T,1.5);
 		
 		//Compute final flux value		
 		f= -f_cl*f_sat/pow((pow(f_cl,2.) + pow(f_sat,2)),0.5);		

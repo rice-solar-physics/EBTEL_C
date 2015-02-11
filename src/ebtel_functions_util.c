@@ -153,9 +153,6 @@ struct Option *ebtel_input_setter(char *filename)
 	opt->t_start_switch = ebtel_xml_reader(root,"t_start_switch",NULL);
 	opt->amp_switch = ebtel_xml_reader(root,"amp_switch",NULL);
 	opt->t_end_switch = ebtel_xml_reader(root,"t_end_switch",NULL);
-	opt->start_file = ebtel_xml_reader(root,"start_file",NULL);
-	opt->amp_file = ebtel_xml_reader(root,"amp_file",NULL);
-	opt->end_file = ebtel_xml_reader(root,"end_file",NULL);
 	
 	//Free the document tree
 	xmlFreeDoc(doc);

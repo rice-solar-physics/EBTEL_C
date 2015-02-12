@@ -153,6 +153,9 @@ void ebtel_heating_config(struct Option *opt, char *filename)
 			exit(0);
 		}
 	}
+	
+	//Free the XML document tree
+	xmlFreeDoc(doc);
 
 	//If the start times are out of order, sort start and end times in ascending order.
 	if(strcmp(opt->t_start_switch,"normal") == 0)

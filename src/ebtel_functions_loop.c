@@ -237,7 +237,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	pa = 2*K_B*na*ta;
 	
 	//Display initial conditions when using initial conditions from static equilibrium or scaling laws
-	if(strcmp(opt->ic_mode,"st_eq") || strcmp(opt->ic_mode,"scaling"))
+	if(strcmp(opt->ic_mode,"st_eq") == 0 || strcmp(opt->ic_mode,"scaling") == 0)
 	{
 		printf("************************************************************************************\n");
 		printf("            		Initial Conditions		                       \n");
@@ -356,6 +356,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			//Set the state vectore and timestep
 			state_ptr = adapt->state;
 			tau = adapt->tau;
+		}
+		else
+		{
+			printf("Invalid solver option.\n");
+			exit(0);
 		}
 
 		//Update p,n,t,tau and save to structure

@@ -204,9 +204,22 @@ struct Option *ebtel_input_setter(char *filename)
 	temp = NULL;
 	
 	//Int
-	opt->index_dem = atoi(ebtel_xml_reader(root,"index_dem",NULL));
-	opt->num_events = atoi(ebtel_xml_reader(root,"num_events",NULL));
+	temp = ebtel_xml_reader(root,"index_dem",NULL);
+	opt->index_dem = atoi(temp);
+	free(temp);
+	temp = NULL;
+	
+	temp = ebtel_xml_reader(root,"num_events",NULL);
+	opt->num_events = atoi(temp);
+	free(temp);
+	temp = NULL;
+
 	opt->alpha = atoi(ebtel_xml_reader(root,"alpha",NULL));
+	temp = ebtel_xml_reader(root,"alpha",NULL);
+	opt->alpha = atoi(temp);
+	free(temp);
+	temp = NULL;
+	
 	//Char
 	opt->heating_shape = ebtel_xml_reader(root,"heating_shape",NULL);
 	opt->usage_option = ebtel_xml_reader(root,"usage_option",NULL);

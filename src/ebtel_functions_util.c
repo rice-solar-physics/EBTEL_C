@@ -146,7 +146,6 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 	
-	opt->h_nano = atof(ebtel_xml_reader(root,"h_nano",NULL));
 	temp = ebtel_xml_reader(root,"h_nano",NULL);
 	opt->h_nano = atof(temp);
 	free(temp);
@@ -182,7 +181,6 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 	
-	opt->mean_t_start = atof(ebtel_xml_reader(root,"mean_t_start",NULL));
 	temp = ebtel_xml_reader(root,"mean_t_start",NULL);
 	opt->mean_t_start = atof(temp);
 	free(temp);
@@ -214,7 +212,6 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 
-	opt->alpha = atoi(ebtel_xml_reader(root,"alpha",NULL));
 	temp = ebtel_xml_reader(root,"alpha",NULL);
 	opt->alpha = atoi(temp);
 	free(temp);

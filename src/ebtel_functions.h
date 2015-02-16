@@ -191,7 +191,7 @@ double * ebtel_calc_ic(double[], double, double, struct Option *);
 double * ebtel_colon_operator(double, double, double);
 
 //Declare prototype for ebtel_weighted_avg_val of type double
-double ebtel_weighted_avg_val(double[], int, double[]);
+double ebtel_weighted_avg_val(double[], int, double *);
 
 //Declare prototype for ebtel_box_muller of type struct box_muller_st
 struct box_muller_st *ebtel_box_muller(double,double,double,int);

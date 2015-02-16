@@ -516,7 +516,7 @@ double * ebtel_colon_operator(double a, double b, double d)
  
  *********************************************************************************/
  
- double ebtel_weighted_avg_val(double numbers[], int length, double weight[])
+ double ebtel_weighted_avg_val(double numbers[], int length, double *weight)
  {
   	//Declare some variables
   	int i;
@@ -527,7 +527,7 @@ double * ebtel_colon_operator(double a, double b, double d)
   	//Calculate the sum of the weights
   	for (i = 0; i<length; i++)
   	{
-  		sum = sum + weight[i];	
+  		sum = sum + *(weight + i);	
   	}
 	
 	//Construct the average by calculating the respective weights and multiplying

@@ -107,8 +107,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	dem_cor = malloc(ntot*sizeof(double *));
 	for(i = 0; i<ntot; i++)
 	{
-		dem_tr[i] = malloc(opt->index_dem*sizeof(double));
-		dem_cor[i] = malloc(opt->index_dem*sizeof(double));
+		dem_tr[i] = malloc(opt->index_dem*sizeof(dem_tr));
+		dem_cor[i] = malloc(opt->index_dem*sizeof(dem_cor));
 	}
 	
 	//struct
@@ -485,8 +485,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			}
 			
 			//Corona (EM distributed uniformly over temperature interval [tmin,tmax])
-			t_max = ebtel_max_val(t/r2,1.1e+4);
-			t_min = ebtel_max_val(t*(2.0 - 1/r2),1e+4);
+			t_max = ebtel_max_val(t/r2,1.0e+4);
+			t_min = ebtel_max_val(t*(2.0 - 1/r2),1.0e+4);
 			
 			j_max = (log10(t_max) - 4.0)*100;
 			j_min = (log10(t_min) - 4.0)*100;
@@ -494,13 +494,20 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			//Calculate total emission measure
 			em = 2*pow(n,2)*loop_length;			//factor of 2 for both legs
 			
-			delta_t = 1e4*(pow(10.0,((j_max + 0.5)/100.0)) - pow(10.0,((j_min - 0.5)/100.0)));
+			delta_t = 1.0e+4*(pow(10.0,((j_max + 0.5)/100.0)) - pow(10.0,((j_min - 0.5)/100.0)));
         	dem0 = em/delta_t;
         	
         	//Set every value between j_min and j_max DEM in the corona to dem0
-        	for(j=j_min; j<=j_max; j++)
+        	for(j=0; j<opt->index_dem; j++)
         	{
-        		dem_cor[i][j] = dem0;
+				if(j <= j_max && j >= j_min)
+				{
+	        		dem_cor[i][j] = dem0;
+				}
+				else
+				{
+					dem_cor[i][j] = 0.0;
+				}
         	}
         	
         	//Transition region radiation losses based on DEM

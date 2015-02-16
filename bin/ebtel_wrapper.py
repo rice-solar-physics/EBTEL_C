@@ -39,8 +39,8 @@ def plot_ebtel_dem(data_directory,data_file,**kwargs):
     ax = fig.gca()
     fs = 16
     ax.plot(temp,dem_tr,label=r'TR')
-    ax.plot(temp,dem_cor,label=r'Corona')
-    ax.plot(temp,dem_tot,label=r'Total')
+    ax.plot(temp,dem_cor,'r',label=r'Corona')
+    ax.plot(temp,dem_tot,'g',label=r'Total')
     ax.legend()
     ax.set_title(r'EBTEL-C DEM',fontsize=fs)
     ax.set_xlabel(r'$\log(T_{DEM})$ (K)',fontsize=fs)
@@ -84,7 +84,7 @@ def plot_ebtel(data_directory,data_file,**kwargs):
     fig,axes = plt.subplots(3,1,figsize=(12,8))
     #Set the fontsize
     fs = 16
-    
+
     #Plot the heating
     axes[0].plot(time,heat)
     axes[0].set_ylabel(r'$h$  (erg cm$^{-3}$ s$^{-1}$)',fontsize=fs)

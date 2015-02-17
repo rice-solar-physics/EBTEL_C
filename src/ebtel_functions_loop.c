@@ -466,6 +466,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 						}
 					}
 				}
+				else
+				{
+					//If outisde of the TR, set the TR DEM to zero
+					dem_tr[i][j] = 0.0;
+				}
 			}
 			
 			//If we tripped the flag_dem_tr, then we need to reset dem_tr
@@ -552,7 +557,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	param_setter->i_max = i;
 	
 	//Format DEM data to be printed to file.
-	//Take weighted time average for each T_DEM
+	//Take weighted time average for each temperature bin
 	if(strcmp(opt->usage_option,"dem") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
 	{
 		for(j = 0; j < opt->index_dem; j++)
@@ -561,7 +566,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			dem_tr[param_setter->i_max-1][j] = dem_tr[param_setter->i_max-2][j];
 			dem_cor[param_setter->i_max-1][j] = dem_cor[param_setter->i_max-2][j];
 			
-			//Create a single dimensional array from a doubly indexed array
+			//Create a single time array for each slice in j
 			for(k = 0; k<param_setter->i_max; k++)
 			{
 				dem_cor_minus[k] = dem_cor[k][j];
@@ -569,10 +574,23 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 				dem_tot_minus[k] = dem_tr[k][j] + dem_cor[k][j];
 			}
 			
-			//Compute the mean of each of our newly created arrays over the index i, compute the log10, and store it as an entry in the array dem_log10mean_{region}.
+			//Compute the time average at each temperature bin and take the log10
 			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,param_setter->i_max,param_setter->tau));
+			//Make sure that we have no negative numbers as a result of log10(0.0); -infinity *should* be ignored when plotting
+			if(param_setter->dem_cor_log10mean[j] < 0.0)
+			{
+				param_setter->dem_cor_log10mean[j] = -INFINITY;
+			}
+			if(param_setter->dem_tr_log10mean[j] < 0.0)
+			{
+				param_setter->dem_tr_log10mean[j] = -INFINITY;
+			}
+			if(param_setter->dem_tot_log10mean[j] < 0.0)
+			{
+				param_setter->dem_tot_log10mean[j] = -INFINITY;
+			}
 		}
 	}
 	

@@ -45,7 +45,7 @@ def plot_ebtel_dem(data_directory,data_file,**kwargs):
     ax.set_title(r'EBTEL-C DEM',fontsize=fs)
     ax.set_xlabel(r'$\log(T_{DEM})$ (K)',fontsize=fs)
     ax.set_ylabel(r'$\log($DEM$)$ (cm$^{-5}$ K$^{-1}$)',fontsize=fs)
-    ax.set_xlim([5.5,7.5])
+    ax.set_xlim([5.5,7.0])
     
     #Check if output filename is specified
     if 'print_fig_filename' in kwargs:

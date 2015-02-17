@@ -402,7 +402,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		pa = 2*K_B*na*ta;
 		param_setter->papex[i+1] = pa;
 		
-		/*****Differential Emission Measure Calculation*****/
+		/***********************************************************************************
+							Differential Emission Measure (DEM) Calculation
+		***********************************************************************************/
+		
 		//Check usage variable to determine whether we are calculating TR DEM
 		if(strcmp(opt->usage_option,"dem") == 0 || strcmp(opt->usage_option,"rad_ratio") == 0)
 		{	
@@ -446,6 +449,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 						break;
 					}
 					
+					//Check whether to calculate the flux ratio
 					if(strcmp(opt->usage_option,"rad_ratio")==0)
 					{
 						//Check whether it is classical or dynamic to set the f_ratio value
@@ -515,6 +519,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 				}
         	}
         	
+			//Check whether to calculation the radiation ratio
         	//Transition region radiation losses based on DEM
         	if(strcmp(opt->usage_option,"rad_ratio") == 0)
         	{

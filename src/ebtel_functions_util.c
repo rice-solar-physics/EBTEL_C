@@ -191,6 +191,11 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 	
+	temp = ebtel_xml_reader(root,"alpha",NULL);
+	opt->alpha = atof(temp);
+	free(temp);
+	temp = NULL;
+	
 	temp = ebtel_xml_reader(root,"amp0",NULL);
 	opt->amp0 = atof(temp);
 	free(temp);
@@ -209,11 +214,6 @@ struct Option *ebtel_input_setter(char *filename)
 	
 	temp = ebtel_xml_reader(root,"num_events",NULL);
 	opt->num_events = atoi(temp);
-	free(temp);
-	temp = NULL;
-
-	temp = ebtel_xml_reader(root,"alpha",NULL);
-	opt->alpha = atoi(temp);
 	free(temp);
 	temp = NULL;
 	
@@ -534,7 +534,7 @@ double * ebtel_colon_operator(double a, double b, double d)
 	//each entry in numbers[] and then summing
 	for(i=0;i<length;i++)
 	{
-		rel_weight = weight[i]/sum;
+		rel_weight = *(weight + i)/sum;
 		mean = mean + rel_weight*numbers[i];
 	}
 	

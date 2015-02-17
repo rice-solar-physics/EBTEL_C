@@ -43,7 +43,6 @@ struct Option {
 	int total_time;
 	int index_dem;
 	int num_events;
-	int alpha;
 	double loop_length;
 	double energy_nt;
 	double T0;
@@ -55,6 +54,7 @@ struct Option {
 	double t_start;
 	double mean_t_start;
 	double std_t_start;
+	double alpha;
 	double amp0;
 	double amp1;
 	double tau;

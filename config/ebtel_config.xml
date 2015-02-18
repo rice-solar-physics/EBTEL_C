@@ -4,12 +4,13 @@
 		<total_time>26000</total_time>
 		<tau>1.</tau>
 		<loop_length>25</loop_length>
-		<usage_option>no_tr</usage_option> <!-- dem (recommended), no_dem, nt_ebeam, or rad_ratio -->
+		<usage_option>dem</usage_option> <!-- dem (recommended), no_dem, nt_ebeam, or rad_ratio -->
 		<rad_option>rtv</rad_option> <!-- rtv or rk-->
 		<dem_option>new</dem_option> <!-- new or old -->
 		<heat_flux_option>classical</heat_flux_option> <!-- limited or classical -->
 		<solver>rka4</solver> <!-- euler, rk4, or rka4 -->
 		<ic_mode>force</ic_mode> <!-- st_eq, force, or scaling -->
+		<output_file>default</output_file>
 		<rka_error>1.e-6</rka_error>
 		<index_dem>451</index_dem>
 		<T0>7.36e+5</T0>

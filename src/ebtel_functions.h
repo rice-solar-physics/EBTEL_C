@@ -68,6 +68,7 @@ struct Option {
 	char *usage_option; 
 	char *solver;
 	char *ic_mode; 
+	char *output_file;
 	char *heating_shape;
 	char *t_start_switch;
 	char *t_end_switch;

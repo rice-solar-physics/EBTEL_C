@@ -12,7 +12,7 @@ heat_ext = root+'analysis/data/'
 
 #Create dictionary with desired parameters
 #Switches
-run_dictionary = {'usage_option':'dem','rad_option':'rk','dem_option':'new','heat_flux_option':'limited','solver':'rka4','ic_mode':'st_eq'}
+run_dictionary = {'usage_option':'dem','rad_option':'rk','dem_option':'new','heat_flux_option':'limited','solver':'rka4','ic_mode':'st_eq','output_file':'default'}
 #General input
 run_dictionary['total_time'] = 10000
 run_dictionary['tau'] = 1.0

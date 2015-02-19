@@ -321,8 +321,8 @@ void ebtel_file_writer(struct Option *opt, struct ebtel_params_st *params_final)
 	//Declare variables
 	int i;
 	int n = params_final->i_max;
-	char filename_out[64];
-	char filename_out_dem[64];
+	char filename_out[250];
+	char filename_out_dem[250];
 	FILE *out_file;
 	
 	//Check for custom filename

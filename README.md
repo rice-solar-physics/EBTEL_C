@@ -50,7 +50,7 @@ To run EBTEL-C, switch to the `bin/` directory and run `./ebtel`. EBTEL-C also a
 + `./ebtel`
 + `./ebtel quiet`
 + `./ebtel quiet ../config/new_ebtel_config_file.xml`
-+ `/home/users/EBTEL-C/bin/ebtel /home/user/EBTEL-C/config/new_ebtel_config_file.xml` 
++ `/home/user/EBTEL-C/bin/ebtel /home/user/EBTEL-C/config/new_ebtel_config_file.xml` 
 
 See the description of the `output_file` input parameter for information on where results from EBTEL-C are printed. 
 

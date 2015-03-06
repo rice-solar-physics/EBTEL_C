@@ -8,6 +8,8 @@
 import os,os.path
 import subprocess
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 def plot_ebtel_dem(data_directory,data_file,**kwargs):

@@ -1,13 +1,20 @@
 UNAME = $(shell uname)
 CC=gcc
 CFLAGS=-Wall -g -std=c99
+#Try to compile on Mac OS with Libxml2 installed through MacPorts
 ifeq ($(UNAME), Darwin)
 LFLAGS=-lxml2 -lz -liconv -lm
 IFLAGS=-I /opt/local/include/libxml2
-endif
+else
+#Try to compile on Linux with Libxml2 installed through apt-get
 ifeq ($(UNAME), Linux)
 LFLAGS=-lxml2 -lz -lm
 IFLAGS=-I /usr/include/libxml2
+#Try to install on Windows with Libxml2 installed through Cygwin
+else
+LFLAGS=-lxml2 -lz -liconv -lm
+IFLAGS=-I cygwin64\usr\include\libxml2
+endif
 endif
 
 all: ebtel

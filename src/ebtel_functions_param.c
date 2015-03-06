@@ -264,7 +264,7 @@ double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Opti
 			err = tt_new - tt_old;																//difference between t_i, T_i-1
 			err_n = nn - nn_old;	
 			//Break the loop if the error gets below a certain threshold
-			if(fabs(err)<tol) && fabs(err_n)<tol)
+			if(fabs(err)<tol && fabs(err_n)<tol)
 			{
 				//Set parameters and break loop
 				tt_old = tt_new;

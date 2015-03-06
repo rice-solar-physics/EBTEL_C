@@ -13,7 +13,7 @@ IFLAGS=-I /usr/include/libxml2
 #Try to install on Windows with Libxml2 installed through Cygwin
 else
 LFLAGS=-lxml2 -lz -liconv -lm
-IFLAGS=-I cygwin64\usr\include\libxml2
+IFLAGS=-I /usr/include/libxml2
 endif
 endif
 

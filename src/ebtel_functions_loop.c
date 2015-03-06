@@ -47,7 +47,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	int j_max;
 	int mem_lim = ntot;
 	int new_mem_lim;
-	int count_reallocate;
+	int count_reallocate = 0;
 	
 	//Pointers
 	double *kptr;

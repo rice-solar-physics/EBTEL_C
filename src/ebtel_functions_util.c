@@ -550,7 +550,7 @@ double * ebtel_colon_operator(double a, double b, double d)
  
  *********************************************************************************/
  
- double ebtel_weighted_avg_val(double numbers[], int length, double *weight)
+ double ebtel_weighted_avg_val(double *numbers, int length, double *weight)
  {
   	//Declare some variables
   	int i;
@@ -569,7 +569,7 @@ double * ebtel_colon_operator(double a, double b, double d)
 	for(i=0;i<length;i++)
 	{
 		rel_weight = *(weight + i)/sum;
-		mean = mean + rel_weight*numbers[i];
+		mean = mean + *(numbers + i)*rel_weight;
 	}
 	
 	//Return the weighted mean
@@ -640,6 +640,197 @@ double * ebtel_colon_operator(double a, double b, double d)
  		return num_2;
  	}
 }
+
+/**********************************************************************************
+
+FUNCTION NAME: ebtel_reallocate_mem
+
+FUNCTION DESCRIPTION: This function reallocates memory to the arrays in the structure
+struct ebtel_params_st as well as the two-dimensional arrays that store the coronal and
+TR DEM values.
+
+INPUT:
+	mem_lim			integer value of current memory limit
+	new_mem_lim		integer value of expanded memory limit
+	par_struct		pointer to structure memory that will be freed
+
+OUTPUT:
+none
+
+*********************************************************************************/
+
+void ebtel_reallocate_mem(int mem_lim, int new_mem_lim, struct ebtel_params_st *par_struct, struct Option *opt)
+{
+ //Reallocate each of the arrays in par_struct
+ double *time_r;
+ if((time_r = realloc(par_struct->time,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->time = time_r;
+ 
+ double *tau_r;
+ if((tau_r = realloc(par_struct->tau,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->tau = tau_r;
+ 
+ double *heat_r;
+ if((heat_r = realloc(par_struct->heat,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->heat = heat_r;
+ 
+ double *temp_r;
+ if((temp_r = realloc(par_struct->temp,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->temp = temp_r;
+ 
+ double *ndens_r;
+ if((ndens_r = realloc(par_struct->ndens,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->ndens = ndens_r;
+ 
+ double *press_r;
+ if((press_r = realloc(par_struct->press,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->press = press_r;
+ 
+ double *vel_r;
+ if((vel_r = realloc(par_struct->vel,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->vel = vel_r;
+ 
+ double *tapex_r;
+ if((tapex_r = realloc(par_struct->tapex,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->tapex = tapex_r;
+ 
+ double *napex_r;
+ if((napex_r = realloc(par_struct->napex,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->napex = napex_r;
+ 
+ double *papex_r;
+ if((papex_r = realloc(par_struct->papex,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->papex = papex_r;
+ 
+ double *coeff_1_r;
+ if((coeff_1_r = realloc(par_struct->coeff_1,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->coeff_1 = coeff_1_r;
+ 
+ double *cond_r;
+ if((cond_r = realloc(par_struct->cond,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->cond = cond_r;
+ 
+ double *rad_cor_r;
+ if((rad_cor_r = realloc(par_struct->rad_cor,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->rad_cor = rad_cor_r;
+ 
+ double *rad_r;
+ if((rad_r = realloc(par_struct->rad,sizeof(double[new_mem_lim]))) == NULL)
+ {
+	 printf("Reallocation failed. Out of memory.\n");
+	 exit(0);
+ }
+ par_struct->rad = rad_r;
+ 
+ //Check if rad_ratio or f_ratio were set
+ if(strcmp(opt->usage_option,"rad_ratio")==0)
+ {
+	 double *f_ratio_r;
+	 if((f_ratio_r = realloc(par_struct->f_ratio,sizeof(double[new_mem_lim]))) == NULL)
+	 {
+		 printf("Reallocation failed. Out of memory.\n");
+		 exit(0);
+	 }
+	 par_struct->f_ratio = f_ratio_r;
+	 
+	 double *rad_ratio_r;
+	 if((rad_ratio_r = realloc(par_struct->rad_ratio,sizeof(double[new_mem_lim]))) == NULL)
+	 {
+		 printf("Reallocation failed. Out of memory.\n");
+		 exit(0);
+	 }
+	 par_struct->rad_ratio = rad_ratio_r;
+ }
+ 
+}
+
+/**********************************************************************************
+
+FUNCTION NAME: ebtel_reallocate_two_d_array
+
+FUNCTION DESCRIPTION: This function reallocates memory for a doubly referenced pointer (i.e. a two-dimensional array)
+
+INPUT:
+	array_2d -- doubly referenced pointer
+	mem_lim -- current memory limit for the index that is being reallocated on
+	new_mem_lim -- new memory limit for the index that is being reallocated on
+	dim_2 -- static index
+
+OUTPUT:
+	array_2d -- reallocated doubly referenced pointer 
+
+*********************************************************************************/
+
+ double **ebtel_reallocate_two_d_array(double **array_2d, int mem_lim, int new_mem_lim, int dim_2)
+ {
+	int k;
+	double **tmp;
+	if((tmp = (double **)realloc(array_2d,sizeof(double *)*new_mem_lim)) == NULL )
+	{
+		printf("Out of memory!\n");
+		exit(0);
+	}
+	for(k = mem_lim; k<new_mem_lim; k++)
+	{
+		tmp[k] = (double *)malloc(sizeof(double)*dim_2);
+	}
+
+	array_2d = tmp;
+
+	return array_2d;
+ } 
  
  /**********************************************************************************
  

@@ -45,6 +45,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	int flag_dem_tr;
 	int j_min;
 	int j_max;
+	int mem_lim = ntot;
+	int new_mem_lim;
+	int count_reallocate;
 	
 	//Pointers
 	double *kptr;
@@ -52,6 +55,9 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	double *state_ptr;
 	double *log_tdem_ptr;
 	double *ic_ptr;
+	double *dem_cor_minus;
+	double *dem_tr_minus;
+	double *dem_tot_minus;
 	
 	//Double
 	double r1;
@@ -96,19 +102,16 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	double fourth_tdem[opt->index_dem];
 	double rad_dem[opt->index_dem];
 	double root_rad_dem[opt->index_dem];
-	double dem_cor_minus[ntot];
-	double dem_tr_minus[ntot];
-	double dem_tot_minus[ntot];
 	
 	//Two-dimensional array (dynamically allocate memory to avoid segmentation fault)
 	double **dem_tr;
-	dem_tr = malloc(ntot*sizeof(double *));
+	dem_tr = (double **)malloc(ntot*sizeof(double *));
 	double **dem_cor;
-	dem_cor = malloc(ntot*sizeof(double *));
+	dem_cor = (double **)malloc(ntot*sizeof(double *));
 	for(i = 0; i<ntot; i++)
 	{
-		dem_tr[i] = malloc(opt->index_dem*sizeof(dem_tr));
-		dem_cor[i] = malloc(opt->index_dem*sizeof(dem_cor));
+		dem_tr[i] = (double *)malloc(opt->index_dem*sizeof(dem_tr));
+		dem_cor[i] = (double *)malloc(opt->index_dem*sizeof(dem_cor));
 	}
 	
 	//struct
@@ -550,6 +553,30 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		
 		//Increment the counter
 		i++;
+		
+		//Check if we need to reallocate memory
+		if(i == mem_lim-1 && time < opt->total_time-tau)
+		{
+			//Tell the user that memory is being reallocated
+			printf("Reached current memory limit.Reallocating...\n");
+			
+			//Increment the reallocation counter
+			count_reallocate = count_reallocate + 1;
+			//Update the memory limit
+			new_mem_lim = 2*mem_lim;
+			
+			//Call the reallocation function for the param_setter structure
+			ebtel_reallocate_mem(mem_lim,new_mem_lim,param_setter,opt);
+			//Call the reallocation function for the two-dimensional arrays
+			dem_tr = ebtel_reallocate_two_d_array(dem_tr,mem_lim,new_mem_lim,opt->index_dem);
+			dem_cor = ebtel_reallocate_two_d_array(dem_cor,mem_lim,new_mem_lim,opt->index_dem);
+			
+			//Tell the user the new memory size and the number of reallocations performed
+			printf("The new memory limit is %d\n",new_mem_lim);
+			printf("Number of memory reallocations: %d\n",count_reallocate);
+			//Update the memory limit
+			mem_lim = new_mem_lim;
+		}
 	}
 	
 	//End of loop
@@ -571,6 +598,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			dem_tr[param_setter->i_max-1][j] = dem_tr[param_setter->i_max-2][j];
 			dem_cor[param_setter->i_max-1][j] = dem_cor[param_setter->i_max-2][j];
 			
+			//Malloc reduced dimension pointers
+			dem_cor_minus = malloc(sizeof(double)*param_setter->i_max);
+			dem_tr_minus = malloc(sizeof(double)*param_setter->i_max);
+			dem_tot_minus = malloc(sizeof(double)*param_setter->i_max);
+			
 			//Create a single time array for each slice in j
 			for(k = 0; k<param_setter->i_max; k++)
 			{
@@ -583,6 +615,15 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,param_setter->i_max,param_setter->tau));
+			
+			//Free the reduced dimension pointers; they get malloc'd on the next iteration
+			free(dem_cor_minus);
+			dem_cor_minus = NULL;
+			free(dem_tr_minus);
+			dem_tr_minus = NULL;
+			free(dem_tot_minus);
+			dem_tot_minus = NULL;
+			
 			//Make sure that we have no negative numbers as a result of log10(0.0); -infinity *should* be ignored when plotting
 			if(param_setter->dem_cor_log10mean[j] < 0.0)
 			{
@@ -607,7 +648,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		free(log_tdem_ptr);
 		log_tdem_ptr = NULL;
 	}
-	for(i=0;i<ntot;i++)
+	for(i=0;i<mem_lim;i++)
 	{
 		free(dem_tr[i]);
 		dem_tr[i] = NULL;

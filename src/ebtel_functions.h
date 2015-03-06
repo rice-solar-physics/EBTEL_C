@@ -192,7 +192,7 @@ double * ebtel_calc_ic(double[], double, double, struct Option *);
 double * ebtel_colon_operator(double, double, double);
 
 //Declare prototype for ebtel_weighted_avg_val of type double
-double ebtel_weighted_avg_val(double[], int, double *);
+double ebtel_weighted_avg_val(double *, int, double *);
 
 //Declare prototype for ebtel_box_muller of type struct box_muller_st
 struct box_muller_st *ebtel_box_muller(double,double,double,int);
@@ -220,5 +220,11 @@ struct Option *ebtel_input_setter(char *);
 
 //Declare prototype for ebtel_xml_reader of type char *
 char *ebtel_xml_reader(xmlNodePtr,char *, char *);
+
+//Declare prototype for ebtel_reallocate_mem of type void
+void ebtel_reallocate_mem(int, int, struct ebtel_params_st *, struct Option *);
+
+//Declare prototype for ebtel_reallocate_two_d_array of type double **
+double **ebtel_reallocate_two_d_array(double **, int, int, int);
 
 #endif

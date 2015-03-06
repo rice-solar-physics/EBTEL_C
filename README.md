@@ -28,20 +28,17 @@ It should be noted that extensive testing has been carried out to ensure that EB
 ![Example EBTEL-C run showing resulting temperature and density profiles from 23 impulsive heating events](ebtel_C_example.png)
 
 ##Dependencies
-EBTEL-C uses an XML configuration file system to minimize errors that result from poorly formatted input files and allow for easier input readability. EBTEL-C uses the XML C parser toolkit `libxml2` which provides a number of useful functions and datatypes for parsing structured XML files. The toolkit, which is essentially a collection of header files, can be obtained <a href="http://xmlsoft.org/downloads.html">here.</a> Additionally, Mac users can obtain the library using the <a href="https://www.macports.org/">MacPorts</a> package manager by running `sudo port install libxml2`. Linux users can obtain the library via the built-in Aptitude package manager.
+EBTEL-C uses an XML configuration file system to minimize errors that result from poorly formatted input files and allow for easier input readability. EBTEL-C uses the XML C parser toolkit `libxml2` which provides a number of useful functions and datatypes for parsing structured XML files. The toolkit can be found <a href = "http://xmlsoft.org/downloads.html">here</a> though manual installation is not advised. Mac users can obtain the library using the <a href="https://www.macports.org/">MacPorts</a> package manager by running `sudo port install libxml2`. Linux users can obtain the library via the built-in Aptitude package manager by running `sudo apt-get install libxml2`. Windows users should install libxml2 through <a href="https://www.cygwin.com/">Cygwin</a>. Note that you will need to manually select the package when you install Cygwin. **Provided the `libxml2` library is installed through one of the above methods, no additional changes should be needed to compile and run EBTEL-C.**
 
-**NOTE: If you use the build procedure described below to compile EBTEL-C, you must first change the include location of the `libxml2` library in `src/makefile`.** At the top of the file, the variable `IFLAGS` specifies the location of your local copy of the `libxml2` directory containing all of the necessary header files. For example, if the `libxml2` directory is in `/opt/local/include`, then the line in your makefile would be:
-
-+ `IFLAGS=-I /opt/local/include/libxml2`
-
-Linux (specifically Ubuntu) users may also find that they need to remove the `-liconv` flag in the line
+**NOTE: If you use the build procedure described below to compile EBTEL-C and have not obtained `libxml2` through the above channels, you must first change the include location of the `libxml2` library in `src/makefile`.** The Makefile located in `src/makefile` is configured to detect the OS and change the compiler flags appropriately. However, if you are having trouble with default build procedure, you may need to modify the following lines in `src/makefile`:
 
 + `LFLAGS=-lxml2 -lz -liconv -lm`
++ `IFLAGS=-I /opt/local/include/libxml2`
 
-also in the makefile. You of course may also choose to compile EBTEL-C by hand or write your own `makefile`.
+Note that the `IFLAGS` option specifies the location of the top-level `libxml2` directory. If you have built `libxml2` in a directory other than the default directories or have moved the files, you will need to alter these lines. 
 
 ##Downloading and Compiling
-Linux and Mac users should be able to compile and run EBTEL-C in the terminal. Windows users should compile and run the code in the <a href="https://www.cygwin.com/">Cygwin</a> environment. The best way to obtain this code is to clone a copy of this repository on your local machine. If you have `git` installed locally, create a working copy by typing `git clone https://github.com/rice-solar-physics/EBTEL_C.git` at the command line. Changes may be made periodically to the main EBTEL-C repository. To pull down these changes, but not override any local changes, use `git pull` inside of your working directory. You can also simply download a compressed file containing all of the source code if you do not wish to bother with the version control.
+Linux and Mac users should be able to compile and run EBTEL-C in the terminal. Windows users should compile and run the code in the <a href="https://www.cygwin.com/">Cygwin</a> environment. The best way to obtain this code is to clone a copy of this repository on your local machine. This allows you to keep your copy of EBTEL-C up to date with the main repository. You can also simply download a compressed file containing all of the source code if you do not wish to bother with the version control.
 
 To compile EBTEL-C, switch to the `build/` directory and run `./build`. This uses a makefile in `src/` to compile the source code and place an executable called `ebtel` in the `bin/` directory. Additionally, running `./clean` in `build/` removes the executable and all of the object files created at compile time.
 

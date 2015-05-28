@@ -56,6 +56,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	double *log_tdem_ptr;
 	double *ic_ptr;
 	double *dem_cor_minus;
+	double *em_cor_minus;
 	double *dem_tr_minus;
 	double *dem_tot_minus;
 	
@@ -103,10 +104,13 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	dem_tr = (double **)malloc(ntot*sizeof(double *));
 	double **dem_cor;
 	dem_cor = (double **)malloc(ntot*sizeof(double *));
+	double **em_cor;
+	em_cor = (double **)malloc(ntot*sizeof(double *));
 	for(i = 0; i<ntot; i++)
 	{
 		dem_tr[i] = (double *)malloc(opt->index_dem*sizeof(dem_tr));
 		dem_cor[i] = (double *)malloc(opt->index_dem*sizeof(dem_cor));
+		em_cor[i] = (double *)malloc(opt->index_dem*sizeof(em_cor));
 	}
 	
 	//struct
@@ -141,6 +145,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		param_setter->logtdem = malloc(sizeof(double[opt->index_dem]));
 		param_setter->dem_tr_log10mean = malloc(sizeof(double[opt->index_dem]));
 		param_setter->dem_cor_log10mean = malloc(sizeof(double[opt->index_dem]));
+		param_setter->em_cor_log10mean = malloc(sizeof(double[opt->index_dem]));
 		param_setter->dem_tot_log10mean = malloc(sizeof(double[opt->index_dem]));
 	}
 	
@@ -506,10 +511,12 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 				if(j <= j_max && j >= j_min)
 				{
 	        		dem_cor[i][j] = dem0;
+					em_cor[i][j] = em;
 				}
 				else
 				{
 					dem_cor[i][j] = 0.0;
+					em_cor[i][j] = 0.0;
 				}
         	}
         	
@@ -560,6 +567,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			//Call the reallocation function for the two-dimensional arrays
 			dem_tr = ebtel_reallocate_two_d_array(dem_tr,mem_lim,new_mem_lim,opt->index_dem);
 			dem_cor = ebtel_reallocate_two_d_array(dem_cor,mem_lim,new_mem_lim,opt->index_dem);
+			em_cor = ebtel_reallocate_two_d_array(em_cor,mem_lim,new_mem_lim,opt->index_dem);
 			
 			//Tell the user the new memory size and the number of reallocations performed
 			printf("The new memory limit is %d\n",new_mem_lim);
@@ -587,9 +595,11 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			//Set the last entry that was left empty by the loop on t
 			dem_tr[param_setter->i_max-1][j] = dem_tr[param_setter->i_max-2][j];
 			dem_cor[param_setter->i_max-1][j] = dem_cor[param_setter->i_max-2][j];
+			em_cor[param_setter->i_max-1][j] = em_cor[param_setter->i_max-2][j];
 			
 			//Malloc reduced dimension pointers
 			dem_cor_minus = malloc(sizeof(double)*param_setter->i_max);
+			em_cor_minus = malloc(sizeof(double)*param_setter->i_max);
 			dem_tr_minus = malloc(sizeof(double)*param_setter->i_max);
 			dem_tot_minus = malloc(sizeof(double)*param_setter->i_max);
 			
@@ -597,18 +607,22 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			for(k = 0; k<param_setter->i_max; k++)
 			{
 				dem_cor_minus[k] = dem_cor[k][j];
+				em_cor_minus[k] = em_cor[k][j];
 				dem_tr_minus[k] = dem_tr[k][j];
 				dem_tot_minus[k] = dem_tr[k][j] + dem_cor[k][j];
 			}
 			
 			//Compute the time average at each temperature bin and take the log10
 			param_setter->dem_cor_log10mean[j] = log10(ebtel_weighted_avg_val(dem_cor_minus,param_setter->i_max,param_setter->tau));
+			param_setter->em_cor_log10mean[j] = log10(ebtel_weighted_avg_val(em_cor_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tr_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tr_minus,param_setter->i_max,param_setter->tau));
 			param_setter->dem_tot_log10mean[j] = log10(ebtel_weighted_avg_val(dem_tot_minus,param_setter->i_max,param_setter->tau));
 			
 			//Free the reduced dimension pointers; they get malloc'd on the next iteration
 			free(dem_cor_minus);
 			dem_cor_minus = NULL;
+			free(em_cor_minus);
+			em_cor_minus = NULL;
 			free(dem_tr_minus);
 			dem_tr_minus = NULL;
 			free(dem_tot_minus);
@@ -618,6 +632,10 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 			if(param_setter->dem_cor_log10mean[j] < 0.0)
 			{
 				param_setter->dem_cor_log10mean[j] = -INFINITY;
+			}
+			if(param_setter->em_cor_log10mean[j] < 0.0)
+			{
+				param_setter->em_cor_log10mean[j] = -INFINITY;
 			}
 			if(param_setter->dem_tr_log10mean[j] < 0.0)
 			{
@@ -644,11 +662,15 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		dem_tr[i] = NULL;
 		free(dem_cor[i]);
 		dem_cor[i] = NULL;
+		free(em_cor[i]);
+		em_cor[i] = NULL;
 	}
 	free(dem_tr);
 	dem_tr = NULL;
 	free(dem_cor);
 	dem_cor = NULL;
+	free(em_cor);
+	em_cor = NULL;
 	
 	//Exit and return the structure that has been set appropriately
 	return param_setter;

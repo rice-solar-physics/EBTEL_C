@@ -100,6 +100,7 @@ int main (int argc, char *argv[])
 	int quiet_flag = 0;
 	double L;
 	char filename_in[250];
+	double *kptr;
 	
 	/**********************************
 	Read configuration file
@@ -154,6 +155,17 @@ int main (int argc, char *argv[])
 	
 	//Set non-thermal electron energy structure option
 	opt->energy_nt = 8.01e-8;	//50 keV in ergs
+	
+	//Set temperature bins for calculating radiative loss function
+ 	//Make the kpar array
+	NK=6;	//There is a correspondence with the length of KPAR[]; if NK ever changes, change length of KPAR[] in header file
+	kptr = ebtel_kpar_set(opt->rad_option);
+ 	for(i=0; i<NK; i++)
+ 	{
+ 		KPAR[i] = *(kptr + i);
+ 	}
+	free(kptr);
+	kptr=NULL;
 	
 	/************************************************************************************
 									Heating

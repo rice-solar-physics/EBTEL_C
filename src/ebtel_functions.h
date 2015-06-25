@@ -37,6 +37,8 @@ double TWO_THIRDS;
 double ROOT_C2;
 double C3;
 double C4;
+int NK;
+double KPAR[6];
 
 //Declare structures
 struct Option {
@@ -127,7 +129,7 @@ struct ebtel_params_st *ebtel_loop_solver( int, double, struct Option *);
 double * ebtel_kpar_set(char *);
 
 //Declare prototype for ebtel_rad_loss of type double
-double ebtel_rad_loss( double, double[], char *);
+double ebtel_rad_loss( double, char *);
 
 //Declare prototype for ebtel_calc_thermal_conduction of type double *
 double * ebtel_calc_thermal_conduction(double, double, double, double, double, double, char *);
@@ -163,7 +165,7 @@ void ebtel_free_mem(struct ebtel_params_st *, struct Option *);
 double * ebtel_rk(double[], int, double, double, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_rk_derivs of type double
-double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option *);
+//double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_heating of type double
 double ebtel_heating(double, struct Option *);
@@ -172,7 +174,7 @@ double ebtel_heating(double, struct Option *);
 void ebtel_print_header(int, struct Option *);
 
 //Declare prototype for ebtel_euler of type double
-double * ebtel_euler(double[], double, struct rk_params, struct Option *);
+//double * ebtel_euler(double[], double, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_derivs function of type double
 double * ebtel_derivs(double[], double, struct rk_params, struct Option *);

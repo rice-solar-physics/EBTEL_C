@@ -48,29 +48,14 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	double dTdt;
 	double *flux_ptr;
  	double *derivs = malloc(sizeof(double[3]));
- 	int nk;
- 	int i;
  
  	//Unravel the state vector
  	p = s[0];
  	n = s[1];
  	T = s[2];
  	
- 	//Make the kpar array
- 	if(strcmp(opt->rad_option,"rk")==0)
- 	{nk = 7;
- 	}
- 	else
- 	{nk = 6;
- 	}
- 	double kpar[nk];
- 	for(i=0; i<nk; i++)
- 	{
- 		kpar[i] = *(par.kpar + i);
- 	}
- 	
  	//Compute the radiative loss function 
- 	rad = ebtel_rad_loss(T,kpar,opt->rad_option);
+ 	rad = ebtel_rad_loss(T,opt->rad_option);
  	
  	//Compute the coefficient r3
  	r3 = ebtel_calc_c1(T,n,par.L,rad);
@@ -96,15 +81,20 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
 	//Set the derivative state vector
 	if(strcmp(opt->solver,"euler")==0)
 	{
-		derivs[0] = dpdt*opt->tau + p;
-		derivs[1] = dndt*opt->tau + n;
-		derivs[2] = dervs[0]/(2.0*derivs[1]*K_B);
+		derivs[0] = dpdt*(opt->tau) + p;
+		derivs[1] = dndt*(opt->tau) + n;
+		derivs[2] = derivs[0]/(2.0*derivs[1]*K_B);
 	}
 	else if(strcmp(opt->solver,"rka4") == 0 || strcmp(opt->solver,"rk4") == 0)
 	{
 		derivs[0] = dpdt;
 		derivs[1] = dndt;
 		derivs[2] = dTdt;
+	}
+	else
+	{
+		printf("Invalid solver option.\n");
+		exit(0);
 	}
 	
 	//Return the pointer
@@ -127,7 +117,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  OUTPUTS:
  	s_out--updated state vector
 	
- *********************************************************************************/
+
  
  double * ebtel_euler(double s[], double tau, struct rk_params par, struct Option *opt)
  {
@@ -167,6 +157,8 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
 	return s_out;
 
  }
+
+ *********************************************************************************/
  
   /**********************************************************************************
  
@@ -211,7 +203,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	t_full = t + tau;
  	
  	//Compute the first function f1
- 	f1 = ebtel_rk_derivs(s,t,0,par,opt);
+ 	f1 = ebtel_derivs(s,t,par,opt);
 	//Make the temporary state vector
  	for(i=0; i<n; i++)
  	{
@@ -220,7 +212,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	}
  	
  	//Compute the second function f2
- 	f2 = ebtel_rk_derivs(s_temp,t_half,1,par,opt);
+ 	f2 = ebtel_derivs(s_temp,t_half,par,opt);
 	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
@@ -229,7 +221,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	}
  	
  	//Compute the third function f3
- 	f3 = ebtel_rk_derivs(s_temp,t_half,1,par,opt);
+ 	f3 = ebtel_derivs(s_temp,t_half,par,opt);
 	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
@@ -238,7 +230,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	}
  	
  	//Compute the fourth function f4
- 	f4 = ebtel_rk_derivs(s_temp,t_full,2,par,opt);
+ 	f4 = ebtel_derivs(s_temp,t_full,par,opt);
 	//Rebuild the temporary state vector
  	for(i=0; i<n; i++)
  	{
@@ -440,7 +432,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  OUTPUTS:
  	derivs--updated derivative state vector
 	
- *********************************************************************************/
+
  
  double * ebtel_rk_derivs(double s[], double t, int tau_opt, struct rk_params par, struct Option *opt)
  {
@@ -525,3 +517,5 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
 	return derivs;
  	
  }
+ 
+  *********************************************************************************/

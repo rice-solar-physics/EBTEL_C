@@ -11,6 +11,106 @@ DATE: created: 19 April 2014
 //Include appropriate header file
 #include "ebtel_functions.h"
 
+/**********************************************************************************
+
+FUNCTION NAME: ebtel_derivs
+
+FUNCTION DESCRIPTION: This function computes the needed derivatives for both the 
+Euler and Runge-Kutta solvers in EBTEL. In the Euler case, the resulting updated 
+parameters are passed back to the main loops function. For the RK4 cases (adaptive 
+and non-adaptive), the resulting derivatives are passed to the relevant RK functions.
+ 
+INPUTS:
+	s--vector that stores the current state of the system
+	t--current time
+	par--structure that holds necessary parameters
+	opt--structure that holds necessary input parameters
+
+OUTPUTS:
+	derivs--updated state vector
+
+*********************************************************************************/
+
+double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option *opt)
+{
+ 	//Declare variables
+ 	double p;
+ 	double n;
+ 	double T;
+ 	double rad;
+ 	double r3;
+ 	double f;
+ 	double f_eq;
+ 	double q;
+	double pv;
+ 	double dpdt;
+ 	double dndt;
+ 	double dTdt;
+	double *flux_ptr;
+ 	double *derivs = malloc(sizeof(double[3]));
+ 	int nk;
+ 	int i;
+ 
+ 	//Unravel the state vector
+ 	p = s[0];
+ 	n = s[1];
+ 	T = s[2];
+ 	
+ 	//Make the kpar array
+ 	if(strcmp(opt->rad_option,"rk")==0)
+ 	{nk = 7;
+ 	}
+ 	else
+ 	{nk = 6;
+ 	}
+ 	double kpar[nk];
+ 	for(i=0; i<nk; i++)
+ 	{
+ 		kpar[i] = *(par.kpar + i);
+ 	}
+ 	
+ 	//Compute the radiative loss function 
+ 	rad = ebtel_rad_loss(T,kpar,opt->rad_option);
+ 	
+ 	//Compute the coefficient r3
+ 	r3 = ebtel_calc_c1(T,n,par.L,rad);
+ 	
+ 	//Compute heat flux
+	flux_ptr = ebtel_calc_thermal_conduction(T,n,par.L,rad,r3,opt->sat_limit,opt->heat_flux_option);
+	f = *(flux_ptr + 0);
+	f_eq = *(flux_ptr + 1);
+	free(flux_ptr);
+	flux_ptr = NULL;
+	
+	//Set the heating depending on the time 
+	q = ebtel_heating(t,opt);
+	
+	//Calculate the enthalpy flux
+	pv = 0.4*(f_eq - f - par.flux_nt);
+	
+	//Now compute the derivatives of each of the quantities in our state vector
+	dpdt = 	TWO_THIRDS*(q + (1. + 1./r3)*f_eq/par.L - (1. - 1.5*K_B*T/opt->energy_nt)*par.flux_nt/par.L);
+	dndt = (pv*0.5/(par.r12*K_B*T*par.L) + par.flux_nt/opt->energy_nt/par.L);
+	dTdt = T*(1./p*dpdt - 1./n*dndt);
+	
+	//Set the derivative state vector
+	if(strcmp(opt->solver,"euler")==0)
+	{
+		derivs[0] = dpdt*opt->tau + p;
+		derivs[1] = dndt*opt->tau + n;
+		derivs[2] = dervs[0]/(2.0*derivs[1]*K_B);
+	}
+	else if(strcmp(opt->solver,"rka4") == 0 || strcmp(opt->solver,"rk4") == 0)
+	{
+		derivs[0] = dpdt;
+		derivs[1] = dndt;
+		derivs[2] = dTdt;
+	}
+	
+	//Return the pointer
+	return derivs;
+}
+
  /**********************************************************************************
  
  FUNCTION NAME: ebtel_euler

@@ -174,6 +174,9 @@ void ebtel_print_header(int, struct Option *);
 //Declare prototype for ebtel_euler of type double
 double * ebtel_euler(double[], double, struct rk_params, struct Option *);
 
+//Declare prototype for ebtel_derivs function of type double
+double * ebtel_derivs(double[], double, struct rk_params, struct Option *);
+
 //Declare prototype for ebtel_data_writer of type void
 void ebtel_file_writer(struct Option *, struct ebtel_params_st *);
 

@@ -164,17 +164,11 @@ void ebtel_free_mem(struct ebtel_params_st *, struct Option *);
 //Declare prototype for ebtel_rk of type double
 double * ebtel_rk(double[], int, double, double, struct rk_params, struct Option *);
 
-//Declare prototype for ebtel_rk_derivs of type double
-//double * ebtel_rk_derivs(double[], double, int, struct rk_params, struct Option *);
-
 //Declare prototype for ebtel_heating of type double
 double ebtel_heating(double, struct Option *);
 
 //Declare prototype for ebtel_print_header of type void
 void ebtel_print_header(int, struct Option *);
-
-//Declare prototype for ebtel_euler of type double
-//double * ebtel_euler(double[], double, struct rk_params, struct Option *);
 
 //Declare prototype for ebtel_derivs function of type double
 double * ebtel_derivs(double[], double, struct rk_params, struct Option *);

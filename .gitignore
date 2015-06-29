@@ -1,11 +1,12 @@
-#Ignore data folder
-/data/*
-#Ignore executables
-ebtel
-#Ignore object files
+#ignore object files
 *.o
-#Ignore pyc files
+#ignore executable
+bin/ebtel
+#ignore Python binaries
 *.pyc
-#Ignore configuration files
-config/*
-!config/ebtel_config.xml
+#ignore data folder
+/data/*
+#ignore config files
+/config/*
+#except for the sample file
+!/config/ebtel_config.xml

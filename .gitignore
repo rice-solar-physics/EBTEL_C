@@ -6,3 +6,6 @@ ebtel
 *.o
 #Ignore pyc files
 *.pyc
+#Ignore configuration files
+config/*
+!config/ebtel_config.xml

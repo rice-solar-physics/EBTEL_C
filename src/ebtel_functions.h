@@ -69,7 +69,8 @@ struct Option {
 	char *rad_option; 
 	char *usage_option; 
 	char *solver;
-	char *ic_mode; 
+	char *ic_mode;
+	char *print_plasma_params;
 	char *output_file;
 	char *heating_shape;
 	char *t_start_switch;

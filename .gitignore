@@ -1,16 +1,12 @@
 #Ignore data folder
 /data/*
-#Ignore analysis folder
-/analysis
 #Ignore executables
 ebtel
 #Ignore object files
 *.o
-#Ignore MATLAB files
-*.m
 #Ignore pyc files
 *.pyc
 #Ignore all config files
 /config/*
-#Ignore starter file (keep sample)
-/bin/ebtel_starter.py
+#Except for example configuration file
+!/config/ebtel_config.xml

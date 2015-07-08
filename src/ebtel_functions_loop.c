@@ -693,24 +693,22 @@ OUTPUTS:
 
 double * ebtel_kpar_set(char *rad_option)
 {	
+	double *kpar = malloc(sizeof(double[6]));
 	//Check option input to decide which method to use
 	if (strcmp(rad_option,"rk") == 0)
 	{	
-		double *kpar = malloc(sizeof(double[7]));
 		//Raymond-Klimchuk Loss function
-		kpar[0] = 1.0e+4;
-		kpar[1] = 9.3325e4;
-		kpar[2] = 4.67735e5;
-        kpar[3] = 1.51356e6;
-        kpar[4] = 3.54813e6;
-        kpar[5] = 7.94328e6;
-        kpar[6] = 4.28048e7;
+		kpar[0] = 9.3325e4;
+		kpar[1] = 4.67735e5;
+        kpar[2] = 1.51356e6;
+        kpar[3] = 3.54813e6;
+        kpar[4] = 7.94328e6;
+        kpar[5] = 4.28048e7;
         
         return kpar;
 	}
-	else
+	else if(strcmp(rad_option,"rtv")==0)
 	{
-		double *kpar = malloc(sizeof(double[6]));
 		//Rosner-Tucker-Vaiana Loss function
 		kpar[0] = pow(10.0,4.3);
         kpar[1] = pow(10.0,4.6);
@@ -720,6 +718,11 @@ double * ebtel_kpar_set(char *rad_option)
         kpar[5] = pow(10.0,6.3);
         
         return kpar;
+	}
+	else
+	{
+		printf("Invalid radiative loss function option.\n");
+		exit(0);
 	}
 }
 

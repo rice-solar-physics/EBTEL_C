@@ -35,6 +35,7 @@ def plot_ebtel_dem(data_directory,data_file,**kwargs):
     dem_tr = data[:,1]
     dem_cor = data[:,2]
     dem_tot = data[:,3]
+    em_cor = data[:,4]
     
     #Set up the figure
     fig = plt.figure(figsize=(10,10))
@@ -43,11 +44,13 @@ def plot_ebtel_dem(data_directory,data_file,**kwargs):
     ax.plot(temp,dem_tr,label=r'TR')
     ax.plot(temp,dem_cor,'r',label=r'Corona')
     ax.plot(temp,dem_tot,'g',label=r'Total')
+    ax.plot(temp,em_cor,'--r',label=r'Corona EM')
     ax.legend()
     ax.set_title(r'EBTEL-C DEM',fontsize=fs)
     ax.set_xlabel(r'$\log(T_{DEM})$ (K)',fontsize=fs)
     ax.set_ylabel(r'$\log($DEM$)$ (cm$^{-5}$ K$^{-1}$)',fontsize=fs)
-    ax.set_xlim([5.5,7.0])
+    ax.set_xlim([5.5,7.5])
+    ax.set_ylim([18.0,30.0])
     
     #Check if output filename is specified
     if 'print_fig_filename' in kwargs:

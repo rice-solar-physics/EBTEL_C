@@ -1,4 +1,5 @@
 #!/bin/bash
+#Add IFLAGS and LFLAGS variables here if needed 
 
 cd ../src
 make

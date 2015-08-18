@@ -103,5 +103,41 @@ The `bin/ebtel_wrapper.py` script provides four different functions:
 
 Additional documentation can be found in `bin/ebtel_wrapper.py`. The script `bin/ebtel_starter.py` shows an example of how to use these functions to start an EBTEL-C run. All of the Python scripts can also be easily modified to fit the specific needs of the user.
 
+##Example 
+Below is an example of how to compile and run EBTEL and plot some sample results. The instructions below assume that the EBTEL_C directory tree is located at `/path/to/EBTEL_C/`.
+
++ First, switch to the build directory and run the build script to compile.
+	+ `$ cd /path/to/EBTEL_C/build`
+	+ `$ ./build`
+	
++ Now that EBTEL has been successfully compiled, we'll use our Python wrappers to do the rest. First, enter the python (or IPython) command line environment.	
+	+ `$ python`
+
++ Import the ebtel_wrapper module
+	+ `>>> import ebtel_wrapper as ew`
+
++ First, we'll want to configure a dictionary object to hold all of the inputs as outlined above. See `bin/ebtel_starter.py` for an example.
+	+ `>>> ebtel_inputs = {'usage_option':'dem'}`
+	+ `>>> ebtel_inputs['loop_length'] = 75.0`
+	+ `>>> ebtel_inputs['output_file'] = '/path/to/EBTEL_C/data/my_ebtel_output_file'`
+
++ Once the input dictionary has been configured with all of the necessary inputs, print it to an XML file
+	+ `>>> ew.print_xml_config(ebtel_inputs,config_file='/path/to/EBTEL_C/config/my_custom_config.xml')`
+	
++ Now that the config file has been printed, we can run the EBTEL executable
+	+ `>>> ew.run_ebtel('/path/to/EBTEL_C/bin/','/path/to/EBTEL_C/config/',config_file='my_custom_config.xml')`
+	
++ This can also be done at the command line
+	+ `$ cd /path/to/EBTEL_C/bin/`
+	+ `$ ./ebtel /path/to/EBTEL_C/config/my_custom_config.xml`
+	
++ Once EBTEL has executed successfully, a message will be printed saying the plasma parameters have been printed to the file `/path/to/EBTEL_C/data/my_ebtel_output_file.txt` and the DEM results to `/path/to/EBTEL_C/data/my_ebtel_output_file_dem.txt`
+	
++ Plot the data
+	+ `>>> ew.plot_ebtel('/path/to/EBTEL_C/data/','my_ebtel_output_file.txt',print_fig_filename='/path/to/my_ebtel_figure.eps')` Plot the plasma parameters
+	+ `>>> ew.plot_ebtel_dem('/path/to/EBTEL_C/data/','my_ebtel_output_file_dem.txt',print_fig_filename='/path/to/my_ebtel_dem_figure.eps')` Plot the DEM parameters
+	
+These Python wrapper functions can be easily modified and used to print many thousands of configuration files for many different sets of inputs. Use of these Python scripts is of course not necessary, but makes setting up an EBTEL run (particularly configuring the XML input file) much easier.
+
 ##Reporting Bugs and Issues
 If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will (dot) t (dot) barnes (at) rice (dot) edu`.

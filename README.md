@@ -122,10 +122,10 @@ Below is an example of how to compile and run EBTEL and plot some sample results
 	+ `>>> ebtel_inputs['output_file'] = '/path/to/EBTEL_C/data/my_ebtel_output_file'`
 
 + Once the input dictionary has been configured with all of the necessary inputs, print it to an XML file
-	+ `>>> ew.print_xml_config(ebtel_inputs,config_file='/path/to/EBTEL_C/config/my_custom_config.xml')`
+	+ `>>> ew.print_xml_config(ebtel_inputs, config_file='/path/to/EBTEL_C/config/my_custom_config.xml')`
 	
 + Now that the config file has been printed, we can run the EBTEL executable
-	+ `>>> ew.run_ebtel('/path/to/EBTEL_C/bin/','/path/to/EBTEL_C/config/',config_file='my_custom_config.xml')`
+	+ `>>> ew.run_ebtel('/path/to/EBTEL_C/bin/', '/path/to/EBTEL_C/config/', config_file='my_custom_config.xml')`
 	
 + This can also be done at the command line
 	+ `$ cd /path/to/EBTEL_C/bin/`
@@ -133,9 +133,9 @@ Below is an example of how to compile and run EBTEL and plot some sample results
 	
 + Once EBTEL has executed successfully, a message will be printed saying the plasma parameters have been printed to the file `/path/to/EBTEL_C/data/my_ebtel_output_file.txt` and the DEM results to `/path/to/EBTEL_C/data/my_ebtel_output_file_dem.txt`
 	
-+ Plot the data
-	+ `>>> ew.plot_ebtel('/path/to/EBTEL_C/data/','my_ebtel_output_file.txt',print_fig_filename='/path/to/my_ebtel_figure.eps')` Plot the plasma parameters
-	+ `>>> ew.plot_ebtel_dem('/path/to/EBTEL_C/data/','my_ebtel_output_file_dem.txt',print_fig_filename='/path/to/my_ebtel_dem_figure.eps')` Plot the DEM parameters
++ Plot the plasma and DEM parameters
+	+ `>>> ew.plot_ebtel('/path/to/EBTEL_C/data/', 'my_ebtel_output_file.txt', print_fig_filename='/path/to/my_ebtel_figure.eps')` 
+	+ `>>> ew.plot_ebtel_dem('/path/to/EBTEL_C/data/', 'my_ebtel_output_file_dem.txt', print_fig_filename='/path/to/my_ebtel_dem_figure.eps')` 
 	
 These Python wrapper functions can be easily modified and used to print many thousands of configuration files for many different sets of inputs. Use of these Python scripts is of course not necessary, but makes setting up an EBTEL run (particularly configuring the XML input file) much easier.
 

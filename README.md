@@ -111,6 +111,7 @@ Below is an example of how to compile and run EBTEL and plot some sample results
 	+ `$ ./build`
 	
 + Now that EBTEL has been successfully compiled, we'll use our Python wrappers to do the rest. First, enter the python (or IPython) command line environment.	
+	+ `$ cd /path/to/EBTEL_C/bin`
 	+ `$ python`
 
 + Import the ebtel_wrapper module

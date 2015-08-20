@@ -138,7 +138,7 @@ Below is an example of how to compile and run EBTEL and plot some sample results
 	+ `>>> ew.plot_ebtel('/path/to/EBTEL_C/data/', 'my_ebtel_output_file.txt', print_fig_filename='/path/to/my_ebtel_figure.eps')` 
 	+ `>>> ew.plot_ebtel_dem('/path/to/EBTEL_C/data/', 'my_ebtel_output_file_dem.txt', print_fig_filename='/path/to/my_ebtel_dem_figure.eps')` 
 	
-These Python wrapper functions can be easily modified and used to print many thousands of configuration files for many different sets of inputs. Use of these Python scripts is of course not necessary, but makes setting up an EBTEL run (particularly configuring the XML input file) much easier.
+These Python wrapper functions can be easily modified and used to print many thousands of configuration files for many different sets of inputs. Use of these Python scripts is of course not necessary, but makes setting up an EBTEL run (particularly configuring the XML input file) much easier. Alternatively, you can run the `bin/ebtel_starter.py` script (after compiling EBTEL) which just condenses the above steps into one script.
 
 ##Reporting Bugs and Issues
 If you find any bugs or have any concerns about the code, create an Issue or submit a pull request. Questions can also be directed to `will (dot) t (dot) barnes (at) rice (dot) edu`.

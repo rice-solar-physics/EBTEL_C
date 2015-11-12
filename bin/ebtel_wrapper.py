@@ -5,6 +5,7 @@
 #Description: Wrapper for the EBTEL-C program
 
 #Import modules
+import sys
 import os,os.path
 import subprocess
 import numpy as np
@@ -151,7 +152,7 @@ def run_ebtel(exec_directory,config_directory,**kwargs):
     
     #Print the output of the subprocess call
     if 'verbose' in kwargs and kwargs['verbose'] is True:
-        print(output)
+        print(output.decode(sys.stdout.encoding))
 
 def print_xml_config(config_dictionary,**kwargs):
     """Print XML configuration file for the EBTEL-C model

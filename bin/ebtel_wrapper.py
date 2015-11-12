@@ -133,6 +133,7 @@ def run_ebtel(exec_directory,config_directory,**kwargs):
     --------------------------
     
     config_file -- specific config file (run only one instance of EBTEL)
+    quiet -- option to not print output to the screen
     
     """
     #Change to executable directory
@@ -149,7 +150,8 @@ def run_ebtel(exec_directory,config_directory,**kwargs):
                 output = subprocess.call([exec_directory+'ebtel',config_directory+name,'quiet'])
     
     #Print the output of the subprocess call
-    print(output)
+    if 'verbose' in kwargs and kwargs['verbose'] is True:
+        print(output)
 
 def print_xml_config(config_dictionary,**kwargs):
     """Print XML configuration file for the EBTEL-C model

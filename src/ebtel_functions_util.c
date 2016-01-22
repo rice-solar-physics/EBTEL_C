@@ -888,7 +888,8 @@ OUTPUT:
  *********************************************************************************/
  void ebtel_free_mem(struct ebtel_params_st *par_struct, struct Option *opt)
  {
- 	//First check that the pointer is valid
+	
+	//First check that the pointer is valid
  	assert(par_struct != NULL);
  	
  	//Free the memory of each of the structure members as well as the structure itself
@@ -920,6 +921,7 @@ OUTPUT:
 	par_struct->rad_cor = NULL;
 	free(par_struct->rad);
 	par_struct->rad = NULL;
+	
 	//Free memory based on usage_option
 	if(strcmp(opt->usage_option,"dem")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
@@ -945,6 +947,9 @@ OUTPUT:
 
 	//Free memory reserved for the structure
 	free(par_struct);
+	
+	//Check that pointer is valid
+	assert(opt != NULL);
 	
 	//Free memory used by char arrays in opt structure
 	free(opt->heat_flux_option);

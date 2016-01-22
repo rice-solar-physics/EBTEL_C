@@ -38,7 +38,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	
 	/*****Variable declarations*****/
 	//Int
-	int nk;
 	int i;	//index over ntot
 	int j;	//index over 451
 	int k;	//index used for averaging over temporal DEM dimensions
@@ -50,7 +49,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	int count_reallocate = 0;
 	
 	//Pointers
-	double *kptr;
 	double *flux_ptr;
 	double *state_ptr;
 	double *log_tdem_ptr;
@@ -120,8 +118,8 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	assert(param_setter != NULL);
 	
 	//Reserve memory for structure members that will be set
-	param_setter->time = malloc(sizeof(double[ntot]));
-	param_setter->heat = malloc(sizeof(double[ntot]));
+	param_setter->time = malloc(ntot*sizeof(double));
+	param_setter->heat = malloc(ntot*sizeof(double));
 	param_setter->temp = malloc(sizeof(double[ntot]));
 	param_setter->ndens = malloc(sizeof(double[ntot]));
 	param_setter->press = malloc(sizeof(double[ntot]));
@@ -160,24 +158,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	r2 = ebtel_calc_c2();	//ratio of average to apex temperature; c2 in Paper I
 	r3 = 2.0;				//ratio of TR to coronal radiative losses; c1 in Paper I
 	r4 = 1.0;				//ratio of average to base velocity
-	
-	//Set temperature bins.
-	//Lengths of the kpar array are different depending on the loss function we use.
-	if (strcmp(opt->rad_option,"rk")== 0)
-	{nk = 7;
-	}
-	else
-	{nk = 6;
-	}
-	//Declare kpar array which will set the bins based on our loss function choice
-	double kpar[nk];
-	//Call the ebtel_kpar_set function and pass the pointer kptr
-	kptr = ebtel_kpar_set(opt->rad_option);
-	//Set the kpar array;
-	for(i = 0; i < nk; i++)
-	{
-		kpar[i] = *(kptr + i);
-	}
 	
 	/***********************************************************************************
 						Set up DEM in Transition Region
@@ -218,7 +198,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	*/
 	
 	//Calculate initial temperature, density, pressure, and velocity.
-	ic_ptr = ebtel_calc_ic(kpar,r3,loop_length,opt);
+	ic_ptr = ebtel_calc_ic(r3,loop_length,opt);
 	r3 = *(ic_ptr + 0);
 	rad = *(ic_ptr + 1);
 	t = *(ic_ptr + 2);
@@ -269,7 +249,6 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	
 	//Set the structure members of the par structure. This is used in both the RK and Euler methods.
 	par.L = loop_length;
-	par.kpar = kptr;
 	par.r12 = r1/r2;
 	par.r2 = r2;
 	
@@ -283,6 +262,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 	//Begin the loop over the timesteps
 	while(time < opt->total_time)
 	{
+		
 		//Update the parameter structure
 		par.q1 = ebtel_heating(time,opt);
 		par.q2 = ebtel_heating(time+tau,opt);
@@ -648,9 +628,7 @@ struct ebtel_params_st *ebtel_loop_solver( int ntot, double loop_length, struct 
 		}
 	}
 	
-	//Free up memory used by ebtel_kpar_set and ebtel_linspace functions
-	free(kptr);
-	kptr = NULL;
+	//Free up EM/DEM pointers
 	if(strcmp(opt->usage_option,"dem")==0 || strcmp(opt->usage_option,"rad_ratio")==0)
 	{
 		free(log_tdem_ptr);
@@ -693,7 +671,7 @@ OUTPUTS:
 
 double * ebtel_kpar_set(char *rad_option)
 {	
-	double *kpar = malloc(sizeof(double[6]));
+	double *kpar = malloc(6*sizeof(double));
 	//Check option input to decide which method to use
 	if (strcmp(rad_option,"rk") == 0)
 	{	

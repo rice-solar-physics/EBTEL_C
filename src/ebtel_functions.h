@@ -103,7 +103,6 @@ struct ebtel_params_st {
 };
 struct rk_params {
 		double L;
-		double *kpar;
 		double r12;
 		double r2;
 		double r3;
@@ -187,7 +186,7 @@ double ebtel_min_val(double, double);
 void ebtel_calc_abundance(void);
 
 //Declare prototype for ebtel_static_eq of type double
-double * ebtel_calc_ic(double[], double, double, struct Option *);
+double * ebtel_calc_ic(double, double, struct Option *);
 
 //Declare prototype for ebtel_colon_operator of type double *
 double * ebtel_colon_operator(double, double, double);

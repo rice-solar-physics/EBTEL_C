@@ -217,7 +217,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double * ebtel_calc_ic(double kpar[], double r3, double loop_length, struct Option *opt)
+double * ebtel_calc_ic(double r3, double loop_length, struct Option *opt)
 {
 	//Variable declarations for both cases
 	double *return_array = malloc(sizeof(double[6]));

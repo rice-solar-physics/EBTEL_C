@@ -65,6 +65,7 @@ As stated above, EBTEL-C uses an XML configuration file system as opposed to a t
   + ic_mode -- choose how to calculate the initial conditions: `st_eq` static equilibrium calculation, `force` initial conditions read in from input file, `scaling` scaling laws calculation.
   + output_file -- `default` option prints all results to the `data` directory in the EBTEL-C root directory using the format `ebteldatL{loop_length}_{usage_option}_{heating_shape}_{solver}.txt`; DEM results will include `_dem`; alternatively, you may use this input option to specify a path to a custom output file
   + print_plasma_params -- `True` prints all plasma parameters (_T_,_n_,_p_,etc.) to file specified by `output_file`, not including the DEM results; `False` skips the printing of these parameters. Set this option to `False` if, for example, you are running EBTEL many times and only looking at the DEM results and want to save space. Runtimes of tens of thousands of seconds can generate data files in excess of tens of megabytes so this option may be desirable if many runs are being computed.
+  + sample_rate -- how often results should be printed, in number of timesteps. Useful when trying to reduce file sizes. Set to 1 to print results at every timestep
   + rka_error -- value that defines the allowed error tolerance in the adaptive time step routine; 1.0e-6 is the recommended value
   + index_dem -- index that defines temperature range over which the transition region DEM is computed; 451 is the recommended value.
   + T0 (K) -- temperature at time _t=0_ s

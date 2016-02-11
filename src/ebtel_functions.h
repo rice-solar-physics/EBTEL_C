@@ -45,6 +45,7 @@ struct Option {
 	int total_time;
 	int index_dem;
 	int num_events;
+	int sample_rate;
 	double loop_length;
 	double energy_nt;
 	double T0;

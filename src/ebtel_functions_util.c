@@ -217,6 +217,11 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 	
+	temp = ebtel_xml_reader(root,"sample_rate",NULL);
+	opt->sample_rate = atoi(temp);
+	free(temp);
+	temp = NULL;
+	
 	//Char
 	opt->heating_shape = ebtel_xml_reader(root,"heating_shape",NULL);
 	opt->usage_option = ebtel_xml_reader(root,"usage_option",NULL);
@@ -360,17 +365,20 @@ void ebtel_file_writer(struct Option *opt, struct ebtel_params_st *params_final)
 		//The members of the structure params_final have now been set so we need to unpack them and set our arrays so that we can easily save our data.
 		for(i = 0; i<n; i++)
 		{	
-			//If we used usage = 4, then we need to save f_ratio and rad_ratio as well.
-			//We set them to zero otherwise just as a placeholder.
-			if(strcmp(opt->usage_option,"rad_ratio") == 0)
+			if(i % opt->sample_rate == 0)
 			{
-				//Print the data to the file filename using tab delimited entries
-				fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i),*(params_final->tau + i),*(params_final->rad_ratio + i),*(params_final->f_ratio + i));
-			}
-			else
-			{
-				//Print the data to the file filename using tab delimited entries
-				fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i),*(params_final->tau + i));
+				//If we used usage = 4, then we need to save f_ratio and rad_ratio as well.
+				//We set them to zero otherwise just as a placeholder.
+				if(strcmp(opt->usage_option,"rad_ratio") == 0)
+				{
+					//Print the data to the file filename using tab delimited entries
+					fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i),*(params_final->tau + i),*(params_final->rad_ratio + i),*(params_final->f_ratio + i));
+				}
+				else
+				{
+					//Print the data to the file filename using tab delimited entries
+					fprintf(out_file,"%f\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n",*(params_final->time + i),*(params_final->temp + i),*(params_final->ndens + i),*(params_final->press + i),*(params_final->vel + i),*(params_final->tapex + i),*(params_final->napex +i),*(params_final->papex + i),*(params_final->cond + i),*(params_final->rad_cor + i),*(params_final->heat + i),*(params_final->coeff_1 + i),*(params_final->rad + i),*(params_final->tau + i));
+				}
 			}		
 		}
 	

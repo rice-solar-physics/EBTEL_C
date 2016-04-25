@@ -57,7 +57,7 @@ double  ebtel_calc_c1( double temp, double den, double loop_length, double rad, 
 	r2 = ebtel_calc_c2();
 	
 	//Adjust values for gravity
-	if (strcmp(opt->r3_grav_correction,"true")==0 || strcmp(opt->r3_grav_correction,"True"))
+	if (strcmp(opt->r3_grav_correction,"true")==0 || strcmp(opt->r3_grav_correction,"True")==0)
 	{
 		r3_eqm_g = opt->r3_eqm_0*exp(4*sin(PI/l_fact_eq)*loop_length/(PI*sc));
 		r3_radn_g = opt->r3_rad_0*exp(4*sin(PI/l_fact_rad)*loop_length/(PI*sc));
@@ -69,7 +69,7 @@ double  ebtel_calc_c1( double temp, double den, double loop_length, double rad, 
 	}
 	
 	//Adjust for loss function
-	if (strcmp(opt->r3_loss_correction,"true")==0 || strcmp(opt->r3_loss_correction,"True"))
+	if (strcmp(opt->r3_loss_correction,"true")==0 || strcmp(opt->r3_loss_correction,"True")==0)
 	{
 		r3_eqm = r3_eqm_g*1.95e-18/pow(temp,TWO_THIRDS)/rad;
 		r3_radn = r3_radn_g*1.95e-18/pow(temp,TWO_THIRDS)/rad;

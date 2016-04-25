@@ -997,6 +997,10 @@ OUTPUT:
 	opt->t_end_switch = NULL;	
 	free(opt->amp_switch);
 	opt->amp_switch = NULL;
+	free(opt->r3_loss_correction);
+	opt->r3_loss_correction = NULL;
+	free(opt->r3_grav_correction);
+	opt->r3_grav_correction = NULL;
 	
 	//Free the t_start and amp arrays
 	free(opt->t_start_array);

@@ -58,7 +58,7 @@ double * ebtel_derivs(double s[], double t, struct rk_params par, struct Option 
  	rad = ebtel_rad_loss(T,opt->rad_option);
  	
  	//Compute the coefficient r3
- 	r3 = ebtel_calc_c1(T,n,par.L,rad,opt);
+ 	r3 = ebtel_calc_c1(t,T,n,par.L,rad,opt);
  	
  	//Compute heat flux
 	flux_ptr = ebtel_calc_thermal_conduction(T,n,par.L,rad,r3,opt->sat_limit,opt->heat_flux_option);

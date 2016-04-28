@@ -32,7 +32,7 @@ OUTPUTS:
 
 ***********************************************************************************/
 
-double  ebtel_calc_c1( double temp, double den, double loop_length, double rad, struct Option *opt )
+double  ebtel_calc_c1( double t, double temp, double den, double loop_length, double rad, struct Option *opt )
 {
 
 	//Declare variables
@@ -45,6 +45,7 @@ double  ebtel_calc_c1( double temp, double den, double loop_length, double rad, 
 	double noneq2;
 	double r2;
 	double r3;
+	double r3_eqm_0;
 	//double r3_rad_0 = 0.6;	//radiative phase value, no gravity
 	//double r3_eqm_0 = 2.0;	//value in equilibrium with no gravity, -2/3 loss power law
 	double l_fact_eq = 5.0;		//geometric factors for inclusion of gravitational effects
@@ -56,15 +57,49 @@ double  ebtel_calc_c1( double temp, double den, double loop_length, double rad, 
 	//Calculate r2 value
 	r2 = ebtel_calc_c2();
 	
+	//Adjust values for sound speed correction
+	if (strcmp(opt->r3_sound_speed_correction,"true")==0 || strcmp(opt->r3_sound_speed_correction,"True")==0)
+	{
+		double c_s,t_zero,tau_c1;
+		int i;
+		
+		c_s = ebtel_calc_sound_speed(2.0*K_B*den*temp,den);
+		tau_c1 = opt->tr_thickness*loop_length/c_s;
+		
+		t_zero = tau_c1;
+		
+		for(i=opt->num_events-1; i>=0; i--)
+		{
+			if(t>=opt->t_start_array[i])
+			{
+				t_zero = t - opt->t_start_array[i];
+				break;
+			}
+		}
+		
+		if(t_zero < tau_c1)
+		{
+			r3_eqm_0 = (opt->r3_eqm_0a*(1.0-t_zero/tau_c1) + 2.0*opt->r3_eqm_0b*pow((t_zero/tau_c1),2))/(1.0 + pow((t_zero/tau_c1),2));
+		}
+		else
+		{
+			r3_eqm_0 = opt->r3_eqm_0b;
+		}
+	}
+	else
+	{
+		r3_eqm_0 = opt->r3_eqm_0a;
+	}
+	
 	//Adjust values for gravity
 	if (strcmp(opt->r3_grav_correction,"true")==0 || strcmp(opt->r3_grav_correction,"True")==0)
 	{
-		r3_eqm_g = opt->r3_eqm_0*exp(4*sin(PI/l_fact_eq)*loop_length/(PI*sc));
+		r3_eqm_g = r3_eqm_0*exp(4*sin(PI/l_fact_eq)*loop_length/(PI*sc));
 		r3_radn_g = opt->r3_rad_0*exp(4*sin(PI/l_fact_rad)*loop_length/(PI*sc));
 	}
 	else
 	{
-		r3_eqm_g = opt->r3_eqm_0;
+		r3_eqm_g = r3_eqm_0;
 		r3_radn_g = opt->r3_rad_0;
 	}
 	
@@ -151,6 +186,27 @@ double ebtel_calc_c3(void)
 	return c3;
 	
 }
+
+/***********************************************************************************
+
+FUNCTION NAME: ebtel_calc_sound_speed
+
+FUNCTION_DESCRIPTION: This function calculates the sound speed in the coronal plasma.
+
+INPUTS:
+	p--pressure (dyne cm^-2)
+	n--density (cm^-3)
+	
+OUTPUTS:
+	cs--sound speed (cm s^-1)
+
+***********************************************************************************/
+
+double ebtel_calc_sound_speed(double p, double n)
+{
+	return pow(5.0/3.0*p/(M_P*n),0.5);
+}
+
 
 /***********************************************************************************
 
@@ -265,7 +321,7 @@ double * ebtel_calc_ic(double r3, double loop_length, struct Option *opt)
 
 		for(i=0; i<=100; i++)
 		{
-			r3 = ebtel_calc_c1(tt_old,nn,loop_length,rad, opt);										//recalculate r3 coefficient
+			r3 = ebtel_calc_c1(0.0,tt_old,nn,loop_length,rad, opt);										//recalculate r3 coefficient
 			tt_new = r2*pow((3.5*r3/(1+r3)*pow(loop_length,2)*heat/KAPPA_0),TWO_SEVENTHS);		//temperature at new r3
 			rad = ebtel_rad_loss(tt_new,opt->rad_option);									//radiative loss at new temperature
 			nn = pow(heat/((1+r3)*rad),0.5);													//density at new r3 and new rad
@@ -326,7 +382,7 @@ double * ebtel_calc_ic(double r3, double loop_length, struct Option *opt)
 		
 		//Set array values
 		rad = ebtel_rad_loss(t_0,opt->rad_option);
-		return_array[0] = ebtel_calc_c1(t_0,n_0,loop_length,rad,opt);
+		return_array[0] = ebtel_calc_c1(0.0,t_0,n_0,loop_length,rad,opt);
 		return_array[1] = rad;
 		return_array[2] = t_0;
 		return_array[3] = n_0;

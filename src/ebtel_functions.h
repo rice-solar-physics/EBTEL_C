@@ -62,7 +62,8 @@ struct Option {
 	double amp1;
 	double tau;
 	double rka_error;
-	double r3_rad_0, r3_eqm_0;
+	double r3_rad_0, r3_eqm_0a, r3_eqm_0b;
+	double tr_thickness;
 	double *amp;
 	double *t_start_array;
 	double *t_end_array;
@@ -80,6 +81,7 @@ struct Option {
 	char *amp_switch;
 	char *r3_loss_correction;
 	char *r3_grav_correction;
+	char *r3_sound_speed_correction;
 };
 struct ebtel_params_st {
 		int i_max;
@@ -139,7 +141,7 @@ double ebtel_rad_loss( double, char *);
 double * ebtel_calc_thermal_conduction(double, double, double, double, double, double, char *);
 
 //Declare prototype for ebtel_calc_c1 of type double
-double ebtel_calc_c1(double, double, double, double, struct Option *);
+double ebtel_calc_c1(double, double, double, double, double, struct Option *);
 
 //Declare prototype for ebtel_calc_c2 of type double
 double ebtel_calc_c2(void);
@@ -230,5 +232,9 @@ void ebtel_reallocate_mem(int, int, struct ebtel_params_st *, struct Option *);
 
 //Declare prototype for ebtel_reallocate_two_d_array of type double **
 double **ebtel_reallocate_two_d_array(double **, int, int, int);
+
+//Declare prototype for ebtel_calc_sound_speed of type double
+double ebtel_calc_sound_speed(double , double);
+
 
 #endif

@@ -64,12 +64,11 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 	//Adjust values for sound speed correction
 	if (strcmp(opt->r3_sound_speed_correction,"true")==0 || strcmp(opt->r3_sound_speed_correction,"True")==0)
 	{
-		double c_s,t_zero,tau_c1,tau_factor;
+		double c_s,t_zero,tau_c1;
 		int i;
 		
 		c_s = ebtel_calc_sound_speed(r1/r2*temp);
 		tau_c1 = opt->tr_thickness*loop_length/c_s;
-		tau_factor = 1.0/log(opt->r3_eqm_0a/opt->r3_eqm_0b);
 		
 		t_zero = tau_c1;
 		
@@ -84,8 +83,7 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 		
 		if(t_zero < tau_c1)
 		{
-			//r3_eqm_0 = (opt->r3_eqm_0a*(1.0-t_zero/tau_c1) + 2.0*opt->r3_eqm_0b*pow((t_zero/tau_c1),2))/(1.0 + pow((t_zero/tau_c1),2));
-			r3_eqm_0 = opt->r3_eqm_0a*exp(-t_zero/(tau_factor*tau_c1));
+			r3_eqm_0 = (opt->r3_eqm_0a*(1.0-pow(t_zero/tau_c1,2)) + 2.0*opt->r3_eqm_0b*pow((t_zero/tau_c1),2))/(1.0 + pow((t_zero/tau_c1),2));
 		}
 		else
 		{

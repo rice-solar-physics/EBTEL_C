@@ -43,6 +43,7 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 	double r3_radn;
 	double n_eq_2;
 	double noneq2;
+	double r1;
 	double r2;
 	double r3;
 	double r3_eqm_0;
@@ -57,13 +58,16 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 	//Calculate r2 value
 	r2 = ebtel_calc_c2();
 	
+	//Calculate r1 value
+	r1 = ebtel_calc_c3();
+	
 	//Adjust values for sound speed correction
 	if (strcmp(opt->r3_sound_speed_correction,"true")==0 || strcmp(opt->r3_sound_speed_correction,"True")==0)
 	{
 		double c_s,t_zero,tau_c1;
 		int i;
 		
-		c_s = ebtel_calc_sound_speed(2.0*K_B*den*temp,den);
+		c_s = ebtel_calc_sound_speed(r1/r2*temp);
 		tau_c1 = opt->tr_thickness*loop_length/c_s;
 		
 		t_zero = tau_c1;
@@ -194,17 +198,16 @@ FUNCTION NAME: ebtel_calc_sound_speed
 FUNCTION_DESCRIPTION: This function calculates the sound speed in the coronal plasma.
 
 INPUTS:
-	p--pressure (dyne cm^-2)
-	n--density (cm^-3)
+	temp--temperature (K)
 	
 OUTPUTS:
 	cs--sound speed (cm s^-1)
 
 ***********************************************************************************/
 
-double ebtel_calc_sound_speed(double p, double n)
+double ebtel_calc_sound_speed(double temp)
 {
-	return pow(5.0/3.0*p/(M_P*n),0.5);
+	return pow(5.0/3.0*2.0*K_B*temp/(M_P),0.5);
 }
 
 

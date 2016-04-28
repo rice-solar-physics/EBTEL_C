@@ -234,7 +234,7 @@ void ebtel_reallocate_mem(int, int, struct ebtel_params_st *, struct Option *);
 double **ebtel_reallocate_two_d_array(double **, int, int, int);
 
 //Declare prototype for ebtel_calc_sound_speed of type double
-double ebtel_calc_sound_speed(double , double);
+double ebtel_calc_sound_speed(double);
 
 
 #endif

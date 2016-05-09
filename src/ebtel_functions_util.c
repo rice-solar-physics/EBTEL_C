@@ -227,18 +227,8 @@ struct Option *ebtel_input_setter(char *filename)
 	free(temp);
 	temp = NULL;
 	
-	temp = ebtel_xml_reader(root,"r3_eqm_0a",NULL);
-	opt->r3_eqm_0a = atof(temp);
-	free(temp);
-	temp = NULL;
-	
-	temp = ebtel_xml_reader(root,"r3_eqm_0b",NULL);
-	opt->r3_eqm_0b = atof(temp);
-	free(temp);
-	temp = NULL;
-	
-	temp = ebtel_xml_reader(root,"tr_thickness",NULL);
-	opt->tr_thickness = atof(temp);
+	temp = ebtel_xml_reader(root,"r3_cond_0",NULL);
+	opt->r3_cond_0 = atof(temp);
 	free(temp);
 	temp = NULL;
 	
@@ -256,9 +246,7 @@ struct Option *ebtel_input_setter(char *filename)
 	opt->amp_switch = ebtel_xml_reader(root,"amp_switch",NULL);
 	opt->t_end_switch = ebtel_xml_reader(root,"t_end_switch",NULL);
 	opt->r3_loss_correction = ebtel_xml_reader(root,"r3_loss_correction",NULL);
-	opt->r3_grav_correction = ebtel_xml_reader(root,"r3_grav_correction",NULL);
-	opt->r3_sound_speed_correction = ebtel_xml_reader(root,"r3_sound_speed_correction",NULL);
-	
+	opt->r3_grav_correction = ebtel_xml_reader(root,"r3_grav_correction",NULL);	
 	
 	//Free the document tree
 	xmlFreeDoc(doc);
@@ -1012,8 +1000,6 @@ OUTPUT:
 	opt->r3_loss_correction = NULL;
 	free(opt->r3_grav_correction);
 	opt->r3_grav_correction = NULL;
-	free(opt->r3_sound_speed_correction);
-	opt->r3_sound_speed_correction = NULL;
 	
 	//Free the t_start and amp arrays
 	free(opt->t_start_array);

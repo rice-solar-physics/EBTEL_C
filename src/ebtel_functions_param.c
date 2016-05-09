@@ -37,20 +37,15 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 
 	//Declare variables
 	double sc;
-	double r3_eqm_g;
-	double r3_radn_g;
-	double r3_eqm;
-	double r3_radn;
 	double n_eq_2;
 	double noneq2;
+	double grav_correction = 1.0;
+	double loss_correction = 1.0;
 	double r1;
 	double r2;
 	double r3;
-	double r3_eqm_0;
-	//double r3_rad_0 = 0.6;	//radiative phase value, no gravity
-	//double r3_eqm_0 = 2.0;	//value in equilibrium with no gravity, -2/3 loss power law
-	double l_fact_eq = 5.0;		//geometric factors for inclusion of gravitational effects
-	double l_fact_rad = 5.0;	//l_fact^-1 = s/L*1/2 where <s/L> approx 0.4 so 1/l_fact apprrox 0.2 or 1/5
+	double r3_eqm_0 = 2.0;		//value in equilibrium with no gravity, -2/3 loss power law; hardcoded, should NOT be user-specified
+	double l_fact = 5.0;		//geometric factors for inclusion of gravitational effects, l_fact^-1 = s/L*1/2 where <s/L> approx 0.4 so 1/l_fact apprrox 0.2 or 1/5
 	
 	//Calculate the scale height
 	sc = ebtel_calc_lambda(temp);
@@ -60,83 +55,38 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 	
 	//Calculate r1 value
 	r1 = ebtel_calc_c3();
-	
-	//Adjust values for sound speed correction
-	if (strcmp(opt->r3_sound_speed_correction,"true")==0 || strcmp(opt->r3_sound_speed_correction,"True")==0)
-	{
-		double c_s,t_zero,tau_c1;
-		int i;
-		
-		c_s = ebtel_calc_sound_speed(r1/r2*temp);
-		tau_c1 = opt->tr_thickness*loop_length/c_s;
-		
-		t_zero = tau_c1;
-		
-		for(i=opt->num_events-1; i>=0; i--)
-		{
-			if(t>=opt->t_start_array[i])
-			{
-				t_zero = t - opt->t_start_array[i];
-				break;
-			}
-		}
-		
-		if(t_zero < tau_c1)
-		{
-			r3_eqm_0 = (opt->r3_eqm_0a*(1.0-pow(t_zero/tau_c1,2)) + 2.0*opt->r3_eqm_0b*pow((t_zero/tau_c1),2))/(1.0 + pow((t_zero/tau_c1),2));
-		}
-		else
-		{
-			r3_eqm_0 = opt->r3_eqm_0b;
-		}
-	}
-	else
-	{
-		r3_eqm_0 = opt->r3_eqm_0a;
-	}
+
 	
 	//Adjust values for gravity
 	if (strcmp(opt->r3_grav_correction,"true")==0 || strcmp(opt->r3_grav_correction,"True")==0)
 	{
-		r3_eqm_g = r3_eqm_0*exp(4*sin(PI/l_fact_eq)*loop_length/(PI*sc));
-		r3_radn_g = opt->r3_rad_0*exp(4*sin(PI/l_fact_rad)*loop_length/(PI*sc));
-	}
-	else
-	{
-		r3_eqm_g = r3_eqm_0;
-		r3_radn_g = opt->r3_rad_0;
+		grav_correction = exp(4*sin(PI/l_fact)*loop_length/(PI*sc));
 	}
 	
 	//Adjust for loss function
 	if (strcmp(opt->r3_loss_correction,"true")==0 || strcmp(opt->r3_loss_correction,"True")==0)
 	{
-		r3_eqm = r3_eqm_g*1.95e-18/pow(temp,TWO_THIRDS)/rad;
-		r3_radn = r3_radn_g*1.95e-18/pow(temp,TWO_THIRDS)/rad;
-	}
-	else
-	{
-		r3_eqm = r3_eqm_g;
-		r3_radn = r3_radn_g;
+		loss_correction = 1.95e-18/pow(temp,TWO_THIRDS)/rad;
 	}
 	
 	//Calculate over/under density
-	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(SEVEN_HALVES*r3_eqm*rad*pow(loop_length,2));
+	n_eq_2 = KAPPA_0*pow((temp/r2),SEVEN_HALVES)/(SEVEN_HALVES*r3_eqm_0*grav_correction*loss_correction*rad*pow(loop_length,2));
 	noneq2 = pow(den,2)/n_eq_2;
 	
 	//Use different values of r3 based on value of noneq2
 	if (noneq2 < 1.0)
 	{
 		//Hot loops equilibrium value of c1
-		r3 = r3_eqm;
+		r3 = (2.0*r3_eqm_0 + opt->r3_cond_0*(1.0/noneq2 - 1.0))/(1.0 + 1.0/noneq2);
 	}
 	else
 	{	
 		//Radiative loops transition from equilibrium (noneq2-->1)
-		r3 = (2*r3_eqm + r3_radn*(noneq2-1))/(1+noneq2);
+		r3 = (2.0*r3_eqm_0 + opt->r3_rad_0*(noneq2 - 1.0))/(1.0 + noneq2);
 	}
 	
 	//Return the value of the parameter
-	return r3;
+	return r3*grav_correction*loss_correction;
 	
 }
 

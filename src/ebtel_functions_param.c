@@ -37,13 +37,10 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 
 	//Declare variables
 	double sc;
-	double n_eq_2;
-	double noneq2;
+	double n_eq_2,noneq2;
+	double r2,r3;
 	double grav_correction = 1.0;
 	double loss_correction = 1.0;
-	double r1;
-	double r2;
-	double r3;
 	double r3_eqm_0 = 2.0;		//value in equilibrium with no gravity, -2/3 loss power law; hardcoded, should NOT be user-specified
 	double l_fact = 5.0;		//geometric factors for inclusion of gravitational effects, l_fact^-1 = s/L*1/2 where <s/L> approx 0.4 so 1/l_fact apprrox 0.2 or 1/5
 	
@@ -52,9 +49,6 @@ double  ebtel_calc_c1( double t, double temp, double den, double loop_length, do
 	
 	//Calculate r2 value
 	r2 = ebtel_calc_c2();
-	
-	//Calculate r1 value
-	r1 = ebtel_calc_c3();
 
 	
 	//Adjust values for gravity

@@ -37,6 +37,7 @@ double TWO_THIRDS;
 double ROOT_C2;
 double C3;
 double C4;
+double G0_SUN;
 int NK;
 double KPAR[6];
 

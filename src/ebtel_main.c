@@ -84,7 +84,7 @@ int main (int argc, char *argv[])
 	struct Option *opt;							
 	
 	//Global definitions (declarations in ebtel_functions.h)
-	KAPPA_0 = 1e-6;			//thermal conduction coefficient
+	KAPPA_0 = 8.12e-7;			//thermal conduction coefficient
 	G0_SUN = 2.74e+4;		//gravitational acceleration at the solar surface in cm/s^2
 	PI = 3.14159265359;
 	TWO_SEVENTHS = 2./7.;

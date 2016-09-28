@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<input>
+	<tau>1.0</tau>
+	<loop_length>40.0</loop_length>
+	<mean_t_start>1000</mean_t_start>
+	<sat_limit>0.166667</sat_limit>
+	<num_events>1</num_events>
+	<h_back>3.4e-06</h_back>
+	<heat_species>electron</heat_species>
+	<t_start_switch>uniform</t_start_switch>
+	<amp_switch>uniform</amp_switch>
+	<t_end_switch>uniform</t_end_switch>
+	<rka_error>1e-06</rka_error>
+	<usage_option>dem</usage_option>
+	<output_file>/Users/willbarnes/Documents/Rice/Research/EBTEL_repo/data/em_testing</output_file>
+	<heating_shape>triangle</heating_shape>
+	<amp0>0.05</amp0>
+	<amp1>0.5</amp1>
+	<total_time>5000</total_time>
+	<ic_mode>st_eq</ic_mode>
+	<t_pulse_half>50.0</t_pulse_half>
+	<heat_flux_option>limited</heat_flux_option>
+	<rad_option>rk</rad_option>
+	<T0>1000000.0</T0>
+	<index_dem>451</index_dem>
+	<h_nano>0.38</h_nano>
+	<t_start>50.0</t_start>
+	<alpha>-1.5</alpha>
+	<std_t_start>1000</std_t_start>
+	<solver>euler</solver>
+	<print_plasma_params>True</print_plasma_params>
+	<dem_option>new</dem_option>
+	<n0>100000000.0</n0>
+</input>

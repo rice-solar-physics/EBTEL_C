@@ -1,0 +1,13 @@
+15
+1.31963e-5
+10000.
+10000.
+-2
+0.01
+0.1
+file
+file
+file
+analysis/kobelski_start.txt
+analysis/kobelski_sine_amp.txt
+analysis/kobelski_end.txt

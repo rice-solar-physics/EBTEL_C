@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<input>
+	<tau>1.0</tau>
+	<loop_length>75.0</loop_length>
+	<sat_limit>0.166666666667</sat_limit>
+	<num_events>1</num_events>
+	<h_back>3.4e-06</h_back>
+	<t_start_switch>uniform</t_start_switch>
+	<amp_switch>uniform</amp_switch>
+	<t_end_switch>uniform</t_end_switch>
+	<rka_error>1e-06</rka_error>
+	<usage_option>dem</usage_option>
+	<mean_t_start>5000</mean_t_start>
+	<heating_shape>triangle</heating_shape>
+	<amp0>0.001</amp0>
+	<amp1>0.01</amp1>
+	<total_time>10000</total_time>
+	<ic_mode>st_eq</ic_mode>
+	<t_pulse_half>250.0</t_pulse_half>
+	<heat_flux_option>limited</heat_flux_option>
+	<rad_option>rk</rad_option>
+	<t_start>0.0</t_start>
+	<index_dem>451</index_dem>
+	<h_nano>0.0015</h_nano>
+	<T0>850000.0</T0>
+	<alpha>-2</alpha>
+	<std_t_start>2000</std_t_start>
+	<solver>rka4</solver>
+	<dem_option>new</dem_option>
+	<n0>36000000.0</n0>
+</input>
